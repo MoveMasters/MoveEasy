@@ -1,5 +1,7 @@
+
 public/node_modules/
 server/node_modules/
 secret.js
 images
-MoveEasy-1.json
+build/
+dist/
