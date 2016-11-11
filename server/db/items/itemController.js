@@ -19,7 +19,7 @@ exports.handleCroppedImage = (req, res, next) => {
   .then(
     (response) => {
       const result = response.data.outputs[0].data.concepts;
-      console.log('result', result);
+      //console.log('result', result);
       res.send(result);
     },
     (err) => {

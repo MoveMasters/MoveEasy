@@ -23,17 +23,17 @@ module.exports = {
   * @param {object} next callback function to execute
   * @returns {object} all users
   */
-  getAllUsers(req, res, next) {
-    dbUtil.getUserFromReq(req, next).then((user) => {
-      User.find({}, (err, result) => {
-        var allUsers = result.map(userEntry => (userEntry.username));
-        allUsers = allUsers.filter((item) => {
-          return (item !== user.username)
-        });
-        res.json({ allUsers });
-      });
-    });
-  },
+  // getAllUsers(req, res, next) {
+  //   dbUtil.getUserFromReq(req, next).then((user) => {
+  //     User.find({}, (err, result) => {
+  //       var allUsers = result.map(userEntry => (userEntry.username));
+  //       allUsers = allUsers.filter((item) => {
+  //         return (item !== user.username)
+  //       });
+  //       res.json({ allUsers });
+  //     });
+  //   });
+  // },
 
   /**
   * This function is used to signin a user if user exists in database and passwords match.
@@ -83,7 +83,7 @@ module.exports = {
     findUser({ username })
       .then((user) => {
         if (user) {
-          return next(new Error('User already exist!'));
+          return next(new Error('User already ' + username + ' exist!'));
         }
 
         /** Make a new user entry in database if username doesn't exist */

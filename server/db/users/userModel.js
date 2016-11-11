@@ -6,6 +6,7 @@
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
+const Q = require('q');
 
 const SALT_WORK_FACTOR = 10;
 const Schema = mongoose.Schema;
