@@ -35,7 +35,7 @@ $(function(){
   var cropAndSend = () => {
     var imageData = cropper.getCroppedCanvas().toDataURL('image/jpeg');
     sendImageData(imageData);
-    const url = 'http://localhost:9000/api/croppedImage';
+    const url = 'http://localhost:9000/api/item/croppedImage';
 
     // cropper.getCroppedCanvas().toBlob(function (blob) {
 
@@ -73,7 +73,7 @@ $(function(){
   }
 
   var sendImageData = (imageData) => {
-    const url = 'http://localhost:9000/api/croppedImage';
+    const url = 'http://localhost:9000/api/item/croppedImage';
 
     // const photo = {
     //   uri: imageData,
@@ -97,7 +97,7 @@ $(function(){
     // .catch(err => console.log('Error postPhotoAndLocation (utils.js):', err));
 
 
-    $.post('http://localhost:9000/api/croppedImage',
+    $.post('http://localhost:9000/api/item/croppedImage',
       {image: imageData}
     ).done(function() {
       console.log( "success" );
