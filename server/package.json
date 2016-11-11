@@ -2,7 +2,12 @@
   "name": "peer-messenger-peerserver",
   "version": "0.0.1",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "clarifai": "^2.0.15",
+    "jwt-simple": "^0.5.0",
+    "mongoose": "^4.6.7",
     "peer": "^0.2.8",
+    "q": "^1.4.1",
     "s3-uploader": "^2.0.2"
   }
 }
