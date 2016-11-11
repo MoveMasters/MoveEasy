@@ -1,13 +1,22 @@
 {
   "name": "peer-messenger-peerserver",
   "version": "0.0.1",
+  "scripts": {
+    "start": "node peer-server",
+    "test": "mocha test/*.js"
+  },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
+    "chai": "^3.5.0",
     "clarifai": "^2.0.15",
+    "datauri": "^1.0.4",
     "jwt-simple": "^0.5.0",
+    "mocha": "^3.1.2",
     "mongoose": "^4.6.7",
+    "nodemon": "^1.11.0",
     "peer": "^0.2.8",
     "q": "^1.4.1",
-    "s3-uploader": "^2.0.2"
+    "s3-uploader": "^2.0.2",
+    "server": "0.0.3"
   }
 }

@@ -10,9 +10,8 @@ const imageUtil = require('./../imageUtil.js');
 
 
 exports.handleCroppedImage = (req, res, next) => {
-  console.log('hit');
   var photoData = req.body.image;
-  photoData = photoData.replace(/^data:image\/jpeg;base64,/, "");
+  photoData = photoData.replace(/^data:image\/(jpeg|png|jpg);base64,/, "");
   const filePath = 'images/logo.png';
 
   imageUtil.saveAndUpload(filePath, photoData)
@@ -24,7 +23,7 @@ exports.handleCroppedImage = (req, res, next) => {
       res.send(result);
     },
     (err) => {
-      console.error(err);
+      console.error('err', err);
       res.status(500).end();
     }
   );
