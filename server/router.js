@@ -3,6 +3,7 @@ const path = require('path');
 const ExpressPeerServer = require('peer').ExpressPeerServer;
 const itemRouter = require('./routers/itemRouter');
 const userRouter = require('./routers/userRouter');
+const authRouter = require('./routers/authRouter');
 
 
 module.exports = (app, express, server) => {
@@ -12,6 +13,7 @@ module.exports = (app, express, server) => {
 
   app.use('/api/user', userRouter);
   app.use('/api/item', itemRouter);
+  app.use('/api/auth', authRouter);
 
 
 

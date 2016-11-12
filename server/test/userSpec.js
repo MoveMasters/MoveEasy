@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const supertest = require('supertest');
-const server = require('./../peer-server.js');
+const server = require('./../server.js');
 const User = require('./../db/users/userModel.js');
 const jwt = require('jwt-simple');
 

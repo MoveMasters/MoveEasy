@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const supertest = require('supertest');
-const server = require('./../peer-server.js');
+const server = require('./../server.js');
 const jwt = require('jwt-simple');
 const DataUri = require('datauri').promise;
 const itemController = require('./../db/items/itemController');
@@ -25,6 +25,6 @@ describe('Item Server APIs', () => {
         done();
       });
     });
-  }).timeout(5000);;
+  }).timeout(5000);
 });
     

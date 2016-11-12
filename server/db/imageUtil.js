@@ -8,10 +8,19 @@ const Promise = require('bluebird');
 
 
 
+
+
 const clarApp = new Clarifai.App(
   secret.ClarifaiClientId,
   secret.ClarifaiClientSecret
 );
+
+var tokenResponse;
+
+clarApp.getToken( token => {
+  tokenResponse = token;
+});
+
 
 
 
@@ -27,8 +36,10 @@ exports.saveAndUpload = (filePath, photoData) => {
   });
 
   return savePromise.then( (success) => {
+    console.log('saved image');
     return new Promise( (resolve, reject) => {
       s3.upload(filePath, {}, (err, versions) => {
+        console.log('done with upload');
         if (err) {
           reject(err);
         } else if (versions.length < 1) {
@@ -40,6 +51,10 @@ exports.saveAndUpload = (filePath, photoData) => {
       });
     });
   });
+};
+
+exports.getClarifaiToken = () => {
+  return tokenResponse;
 };
 
 
