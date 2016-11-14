@@ -31,3 +31,6 @@ const itemSchema = new Schema({
     type: String
   }
 });
+
+const Item = mongoose.model('Item', itemSchema);
+module.exports = Item;

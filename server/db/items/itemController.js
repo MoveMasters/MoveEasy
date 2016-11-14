@@ -14,11 +14,17 @@ exports.handleCroppedImage = (req, res, next) => {
   photoData = photoData.replace(/^data:image\/(jpeg|png|jpg);base64,/, "");
   const filePath = 'images/logo.png';
 
+  var imageUrl;
   imageUtil.saveAndUpload(filePath, photoData)
-  .then(imageUtil.predict)
+  .then((imageUrl) =>{
+    console.log('url', imageUrl);
+    return imageUtil.predict(imageUrl);
+  })
   .then(
     (response) => {
+      console.log('response', response.data);
       const result = response.data.outputs[0].data.concepts;
+      var data = {conecpts: result, url: imageUrl}
       //console.log('result', result);
       res.send(result);
     },

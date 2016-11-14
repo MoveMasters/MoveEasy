@@ -2,7 +2,7 @@
   "name": "peer-messenger-peerserver",
   "version": "0.0.1",
   "scripts": {
-    "start": "node peer-server",
+    "start": "node server",
     "test": "mocha test/*.js"
   },
   "dependencies": {
@@ -10,6 +10,8 @@
     "chai": "^3.5.0",
     "clarifai": "^2.0.15",
     "datauri": "^1.0.4",
+    "google-images-scraper": "^1.0.9",
+    "images-scraper": "^2.0.10",
     "jwt-simple": "^0.5.0",
     "mocha": "^3.1.2",
     "mongoose": "^4.6.7",

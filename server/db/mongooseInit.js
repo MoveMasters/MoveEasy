@@ -14,4 +14,5 @@ module.exports = () => {
   });
 
   mongoose.Promise = Q.Promise;
+  return mongoose;
 };
