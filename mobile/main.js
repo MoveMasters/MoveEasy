@@ -10,6 +10,7 @@ import {
   TextInput,
   ListView,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import io from 'socket.io-client/socket.io';
 
@@ -49,7 +50,7 @@ function getLocalStream(isFront, callback) {
           minFrameRate: 30
         },
         facingMode: (isFront ? "user" : "environment"),
-        optional: [{ sourceId: sourceInfos.id }]
+        optional: [{ sourceId: sourceInfos.id }, { minxFrameRate: 60 }]
       }
     }, function (stream) {
       console.log('dddd', stream);
@@ -115,9 +116,9 @@ function createPC(socketId, isOffer) {
     console.log('onaddstream', event.stream);
     container.setState({info: 'One peer join!'});
 
-    const remoteList = container.state.remoteList;
-    remoteList[socketId] = event.stream.toURL();
-    container.setState({ remoteList: remoteList });
+    // const remoteList = container.state.remoteList;
+    // remoteList[socketId] = event.stream.toURL();
+    container.setState({ remoteViewSrc: event.stream.toURL() });
   };
   pc.onremovestream = function (event) {
     console.log('onremovestream', event.stream);
@@ -187,9 +188,9 @@ function leave(socketId) {
   pc.close();
   delete pcPeers[socketId];
 
-  const remoteList = container.state.remoteList;
-  delete remoteList[socketId]
-  container.setState({ remoteList: remoteList });
+  // const remoteList = container.state.remoteList;
+  // delete remoteList[socketId]
+  container.setState({ remoteViewSrc: null });
   container.setState({info: 'One peer leave!'});
 }
 
@@ -235,6 +236,12 @@ function getStats() {
 
 let container;
 
+
+
+/**************************************************************/
+/*****************************APP******************************/
+/**************************************************************/
+
 const mkmobile = React.createClass({
   getInitialState: function() {
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => true});
@@ -244,7 +251,7 @@ const mkmobile = React.createClass({
       roomID: '',
       isFront: true,
       selfViewSrc: null,
-      remoteList: {},
+      remoteViewSrc: null,
       textRoomConnected: false,
       textRoomData: [],
       textRoomValue: '',
@@ -291,7 +298,7 @@ const mkmobile = React.createClass({
     textRoomData.push({user: 'Me', message: this.state.textRoomValue});
     for (const key in pcPeers) {
       const pc = pcPeers[key];
-      pc.textDataChannel.send(this.state.textRoomValue);
+      pc.textDataChannel.send('capture');
     }
     this.setState({textRoomData, textRoomValue: ''});
   },
@@ -317,20 +324,6 @@ const mkmobile = React.createClass({
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          {this.state.info}
-        </Text>
-        {this.state.textRoomConnected && this._renderTextRoom()}
-        <View style={{flexDirection: 'row'}}>
-          <Text>
-            {this.state.isFront ? "Use front camera" : "Use back camera"}
-          </Text>
-          <TouchableHighlight
-            style={{borderWidth: 1, borderColor: 'black'}}
-            onPress={this._switchVideoType}>
-            <Text>Switch camera</Text>
-          </TouchableHighlight>
-        </View>
         { this.state.status == 'ready' ?
           (<View>
             <TextInput
@@ -346,25 +339,36 @@ const mkmobile = React.createClass({
             </TouchableHighlight>
           </View>) : null
         }
-        <RTCView streamURL={this.state.selfViewSrc} style={styles.selfView}/>
-        {
-          mapHash(this.state.remoteList, function(remote, index) {
-            return <RTCView key={index} streamURL={remote} style={styles.remoteView}/>
-          })
-        }
+          <RTCView streamURL={this.state.remoteViewSrc} style={styles.remoteView}>
+            <RTCView streamURL={this.state.selfViewSrc} style={styles.selfView}/>
+            <View style={styles.switchButton}>
+              <TouchableHighlight
+                style={{borderWidth: 1, borderColor: 'black'}}
+                onPress={this._switchVideoType}>
+                <Icon name="reverse-camera" />
+              </TouchableHighlight>
+            </View>
+          </RTCView>
       </View>
     );
   }
 });
 
 const styles = StyleSheet.create({
+  switchButton: {
+
+  },
   selfView: {
-    width: 200,
-    height: 150,
+    width: 100,
+    height: 100,
+    top: 15, 
+    left: 15,
+    backgroundColor: 'red',
   },
   remoteView: {
-    width: 200,
-    height: 150,
+    backgroundColor: 'blue',
+    flexDirection: 'row',
+    flex: 1,
   },
   container: {
     flex: 1,
