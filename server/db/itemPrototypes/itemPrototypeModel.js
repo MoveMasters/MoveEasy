@@ -9,9 +9,7 @@ const Schema = mongoose.Schema;
 
 
 
-
-
-const itemProtoypeSchema = new Schema(
+const ItemPrototypeSchema = new Schema( {
   name: {
     type: String,
     unique: true,
@@ -20,8 +18,13 @@ const itemProtoypeSchema = new Schema(
   ctf : {
     type: Number,
     required: true
+  },
+  count : {
+    type: Number,
+    required: true,
+    default: 1
   }
-);
+});
 
 
 const ItemPrototype = mongoose.model('ItemPrototype', ItemPrototypeSchema);

@@ -1,6 +1,7 @@
 import json
 import sys
 import xlrd
+import re
 from os.path import join, dirname, abspath
 
 
@@ -9,6 +10,8 @@ if len(sys.argv) < 2:
   #fname = '/Users/stephen/Documents/test.xlsx'
 else:
   fname = sys.argv[1]
+
+
 print 'start'
 
 xl_workbook = xlrd.open_workbook(fname)
@@ -17,6 +20,14 @@ print 'read'
 
 name_col_num = 9
 cft_col_num = 10
+
+
+def fixName(text):
+  # text = text.replace('/', ' ')
+  # text = text.replace('\\', ' ')
+  # text = text.replace('"', ' ')
+  # text = text.replace("'", ' ')
+  return text
 
 class Item:
   def __init__(self, name):
@@ -32,21 +43,24 @@ class Item:
     return self.totalCtf / self.num
 
   def __str__(self):
-    return "%s, Count: %d, Ctf: %f"%(self.name, self.num, self.getAverageCtf())
+    return "%s, Ctf: %f"%(self.name, self.getAverageCtf())
 
   def __repr__(self):
-    return {"name": self.name, "count": self.num, "ctf": self.getAverageCtf()}
+    return {"name": self.name, "ctf": self.getAverageCtf()}
 
   def getShortInfo(self):
-    return '%s\t%d\t%d'%(self.name, self.num, self.getAverageCtf())
+    return '%s\t%d'%(self.name, self.getAverageCtf())
 
   def __str__(self):
     name = self.name
     num = self.num
     ctf = self.getAverageCtf()
-    return '{"name": "%(name)s", "count": %(num)d, "ctf": %(ctf)d'%vars()
+    return '{"name": "%(name)s", "ctf": %(ctf)d'%vars()
 
 
+#check which items to store
+itemList = open('shippingList.txt', 'rb').read().split('\n')
+itemSet = set(itemList)
 
 itemDict = {}
 itemList = []
@@ -62,6 +76,13 @@ for name in xl_workbook.sheet_names():
     if len(row) < cft_col_num:
       continue
     name = str(row[name_col_num].value)
+    name = fixName(name)
+
+    if (name not in itemSet):
+      continue
+    if len(name) > 30:
+      print 'name %(name)s too long!'%vars()
+      continue
     ctf_str = str(row[cft_col_num].value)
     try:
       ctf = float(ctf_str)
@@ -85,7 +106,7 @@ fileOut.close()
 itemNames = map(lambda x: x.getShortInfo(), itemList)
 
 fileOut = open('shippingData.csv', 'wb')
-fileOut.write('Name\tNumber\tCtf\n')
+fileOut.write('Name\tCtf\n')
 fileOut.write('\n'.join(itemNames))
 fileOut.close()
 

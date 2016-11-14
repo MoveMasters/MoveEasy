@@ -8,14 +8,12 @@ const Promise = require('bluebird');
 
 const bing = new Scraper.Bing();
 
-//var clarifaiModelId = process.env.clarifaiModelId || 'furniture';
-
-
 //setup constants
 const shippingJsonFile = './../shippingData/shippingData.json';
 const clarifaiModelName = process.env.clarifaiModelName || 'furniture';
-const numItems = process.env.clarifaiModelName || 100;
-const numImagesPerItem = process.env.clarifaiModelName || 100;
+const numItems = process.env.numItems || 48;
+const numImagesPerItem = process.env.numImagesPerItem || 20;
+const offset = 0;
 
 
 
@@ -24,9 +22,16 @@ const app = new Clarifai.App(
   secret.ClarifaiClientSecret
 );
 
-app.getToken().then(token =>{
-  console.log('token', token);
-});
+
+var getResults = (term, num) => {
+  num = num || numImagesPerItem;
+  return bing.list({
+      keyword: term,
+      num: num,
+      detail: true
+  });
+};
+
 
 
 //check to see if our model exists
@@ -44,33 +49,41 @@ var initializeModel = () => {
 
 
 
+
 var getModel = () => {
   return app.models.search(clarifaiModelName, 'concept').then(
-    response => {
-      if(response.length === 0) {
-        return initializeModel();
-      } else {
-        return response[0];
-      }
-  },
-    err => { throw err }
-  );
-};
-
-
-var deleteAllModels = (cb) => {
-  app.models.delete().then(
-    function(response) {
-      cb(null, response);
-    },
-    function(err) {
-      cb(err, null);
+  response => {
+    if(response.length === 0) {
+      return initializeModel();
+    } else {
+      return response[0];
     }
-  );
+  },
+  err => { 
+    console.log('error getting model', clarifaiModelName);
+    throw err;
+  });
 };
 
+exports.getModel = getModel;
 
-var listAllModels = (cb) => {
+
+
+
+var deleteAllModels = () => {
+  return app.models.delete().then( response => {
+    console.log('success deleting models');
+    return true;
+  },
+  err => {
+    console.log('error deleting models', err);
+    throw err;
+  });
+}
+
+
+
+var listAllModels = () => {
   app.models.list().then(
     function(response) {
       console.log('list all models response', response);
@@ -81,7 +94,7 @@ var listAllModels = (cb) => {
   );
 };
 
-
+exports.listAllModels = listAllModels;
 
 
 var readJson = () => {
@@ -89,7 +102,7 @@ var readJson = () => {
     fs.readFile(shippingJsonFile, 'utf8', function (err, data) {
       if (err) throw err;
       var obj = JSON.parse(data);
-      obj = obj.slice(6, numItems+6);
+      obj = obj.slice(offset, numItems+offset);
       resolve(obj);
     });
   });
@@ -97,24 +110,64 @@ var readJson = () => {
 
 var getModelAndJson = () => {
   return Promise.all([getModel(), readJson()]);
-}
+};
 
 
-//listAllModels();
 
-// getModelAndJson().then( tuple => {
-//   const model = tuple[0];
-//   const data = tuple[1];
-//   //console.log('model', model);
-//   model.getOutputInfo().then(
-//     function(response) {
-//       console.log('response', response);
-//     },
-//     function(err) {
-//       // there was an error
-//     }
-//   );
-// })
+
+var createModel = () => {
+  return Promise.all([readJson(), deleteAllModels()]).then(
+  result => {
+    const data = result[0];
+    const conceptData = data.map( item => {return {id: item.name}} );
+    console.log(conceptData);
+    return app.models.create(
+      clarifaiModelName,
+      conceptData
+    ).then( response => {
+      console.log('success creating', clarifaiModelName);
+      return response;
+    },
+    err => {
+      console.log('err creating model');
+      throw err;
+    });
+  });
+};
+
+var createAndTrain = () => {
+  return createModel().then(
+    model => {
+      return model.train().then(
+        response => {
+          console.log('success training model', model.name);
+          
+          return model;
+        },
+        err => {
+          console.log('error training model');
+          throw err;
+        }
+      );
+    }
+  );
+};
+
+exports.createAndTrain = createAndTrain;
+
+
+var showTrainingData = () => {
+  getModel().then(
+    model => {
+      model.getVersions().then( response => {
+        console.log('versions', response.data.model_versions);
+      });
+    }
+  );
+};
+
+
+exports.showTrainingData = showTrainingData;
 
 
 
@@ -131,7 +184,8 @@ var sendDataToAPI = () => {
       const item = data.pop(0);
       const term = item.name;
       getResults(term).then( resultArr => {
-        var dataArr = resultArr.map( result => { return {url: result.url, id:term} });
+        var dataArr = resultArr.map( result => { return {url: result.url, concepts: {id:term, value:true}} });
+        console.log('dataArr', dataArr);
         app.inputs.create(
           dataArr
         ).then( response => {
@@ -145,8 +199,144 @@ var sendDataToAPI = () => {
   });
 };
 
+exports.sendDataToAPI = sendDataToAPI;
+
+
+var sendSingleUrlToApi = () => {
+  readJson().then( (data) => {
+    var intervalID;
+    //trains item from data stack
+    var trainItem = () => {
+      if (data.length === 0) {
+        clearInterval(intervalID);
+        console.log('done!');
+        return;
+      }
+      const item = data.pop(0);
+      const term = item.name;
+      getResults(term).then( resultArr => {
+        resultArr.forEach(result => {
+          const url = result.url
+          console.log('url', url);
+          app.inputs
+          .create(
+            {url: url,
+            concepts: [{ 
+              id: term,
+              value: true
+            }]}
+          ).then(
+            response => {
+              console.log('Success with', term);
+          },
+          err => {
+            console.log('err with', term, err.status, err.statusText);
+          });
+        });
+      });
+    };
+    intervalID = setInterval(trainItem, 100);
+  });
+};
+
+exports.sendSingleUrlToApi = sendSingleUrlToApi;
+
+
+
+var sendDataToApiSlow = () => {
+  readJson().then( (data) => {
+    var intervalID;
+    //trains item from data stack
+    var trainItem = (term, rul) => {
+      if (data.length === 0) {
+        clearInterval(intervalID);
+        console.log('done!');
+        return;
+      }
+      const item = data.pop(0);
+      var term = item.name;
+      getResults(term).then( resultArr => {
+        resultArr.forEach(result => {
+          const url = result.url
+          app.inputs
+          .create(
+            {url: url,
+            concepts: [{ 
+              id: term,
+              value: true
+            }]}
+          ).then(
+            response => {
+              console.log('Success with', term);
+          },
+          err => {
+            console.log('err with', term, err.status, err.statusText);
+          });
+        });
+      });
+    };
+    intervalID = setInterval(trainItem, 3000);
+  });
+};
+
+exports.sendDataToApiSlow = sendDataToApiSlow;
+
+
+
+
 
 //sendDataToAPI();
+
+
+// var addConcepts = () => {
+//   getModelAndJson().then( tuple => {
+//     const model = tuple[0];
+//     const data = tuple[1];
+//     console.log('mod', typeof model);
+//     const conceptData = data.map( item => {id: item.name});
+//     model.addConcept(conceptData).then( response => {
+//       console.log('addConcepts response', response);
+//     },
+//     err => {
+//       console.log('addConcepts err', err);
+//     });
+//   });
+// };
+
+
+
+// getModelAndJson().then( tuple => {
+//   const model = tuple[0];
+//   const data = tuple[1];
+//   //console.log('model', model);
+//   model.getOutputInfo().then(
+//     function(response) {
+//       console.log('response', response);
+//     },
+//     function(err) {
+//       // there was an error
+//     }
+//   );
+// })
+
+
+// var updateModel = (model) => {
+//   console.log('model', model.__proto__);
+//   readJson().then(
+//     data => {
+//       const conceptData = data.map( item => {id: item.name});
+//       model.addConcepts(conceptData).then( response => {
+//         console.log('addConcepts response', response);
+//       },
+//       err => {
+//         console.log('addConcepts err', err);
+//       });
+//     },
+//     err => {
+//       throw err;
+//     }
+//   );
+// };
 
 
 
@@ -197,15 +387,6 @@ var sendDataToAPI = () => {
 // });
 
 
-
-var getResults = (term, num) => {
-  num = num || numImagesPerItem;
-  return bing.list({
-      keyword: term,
-      num: num,
-      detail: true
-  });
-};
 
 
 

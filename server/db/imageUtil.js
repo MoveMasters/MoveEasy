@@ -5,6 +5,7 @@ const secret = require('./../secret');
 const fs = require('fs'); 
 const s3 = require('./../s3config');
 const Promise = require('bluebird');
+const trainerUtil = require('./../imageTrainer/trainerUtil');
 
 
 
@@ -17,8 +18,13 @@ const clarApp = new Clarifai.App(
 
 var tokenResponse;
 
-clarApp.getToken( token => {
+clarApp.getToken().then( token => {
   tokenResponse = token;
+});
+
+var clarifaiModel;
+trainerUtil.getModel().then( model => {
+  clarifaiModel = model;
 });
 
 
@@ -54,12 +60,23 @@ exports.saveAndUpload = (filePath, photoData) => {
 };
 
 exports.getClarifaiToken = () => {
-  return tokenResponse;
+  console.log('token', tokenResponse.access_token);
+  return tokenResponse.access_token;
 };
 
 
 exports.predict = (imageUrl) => {
-  return clarApp.models.predict(Clarifai.GENERAL_MODEL, imageUrl);
+  //trainerUtil.listAllModels();
+  //return clarApp.models.predict(Clarifai.GENERAL_MODEL, imageUrl);
+  //return clarifaiModel.predict(imageUrl);
+  return clarifaiModel.train().then(
+    response =>{
+      return clarifaiModel.predict(imageUrl);
+    },
+    err => {
+      console.log('err training');
+    }
+  );
 };
 
 

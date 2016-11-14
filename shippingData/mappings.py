@@ -1,4 +1,0 @@
-
-mappings = {
-  'Bookcase - Sections': 'Bookcase'
-}

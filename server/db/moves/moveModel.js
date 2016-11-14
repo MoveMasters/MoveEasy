@@ -19,3 +19,6 @@ const moveSchema = new Schema(
   }]
 
 );
+
+const Move = mongoose.model('Move', moveSchema);
+module.exports = Move;
