@@ -15,12 +15,6 @@ const clarApp = new Clarifai.App(
   secret.ClarifaiClientSecret
 );
 
-var tokenResponse;
-
-clarApp.getToken().then( token => {
-  tokenResponse = token;
-});
-
 
 
 
@@ -77,51 +71,11 @@ exports.saveAndUpload = (filePath, photoData) => {
 };
 
 exports.getClarifaiToken = () => {
-  console.log('token', tokenResponse.access_token);
-  return tokenResponse.access_token;
-};
-
-
-var getMatches = tag => {
-  var checkList = [tag];
-  if (tag in nameMappings) {
-    checkList.push(nameMappings[tag]);
-  }
-  var matches = [];
-  items2check.forEach( item => {
-    var lowered = item.toLowerCase();
-    for (var i = 0; i < checkList.length; i ++) {
-      var tagcheck = checkList[i];
-      console.log('check', tagcheck, item);
-      if (lowered.includes(tagcheck)) {
-        matches.push(item);
-        break;
-      }
-    }
-  });
-  return matches;
-}
-
-
-exports.predict = imageUrl => {
-  //return clarifaiModel.predict(imageUrl);
-  return clarApp.models.predict(Clarifai.GENERAL_MODEL, imageUrl).then( response => {
-    const data = response.data.outputs[0].data.concepts;
-    console.log('response', data);
-    var possibilities = [];
-    for (var i = 0; i < data.length; i ++) {
-      var tag = data[i].name;
-      var result = getMatches(tag);
-      possibilities = possibilities.concat(result);
-    }
-    console.log('possibilities', possibilities);
-    return possibilities;
-  },
-  err => {
-    throw err;
+  //console.log('token', tokenResponse.access_token);
+  //return tokenResponse.access_token;
+  return clarApp.getToken().then( token => {
+    return token.access_token;
   });
 };
-
-
 
 

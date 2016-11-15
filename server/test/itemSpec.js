@@ -16,7 +16,7 @@ describe('Meta Testing', () => {
 
 
 
-describe('Item Server APIs', () => {
+xdescribe('Item Server APIs', () => {
   it('Should respond to image cropping', (done) => {
     DataUri('test/itemImage1.png').then( imageUri => {
       request.post('/api/item/croppedImage')

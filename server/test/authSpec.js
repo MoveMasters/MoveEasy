@@ -15,14 +15,16 @@ describe('Meta Testing', () => {
 
 
 describe('Auth Server APIs', () => {
-  it('Should send auth token for Clarifai', (done) => {
+  it('Should send auth token and other info for Clarifai', (done) => {
     setTimeout( () => {
-      request.get('/api/auth/clarifaiToken')
+      console.log('start')
+      request.get('/api/auth/clarifaiInfo')
       .send().end( (err, res) => {
+        expect(res.body.clarifaiToken).to.not.be.null;
         expect(res.status).to.equal(200);
         done();
       });
-    }, 200);
+    }, 300);
   });
 });
     

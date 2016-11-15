@@ -13,24 +13,18 @@ class Survey extends Component {
 		super(props)
 
 		this.state = {
-			clarifaiToken: null,
 			takePhoto: false
 		}
 	}
 
 	componentWillMount() {
-		//this.setClarifaiToken();
 		this.setClarfaiInfo();
 	}
 
-	setClarifaiToken() {
-		util.getClarifaiToken().then(clarifaiToken => this.setState({ clarifaiToken }));
-	}
 
 	setClarfaiInfo() {
 		util.getClarifaiInfo().then(clarfaiInfo => {
 			console.log('clarfaiInfo', clarfaiInfo);
-			this.setState({clarifaiToken: clarfaiInfo.clarifaiToken});
 		});
 	}
 
