@@ -5,17 +5,10 @@ const secret = require('./../secret');
 const fs = require('fs'); 
 const s3 = require('./../s3config');
 const Promise = require('bluebird');
-// const trainerUtil = require('./../imageTrainer/trainerUtil');
-const basicTrainerUtil = require('./../imageTrainer/basicTrainerUtil');
-const nameMappings = require('./../imageTrainer/nameMappings');
 
 
-
-const tags2check = basicTrainerUtil.readTags();
-const items2check = basicTrainerUtil.getItems();
-
-
-
+const shippingListFile = '../shippingData/shippingList.txt';
+const clarifaiTagFile = '../shippingData/clarifaiTags.txt';
 
 const clarApp = new Clarifai.App(
   secret.ClarifaiClientId,
@@ -29,12 +22,29 @@ clarApp.getToken().then( token => {
 });
 
 
-var clarifaiModel;
-basicTrainerUtil.getModel().then( model => {
-  clarifaiModel = model;
-});
 
 
+
+var readClarfaiTags = () => {
+  data = String(fs.readFileSync(clarifaiTagFile, 'utf8'));
+  const lines = data.split('\n');
+  const tags = lines.map( line => { return line.trim(); });
+  return tags;
+}
+
+
+exports.readClarfaiTags = readClarfaiTags;
+
+
+
+var readClarfaiItems = () => {
+  data = String(fs.readFileSync(shippingListFile, 'utf8'));
+  const lines = data.split('\n');
+  const items = lines.map( line => { return line.trim(); });
+  return items;
+}
+
+exports.readClarfaiItems = readClarfaiItems;
 
 
 exports.saveAndUpload = (filePath, photoData) => {

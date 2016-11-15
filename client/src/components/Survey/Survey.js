@@ -19,11 +19,19 @@ class Survey extends Component {
 	}
 
 	componentWillMount() {
-		this.setClarifaiToken();
+		//this.setClarifaiToken();
+		this.setClarfaiInfo();
 	}
 
 	setClarifaiToken() {
-		util.getClarifaiToken().then(clarifaiToken => this.setState({ clarifaiToken }))
+		util.getClarifaiToken().then(clarifaiToken => this.setState({ clarifaiToken }));
+	}
+
+	setClarfaiInfo() {
+		util.getClarifaiInfo().then(clarfaiInfo => {
+			console.log('clarfaiInfo', clarfaiInfo);
+			this.setState({clarifaiToken: clarfaiInfo.clarifaiToken});
+		});
 	}
 
 	getToken() {
@@ -31,11 +39,11 @@ class Survey extends Component {
 	}
 
 	setPhotoState(boolean) {
-		this.setState({ takePhoto: boolean })
+		this.setState({ takePhoto: boolean });
 	}
 
 	getRemoteStream() {
-		console.log('remoteStream from getRemoteStream', remoteStream, this)
+		console.log('remoteStream from getRemoteStream', remoteStream, this);
 		return remoteStream;
 	}
 
