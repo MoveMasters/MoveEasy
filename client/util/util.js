@@ -18,8 +18,6 @@ var clarfaiItems;
 var nameMappings;
 
 
-
-
 const postCroppedImage = (image) => {
 	return axios.post(postCroppedImageURL, { image })
 	  .then(function (response) {
@@ -47,19 +45,46 @@ const getClarifaiInfo = () => {
 }
 
 
-const getClarifaiToken = () => {
-	return axios.get(getClarifaiTokenURL)
-  		.then( response => console.log(response) || response.data.token )
-  		.catch( error => console.log('Error getClarifaiToken', error) );
+const getMatches = tag => {
+  var checkList = [tag];
+  if (tag in nameMappings) {
+    checkList.push(nameMappings[tag]);
+  }
+  var matches = [];
+  items2check.forEach( item => {
+    var lowered = item.toLowerCase();
+    for (var i = 0; i < checkList.length; i ++) {
+      var tagcheck = checkList[i];
+      if (lowered.includes(tagcheck)) {
+        matches.push(item);
+        break;
+      }
+    }
+  });
+  return matches;
 }
 
 
-const postImageToClarifai = (base64Image, token) => {
+const predict = concepts => {
+  var possibilities = [];
+  for (var i = 0; i < data.length; i ++) {
+    var tag = data[i].name;
+    var result = getMatches(tag);
+    possibilities = possibilities.concat(result);
+  }
+  console.log('possibilities', possibilities);
+  return possibilities;
+};
+
+
+
+
+const postImageToClarifai = (base64Image) => {
 	return axios(postImageToClarifaiURL, {
 		  method: 'post',
 		  model: 'general-v1.3',
 		  headers: {
-		    'Authorization': `Bearer ${token}`
+		    'Authorization': `Bearer ${clarfaiToken}`
 		  },
 		  data: {
 		  	'encoded_data': image
@@ -67,9 +92,12 @@ const postImageToClarifai = (base64Image, token) => {
 		})
 	  .then(function (response) {
 	    console.log(response, 'response from inside utils');
+	    const concepts = response.data.outputs[0].data.concepts;
+	    return predict(concepts);
 	  })
 	  .catch(function (error) {
 	    console.log('Error postImageToClarifai:', error);
+	    throw error;
 	  });
 }
 
@@ -78,4 +106,4 @@ const postImageToClarifai = (base64Image, token) => {
 
 /************************************ EXPORT ************************************/
 
-export default { postCroppedImage, getClarifaiToken, postImageToClarifai, getClarifaiInfo }
+export default { postCroppedImage, postImageToClarifai, getClarifaiInfo }

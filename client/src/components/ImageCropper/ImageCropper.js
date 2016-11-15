@@ -40,7 +40,7 @@ class ImageCropper extends Component {
 	cropAndSend() {
 	  let image = cropper.getCroppedCanvas().toDataURL('image/jpeg');
 	  let base64Image = image.replace(/^data:image\/(jpeg|png|jpg);base64,/, "").toString('base64')
-	  util.postImageToClarifai(base64Image, this.props.getToken())
+	  util.postImageToClarifai(base64Image)
 	  this.props.setPhotoState(false);
 	}
 
