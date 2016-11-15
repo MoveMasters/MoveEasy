@@ -6,7 +6,6 @@ import util from './../../../util/util';
 import PhotoInventory from '../PhotoInventory/PhotoInventory';
 import HorizontalStepper from '../HorizontalStepper/HorizontalStepper';
 
-let remoteStream;
 
 class Survey extends Component {
 	constructor(props) {
@@ -28,42 +27,23 @@ class Survey extends Component {
 		});
 	}
 
-	getToken() {
-		return this.state.token;
-	}
-
-	setPhotoState(boolean) {
-		this.setState({ takePhoto: boolean });
-	}
-
-	getRemoteStream() {
-		console.log('remoteStream from getRemoteStream', remoteStream, this);
-		return remoteStream;
+	setScreenshot(screenshot) {
+		this.setState({ screenshot });
 	}
 
 	render() {
-		console.log(remoteStream, 'remote stream from Survey')
 		return (
 			<div className='row'>
-
 	    		<div className='col-md-6'>
 					<VideoFeed 
-						setRemoteStream={(stream) => remoteStream = stream } 
-						setPhotoState={this.setPhotoState.bind(this)}/>	
-
+						setScreenshot={this.setScreenshot.bind(this)}/>	
 					<hr />	
 
 					<PhotoInventory />			
 				</div>
 
 				<div className='col-md-6'>
-					<HorizontalStepper />
-
-					<ImageCropper 
-						getRemoteStream={this.getRemoteStream.bind(this)}
-						getToken={this.getToken.bind(this)}
-						takePhoto={this.state.takePhoto}
-						setPhotoState={this.setPhotoState.bind(this)}/>
+					<HorizontalStepper screenshot={this.state.screenshot}/>
 				</div>
 			</div>
 		)

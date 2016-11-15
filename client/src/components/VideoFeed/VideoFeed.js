@@ -188,6 +188,21 @@ class VideoFeed extends Component {
 	}
 
 
+	grabScreenshot() {
+		let remoteStream = container.refs.remoteVideo;
+		let video = remoteStream.player.player;
+		let canvas = container.refs.canvas;
+		canvas.width = remoteStream.props.width;
+	  	canvas.height = remoteStream.props.height;
+	  	canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+	  	// create screenshot data object
+  		let screenshot = canvas.toDataURL("image/png");
+
+  		// set that as state in Survey Component
+  		container.props.setScreenshot(screenshot);
+	}
+
 	render() {
 	    return (
 	    		<div style={styles.videoFeed}>
@@ -199,13 +214,13 @@ class VideoFeed extends Component {
 
 			 
 			        <ReactPlayer playing
-			        	ref={stream => stream && this.props.setRemoteStream(stream)}
+			        	ref='remoteVideo'
 			        	style={styles.remoteStream}  
 			        	url={this.state.remoteStreamURL}
 			        	width={375}
 			        	height={667} />
-						<button onClick={() => this.props.setPhotoState(true)}>Take Photo</button>
-						<button onClick={this.cropAndSend.bind(this)}>Send Cropped Photo</button>
+			       	<canvas ref='canvas' style={{display: 'none'}}></canvas>
+			       	<button onClick={this.grabScreenshot.bind(this)}>grabScreenshot</button>
 			    </div>
 	    );
 	}
