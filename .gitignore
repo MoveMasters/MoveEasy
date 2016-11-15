@@ -7,3 +7,4 @@ images
 build/
 dist/
 .DS_Store
+client/node_modules/
