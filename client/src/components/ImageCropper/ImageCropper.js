@@ -54,8 +54,6 @@ class ImageCropper extends Component {
 						ref='canvas'
 						className='col-md-4'></canvas>
 				</div>
-				<button onClick={this.captureImage}>Take Photo</button>
-				<button onClick={this.cropAndSend.bind(this)}>Send Cropped Photo</button>
 			</div>
 		)
 	}
