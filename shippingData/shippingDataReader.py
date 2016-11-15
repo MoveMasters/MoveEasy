@@ -78,8 +78,6 @@ for name in xl_workbook.sheet_names():
     name = str(row[name_col_num].value)
     name = fixName(name)
 
-    if (name not in itemSet):
-      continue
     if len(name) > 30:
       print 'name %(name)s too long!'%vars()
       continue
@@ -97,9 +95,11 @@ for name in xl_workbook.sheet_names():
 itemList.sort(key = lambda x: x.num, reverse=True)
 itemStrings = map(lambda x: str(x), itemList)
 
+#only certain items
 fileOut = open('shippingData.json', 'wb')
-allItems = map(lambda x: x.__repr__(), itemList)
-fileOut.write(json.dumps(allItems));
+matchingItems = filter(lambda x: x.name in itemSet, itemList)
+matchingItems = map(lambda x: x.__repr__(), matchingItems)
+fileOut.write(json.dumps(matchingItems));
 fileOut.close()
 
 #names

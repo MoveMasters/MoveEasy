@@ -76,6 +76,7 @@ module.exports = {
   * @returns {object} if user is created successfully, returns the user token
   */
   signup(req, res, next) {
+    console.log('signup');
     const username = req.body.username;
     const password = req.body.password;
 

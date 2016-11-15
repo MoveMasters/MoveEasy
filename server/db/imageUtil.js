@@ -5,11 +5,10 @@ const secret = require('./../secret');
 const fs = require('fs'); 
 const s3 = require('./../s3config');
 const Promise = require('bluebird');
-const trainerUtil = require('./../imageTrainer/trainerUtil');
 
 
-
-
+const shippingListFile = '../shippingData/shippingList.txt';
+const clarifaiTagFile = '../shippingData/clarifaiTags.txt';
 
 const clarApp = new Clarifai.App(
   secret.ClarifaiClientId,
@@ -22,12 +21,30 @@ clarApp.getToken().then( token => {
   tokenResponse = token;
 });
 
-var clarifaiModel;
-trainerUtil.getModel().then( model => {
-  clarifaiModel = model;
-});
 
 
+
+
+var readClarfaiTags = () => {
+  data = String(fs.readFileSync(clarifaiTagFile, 'utf8'));
+  const lines = data.split('\n');
+  const tags = lines.map( line => { return line.trim(); });
+  return tags;
+}
+
+
+exports.readClarfaiTags = readClarfaiTags;
+
+
+
+var readClarfaiItems = () => {
+  data = String(fs.readFileSync(shippingListFile, 'utf8'));
+  const lines = data.split('\n');
+  const items = lines.map( line => { return line.trim(); });
+  return items;
+}
+
+exports.readClarfaiItems = readClarfaiItems;
 
 
 exports.saveAndUpload = (filePath, photoData) => {
@@ -65,18 +82,46 @@ exports.getClarifaiToken = () => {
 };
 
 
-exports.predict = (imageUrl) => {
-  //trainerUtil.listAllModels();
-  //return clarApp.models.predict(Clarifai.GENERAL_MODEL, imageUrl);
-  //return clarifaiModel.predict(imageUrl);
-  return clarifaiModel.train().then(
-    response =>{
-      return clarifaiModel.predict(imageUrl);
-    },
-    err => {
-      console.log('err training');
+var getMatches = tag => {
+  var checkList = [tag];
+  if (tag in nameMappings) {
+    checkList.push(nameMappings[tag]);
+  }
+  var matches = [];
+  items2check.forEach( item => {
+    var lowered = item.toLowerCase();
+    for (var i = 0; i < checkList.length; i ++) {
+      var tagcheck = checkList[i];
+      console.log('check', tagcheck, item);
+      if (lowered.includes(tagcheck)) {
+        matches.push(item);
+        break;
+      }
     }
-  );
+  });
+  return matches;
+}
+
+
+exports.predict = imageUrl => {
+  //return clarifaiModel.predict(imageUrl);
+  return clarApp.models.predict(Clarifai.GENERAL_MODEL, imageUrl).then( response => {
+    const data = response.data.outputs[0].data.concepts;
+    console.log('response', data);
+    var possibilities = [];
+    for (var i = 0; i < data.length; i ++) {
+      var tag = data[i].name;
+      var result = getMatches(tag);
+      possibilities = possibilities.concat(result);
+    }
+    console.log('possibilities', possibilities);
+    return possibilities;
+  },
+  err => {
+    throw err;
+  });
 };
+
+
 
 

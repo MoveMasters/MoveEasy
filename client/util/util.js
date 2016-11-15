@@ -6,8 +6,19 @@ const port = '9000'
 const postCroppedImageURL = `http://${ip}:${port}/api/item/croppedImage`;
 const getClarifaiTokenURL = `http://${ip}:${port}/api/auth/clarifaiToken`;
 const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;
+const getClarfaiInfoURL = `http://${ip}:${port}/api/auth/clarifaiInfo`;
+
+
+
 
 /************************************ PHOTOS ************************************/
+var clarfaiTags;
+var clarfaiToken;
+var clarfaiItems;
+var nameMappings;
+
+
+
 
 const postCroppedImage = (image) => {
 	return axios.post(postCroppedImageURL, { image })
@@ -18,6 +29,23 @@ const postCroppedImage = (image) => {
 	    console.log('Error from postCroppedImage:', error);
 	  });
 }
+
+const getClarifaiInfo = () => {
+	return axios.get(getClarfaiInfoURL)
+	.then( response => {
+		const data = response.data;
+		clarfaiTags = data.clarfaiTags;
+		clarfaiToken = data.clarfaiToken;
+		clarfaiItems = data.clarfaiItems;
+		nameMappings = data.nameMappings;
+		return data;
+	})
+	.catch( error => {
+		console.log('Error getClarifaiInfo', error) 
+		throw err;
+	});
+}
+
 
 const getClarifaiToken = () => {
 	return axios.get(getClarifaiTokenURL)
@@ -50,4 +78,4 @@ const postImageToClarifai = (base64Image, token) => {
 
 /************************************ EXPORT ************************************/
 
-export default { postCroppedImage, getClarifaiToken, postImageToClarifai }
+export default { postCroppedImage, getClarifaiToken, postImageToClarifai, getClarifaiInfo }

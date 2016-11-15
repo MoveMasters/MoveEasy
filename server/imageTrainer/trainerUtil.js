@@ -1,3 +1,11 @@
+/*
+A utility file for training models with custom inputs
+currently NOT in use!
+
+
+Should form basis of a model with training of non-default concepts with url inputs from a scraper
+
+*/
 const Clarifai = require('clarifai');
 const secret = require('./../secret');
 const fs = require('fs'); 
@@ -11,9 +19,10 @@ const bing = new Scraper.Bing();
 //setup constants
 const shippingJsonFile = './../shippingData/shippingData.json';
 const clarifaiModelName = process.env.clarifaiModelName || 'furniture';
-const numItems = process.env.numItems || 48;
-const numImagesPerItem = process.env.numImagesPerItem || 20;
+const numItems = process.env.numItems || 49;
+const numImagesPerItem = process.env.numImagesPerItem || 100;
 const offset = 0;
+const timeBetweenCalls = process.env.timeBetweenCalls || 200;
 
 
 
@@ -171,8 +180,47 @@ exports.showTrainingData = showTrainingData;
 
 
 
+
+
+var createApiObjects = () => {
+  var term;
+  return readJson().then( (data) => {
+    var promises = [];
+    var concepts = [];
+    data.forEach(item => {
+      term = item.name
+      const promise = getResults(term);
+      promises.push(promise);
+      concepts.push(term);
+    });
+    var outputs = [];
+    return Promise.all(promises).then(allResults => {
+      for (var i = 0; i < allResults.length; i ++) {
+        var termResult = allResults[i];
+        //console.log('fulfilled', termResult);
+        term = concepts[i];
+        termResult.forEach(result => {
+          var url = result.url;
+          var obj = {
+            url: url,
+            concepts: [{ 
+            id: term,
+            value: true
+          }]};
+          outputs.push(obj);
+        });
+      }
+      return outputs;
+    });
+  });
+};
+
+
+exports.createApiObjects = createApiObjects;
+
+
 var sendDataToAPI = () => {
-  readJson().then( (data) => {
+  createApiObjects().then( data => {
     var intervalID;
     //trains item from data stack
     var trainItem = () => {
@@ -181,108 +229,23 @@ var sendDataToAPI = () => {
         console.log('done!');
         return;
       }
-      const item = data.pop(0);
-      const term = item.name;
-      getResults(term).then( resultArr => {
-        var dataArr = resultArr.map( result => { return {url: result.url, concepts: {id:term, value:true}} });
-        console.log('dataArr', dataArr);
-        app.inputs.create(
-          dataArr
-        ).then( response => {
-          console.log('Success with', term);
-        }, err => {
-          console.log('err with', term, err.status, err.statusText);
-        });
+      var obj = data.pop(0);
+      var term = obj.concepts[0].id;
+      //console.log('sending', term, obj.url);
+      app.inputs.create(obj).then(
+      response => {
+        console.log('Success with', term, obj.url);
+      },
+      err => {
+        console.log('err with', term, obj.url, err.status, err.statusText);
       });
-    };
-    intervalID = setInterval(trainItem, 100);
+    }
+    intervalID = setInterval(trainItem, timeBetweenCalls);
   });
 };
+
 
 exports.sendDataToAPI = sendDataToAPI;
-
-
-var sendSingleUrlToApi = () => {
-  readJson().then( (data) => {
-    var intervalID;
-    //trains item from data stack
-    var trainItem = () => {
-      if (data.length === 0) {
-        clearInterval(intervalID);
-        console.log('done!');
-        return;
-      }
-      const item = data.pop(0);
-      const term = item.name;
-      getResults(term).then( resultArr => {
-        resultArr.forEach(result => {
-          const url = result.url
-          console.log('url', url);
-          app.inputs
-          .create(
-            {url: url,
-            concepts: [{ 
-              id: term,
-              value: true
-            }]}
-          ).then(
-            response => {
-              console.log('Success with', term);
-          },
-          err => {
-            console.log('err with', term, err.status, err.statusText);
-          });
-        });
-      });
-    };
-    intervalID = setInterval(trainItem, 100);
-  });
-};
-
-exports.sendSingleUrlToApi = sendSingleUrlToApi;
-
-
-
-var sendDataToApiSlow = () => {
-  readJson().then( (data) => {
-    var intervalID;
-    //trains item from data stack
-    var trainItem = (term, rul) => {
-      if (data.length === 0) {
-        clearInterval(intervalID);
-        console.log('done!');
-        return;
-      }
-      const item = data.pop(0);
-      var term = item.name;
-      getResults(term).then( resultArr => {
-        resultArr.forEach(result => {
-          const url = result.url
-          app.inputs
-          .create(
-            {url: url,
-            concepts: [{ 
-              id: term,
-              value: true
-            }]}
-          ).then(
-            response => {
-              console.log('Success with', term);
-          },
-          err => {
-            console.log('err with', term, err.status, err.statusText);
-          });
-        });
-      });
-    };
-    intervalID = setInterval(trainItem, 3000);
-  });
-};
-
-exports.sendDataToApiSlow = sendDataToApiSlow;
-
-
-
 
 
 //sendDataToAPI();
@@ -579,6 +542,34 @@ exports.sendDataToApiSlow = sendDataToApiSlow;
 
 
 
+
+// var sendDataToAPI = () => {
+//   readJson().then( (data) => {
+//     var intervalID;
+//     //trains item from data stack
+//     var trainItem = () => {
+//       if (data.length === 0) {
+//         clearInterval(intervalID);
+//         console.log('done!');
+//         return;
+//       }
+//       const item = data.pop(0);
+//       const term = item.name;
+//       getResults(term).then( resultArr => {
+//         var dataArr = resultArr.map( result => { return {url: result.url, concepts: {id:term, value:true}} });
+//         console.log('dataArr', dataArr);
+//         app.inputs.create(
+//           dataArr
+//         ).then( response => {
+//           console.log('Success with', term);
+//         }, err => {
+//           console.log('err with', term, err.status, err.statusText);
+//         });
+//       });
+//     };
+//     intervalID = setInterval(trainItem, 100);
+//   });
+// };
 
 
 

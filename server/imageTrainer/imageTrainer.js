@@ -1,6 +1,13 @@
 const trainerUtil = require('./trainerUtil');
+const basicTrainerUtil = require('./basicTrainerUtil');
 
 
+
+//trainerUtil.sendDataToAPI();
 //trainerUtil.createAndTrain();
-//trainerUtil.sendDataToApiSlow();
-trainerUtil.showTrainingData();
+//trainerUtil.showTrainingData();
+
+
+//basicTrainerUtil.createAndTrain();
+//basicTrainerUtil.addDummy();
+basicTrainerUtil.showTrainingData();
