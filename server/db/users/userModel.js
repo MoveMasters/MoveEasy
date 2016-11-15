@@ -36,8 +36,9 @@ const userSchema = new Schema({
   * @param {string} candidatePassword request object
   * @returns {boolean}
   */
-userSchema.methods.comparePasswords = (candidatePassword) => {
+userSchema.methods.comparePasswords = function(candidatePassword) {
   const savedPassword = this.password;
+
   return new Q.Promise((resolve, reject) => {
     bcrypt.compare(candidatePassword, savedPassword, (err, isMatch) => {
       console.log('Error: ', err);

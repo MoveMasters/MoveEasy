@@ -1,8 +1,7 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -45,9 +44,9 @@ function getLocalStream(isFront, callback) {
       audio: true,
       video: {
         mandatory: {
-          minWidth: 500, // Provide your own width, height and frame rate here
-          minHeight: 300,
-          minFrameRate: 30
+          minWidth: 750, // Provide your own width, height and frame rate here
+          minHeight: 1334,
+          minFrameRate: 30,
         },
         facingMode: (isFront ? "user" : "environment"),
         optional: [{ sourceId: sourceInfos.id }, { minxFrameRate: 60 }]
@@ -236,16 +235,45 @@ function getStats() {
 
 let container;
 
+const styles = StyleSheet.create({
+  switchButton: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    justifyContent: 'center',
+    height: 50,
+    width: 50,
+    margin: 20,
+  },
+  selfView: {
+    backgroundColor: 'grey',
+    height: 100,
+    width: 100,
+    top: 20,
+    left: 15,
+  },
+  remoteView: {
+    flex: 1,
+    backgroundColor: 'black',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  listViewContainer: {
+    height: 150,
+  },
+});
 
+/** **********************************************************  **/
+/** ***************************APP****************************  **/
+/** **********************************************************  **/
 
-/**************************************************************/
-/*****************************APP******************************/
-/**************************************************************/
-
-const mkmobile = React.createClass({
-  getInitialState: function() {
-    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => true});
-    return {
+export default class Main extends React.Component {
+  constructor(props) {
+    super(props);
+    this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => true });
+    this.state = {
       info: 'Initializing',
       status: 'init',
       roomID: '',
@@ -256,19 +284,29 @@ const mkmobile = React.createClass({
       textRoomData: [],
       textRoomValue: '',
     };
-  },
-  componentDidMount: function() {
+
+    this._switchVideoType = this._switchVideoType.bind(this);
+    this._textRoomPress = this._textRoomPress.bind(this);
+    this._press = this._press.bind(this);
+    this.receiveTextData = this.receiveTextData.bind(this);
+    this._renderTextRoom = this._renderTextRoom.bind(this);
+  }
+
+  componentDidMount() {
     container = this;
-  },
-  _press(event) {
+  }
+
+  _press() {
     this.refs.roomID.blur();
-    this.setState({status: 'connect', info: 'Connecting'});
+    this.setState({ status: 'connect', info: 'Connecting' });
     join(this.state.roomID);
-  },
+  }
+
   _switchVideoType() {
+    console.log('this is', this);
     const isFront = !this.state.isFront;
-    this.setState({isFront});
-    getLocalStream(isFront, function(stream) {
+    this.setState({ isFront });
+    getLocalStream(isFront, (stream) => {
       if (localStream) {
         for (const id in pcPeers) {
           const pc = pcPeers[id];
@@ -277,112 +315,87 @@ const mkmobile = React.createClass({
         localStream.release();
       }
       localStream = stream;
-      container.setState({selfViewSrc: stream.toURL()});
+      container.setState({ selfViewSrc: stream.toURL() });
 
       for (const id in pcPeers) {
         const pc = pcPeers[id];
         pc && pc.addStream(localStream);
       }
     });
-  },
+  }
+
   receiveTextData(data) {
     const textRoomData = this.state.textRoomData.slice();
     textRoomData.push(data);
-    this.setState({textRoomData, textRoomValue: ''});
-  },
+    this.setState({ textRoomData, textRoomValue: '' });
+  }
+
   _textRoomPress() {
-    if (!this.state.textRoomValue) {
-      return
-    }
-    const textRoomData = this.state.textRoomData.slice();
-    textRoomData.push({user: 'Me', message: this.state.textRoomValue});
     for (const key in pcPeers) {
       const pc = pcPeers[key];
       pc.textDataChannel.send('capture');
     }
-    this.setState({textRoomData, textRoomValue: ''});
-  },
+
+    // if (!this.state.textRoomValue) {
+    //   return;
+    // }
+    // const textRoomData = this.state.textRoomData.slice();
+    // textRoomData.push({ user: 'Me', message: this.state.textRoomValue });
+    // for (const key in pcPeers) {
+    //   const pc = pcPeers[key];
+    //   pc.textDataChannel.send('capture');
+    // }
+    // this.setState({ textRoomData, textRoomValue: '' });
+  }
+
   _renderTextRoom() {
     return (
       <View style={styles.listViewContainer}>
         <ListView
           dataSource={this.ds.cloneWithRows(this.state.textRoomData)}
           renderRow={rowData => <Text>{`${rowData.user}: ${rowData.message}`}</Text>}
-          />
+        />
         <TextInput
-          style={{width: 200, height: 30, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={value => this.setState({textRoomValue: value})}
+          style={{ width: 200, height: 30, borderColor: 'gray', borderWidth: 1 }}
+          onChangeText={value => this.setState({ textRoomValue: value })}
           value={this.state.textRoomValue}
         />
         <TouchableHighlight
-          onPress={this._textRoomPress}>
+          onPress={this._textRoomPress}
+        >
           <Text>Send</Text>
         </TouchableHighlight>
       </View>
     );
-  },
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        { this.state.status == 'ready' ?
+        { this.state.status === 'ready' ?
           (<View>
             <TextInput
               ref='roomID'
               autoCorrect={false}
-              style={{width: 200, height: 40, borderColor: 'gray', borderWidth: 1}}
-              onChangeText={(text) => this.setState({roomID: text})}
+              style={{ width: 200, height: 40, borderColor: 'gray', borderWidth: 1 }}
+              onChangeText={text => this.setState({ roomID: text })}
               value={this.state.roomID}
             />
-            <TouchableHighlight
-              onPress={this._press}>
+            <TouchableHighlight onPress={this._press}>
               <Text>Enter room</Text>
             </TouchableHighlight>
           </View>) : null
         }
-          <RTCView streamURL={this.state.remoteViewSrc} style={styles.remoteView}>
-            <RTCView streamURL={this.state.selfViewSrc} style={styles.selfView}/>
-            <View style={styles.switchButton}>
-              <TouchableHighlight
-                style={{borderWidth: 1, borderColor: 'black'}}
-                onPress={this._switchVideoType}>
-                <Icon name="reverse-camera" />
-              </TouchableHighlight>
-            </View>
-          </RTCView>
+        <RTCView streamURL={this.state.remoteViewSrc} style={styles.remoteView}>
+          <RTCView streamURL={this.state.selfViewSrc} style={styles.selfView} />
+          <TouchableHighlight style={styles.switchButton} onPress={this._switchVideoType.bind(this)}>
+            <Icon name="ios-reverse-camera" size={40} style={{ color: 'white' }} />
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.switchButton} onPress={this._textRoomPress}>
+            <Icon name="md-aperture" size={50} style={{ color: 'white' }} />
+          </TouchableHighlight>
+        </RTCView>
       </View>
     );
   }
-});
-
-const styles = StyleSheet.create({
-  switchButton: {
-
-  },
-  selfView: {
-    width: 100,
-    height: 100,
-    top: 15, 
-    left: 15,
-    backgroundColor: 'red',
-  },
-  remoteView: {
-    backgroundColor: 'blue',
-    flexDirection: 'row',
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  listViewContainer: {
-    height: 150,
-  },
-});
-
-AppRegistry.registerComponent('mkmobile', () => mkmobile);
+}

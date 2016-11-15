@@ -1,6 +1,6 @@
 'use strict';
 const Upload = require('s3-uploader');
-const secret = require('./secret.js');
+const secret = require('./_secret.js');
 
 module.exports = new Upload('movekick', {
   aws: {
