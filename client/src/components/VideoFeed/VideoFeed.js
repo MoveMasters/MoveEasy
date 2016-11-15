@@ -187,6 +187,7 @@ class VideoFeed extends Component {
 	  delete pcPeers[socketId];
 	}
 
+
 	render() {
 	    return (
 	    		<div style={styles.videoFeed}>
@@ -203,8 +204,9 @@ class VideoFeed extends Component {
 			        	url={this.state.remoteStreamURL}
 			        	width={375}
 			        	height={667} />
+						<button onClick={() => this.props.setPhotoState(true)}>Take Photo</button>
+						<button onClick={this.cropAndSend.bind(this)}>Send Cropped Photo</button>
 			    </div>
-
 	    );
 	}
 }
