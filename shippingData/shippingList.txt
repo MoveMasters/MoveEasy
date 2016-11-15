@@ -1,3 +1,4 @@
+Chair - Office
 Bookcase - Sections
 Bed - Queen
 Sofa - 3 Cushion
@@ -10,7 +11,6 @@ Table - End
 Dresser - Single
 Dryer
 Washing Machine
-Ottoman - Small
 Rug
 Bookcase - Bookcase
 Stool
@@ -23,7 +23,6 @@ Bed - King
 TV - Stand
 Table - Kitchen
 Table - Dining
-Ironing Board
 Desk - Office
 Table - Coffee
 Table - Small
@@ -33,12 +32,10 @@ Filing Cabinet - 2-door
 Chair - Overstuffed
 Microwave Oven
 Lamp
-Golf Bag
 Toolchest - Small
 Ladder - 6' Step
 Night Table
 Dresser - Triple
-Garden Hose & Tools
 Ladder - Stepstool
 Chair - Rocker
 Table - Large

@@ -1,0 +1,22 @@
+lamp
+chair
+stool
+sofa
+airmchair
+bookcase
+bed
+vacuum
+drawer
+cabinet
+table
+dryer
+washer
+electric fan
+fan
+bike
+luggage
+desk
+computer
+barbecue
+container
+ladder
