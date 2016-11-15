@@ -1,0 +1,22 @@
+{
+  "name": "mkmobile",
+  "version": "0.0.1",
+  "description": "Mobile companion application for for MoveKick clients",
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "native-base": "^0.5.13",
+    "react": "15.3.2",
+    "react-native": "0.37.0",
+    "react-native-webrtc": "^0.54.1",
+    "socket.io-client": "^1.3.7"
+  },
+  "devDependencies": {
+    "eslint": "^3.8.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1"
+  }
+}

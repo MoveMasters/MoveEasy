@@ -1,4 +1,5 @@
-
+mobile/node_modules/
+mobile/ios/build/
 public/node_modules/
 server/node_modules/
 secret.js
