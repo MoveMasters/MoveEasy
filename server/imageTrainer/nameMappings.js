@@ -12,4 +12,5 @@ module.exports = {
   container: 'toolchest',
   luggage: 'cooler',
   seat: 'chair',
+  cabinet: 'chest'
 };

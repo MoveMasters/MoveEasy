@@ -43,3 +43,6 @@ Cooler
 Ottoman - Large
 Refrigerator - Mini
 Computer
+Bed - Double
+Dresser - Triple
+Chest - Armoire
