@@ -1,7 +1,7 @@
 
 const Upload = require('s3-uploader');
 const Clarifai = require('clarifai');
-const secret = require('./../secret');
+const secret = require('./../_secret.js');
 const fs = require('fs'); 
 const s3 = require('./../s3config');
 const Promise = require('bluebird');
