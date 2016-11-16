@@ -90,7 +90,19 @@ const predict = (concepts) => {
   return possibilities;
 };
 
-
+const filterSearch = (searchTerm) => {
+  searchTerm = searchTerm.toLowerCase();
+  var results = [];
+  clarifaiItems.forEach( item => {
+    const lowered = item.toLowerCase();
+    lowered.forEach( term => {
+      if (lowered.includes(searchTerm)) {
+        results.push(item);
+      }
+    });
+  });
+  return results;
+}
 
 
 const postImageToClarifai = (base64Image) => {
@@ -153,4 +165,4 @@ const postItemToServer = (item) => {
 
 /************************************ EXPORT ************************************/
 
-export default { postCroppedImage, postImageToClarifai, getClarifaiInfo }
+export default { postCroppedImage, postImageToClarifai, getClarifaiInfo, filterSearch}
