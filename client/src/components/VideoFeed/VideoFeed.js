@@ -17,14 +17,14 @@ let localStream, remoteStream, container;
 var pcPeers = {};
 
 /************************************* SOCKET IO ******************************************/ 
-let width = window.innerWidth;
+let width, height
 
 class VideoFeed extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			localStreamURL: null,
-			remoteStreamURL: null,
+			remoteStreamURL: null
 		}
 	}
 
@@ -51,6 +51,11 @@ class VideoFeed extends Component {
 	componentDidMount() {
 		this.join('MoveKick');
 	}
+
+	// componentWillUpdate() {
+	// 	this.setState({ width: window.innerWidth, height: window.innerHeight});
+	// 	console.log(this.state.width, this.state.height)
+	// }
 
 	logError(error, message) {
 	  console.log(message + ': ', error);
@@ -200,10 +205,13 @@ class VideoFeed extends Component {
   		let screenshot = canvas.toDataURL("image/png");
 
   		// set that as state in Survey Component
-  		container.props.setScreenshot(screenshot);
+  		container.props.handleScreenshot(screenshot);
 	}
 
 	render() {
+		{width = window.innerWidth
+		 height = window.innerHeight;
+		console.log(this.state.width, this.state.height)}
 	    return (
 	    		<div style={styles.videoFeed}>
 			        <ReactPlayer playing

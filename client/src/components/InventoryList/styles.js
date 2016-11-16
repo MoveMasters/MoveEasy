@@ -1,7 +1,13 @@
 export default {
+	imageContainer: {
+		backgroundColor: 'orange',
+		textAlign: 'center'
+	},
 	image: {
-		textAlign: 'center',
-        verticalAlign: 'middle',
-        display: 'table-cell'
+		paddingTop: 20,
+		paddingBottom: 20
+	},
+	inventoryList: {
+		height: 500
 	}
 }

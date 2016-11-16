@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import VideoFeed from '../VideoFeed/VideoFeed';
 import NavigationBar from '../NavigationBar/NavigationBar'
-import ImageCropper from '../ImageCropper/ImageCropper';
 import util from './../../../util/util';
 import PhotoInventory from '../PhotoInventory/PhotoInventory';
 import HorizontalStepper from '../HorizontalStepper/HorizontalStepper';
@@ -27,8 +26,10 @@ class Survey extends Component {
 		});
 	}
 
-	setScreenshot(screenshot) {
+	handleScreenshot(screenshot) {
 		this.setState({ screenshot });
+		let base64Image = screenshot.replace(/^data:image\/(jpeg|png|jpg);base64,/, "").toString('base64')
+		util.postImageToClarifai(base64Image).then(data => console.log(data));
 	}
 
 	render() {
@@ -36,7 +37,7 @@ class Survey extends Component {
 			<div className='row'>
 	    		<div className='col-md-6'>
 					<VideoFeed 
-						setScreenshot={this.setScreenshot.bind(this)}/>	
+						handleScreenshot={this.handleScreenshot.bind(this)}/>	
 					<hr />	
 
 					<PhotoInventory />			
