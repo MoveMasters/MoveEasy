@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import styles from './styles';
+import InventoryList from '../InventoryList/InventoryList'
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -26,7 +27,7 @@ class HorizontalStepper extends React.Component {
     const {stepIndex} = this.state;
     this.setState({
       stepIndex: stepIndex + 1,
-      finished: stepIndex >= 2,
+      finished: stepIndex >= 1,
     });
   };
 
@@ -40,11 +41,9 @@ class HorizontalStepper extends React.Component {
   getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
-        return 'Select campaign settings...';
-      case 1:
-        return 'What is an ad group anyways?';
+        return <div><InventoryList screenshot={this.props.screenshot} /></div>
       default:
-        return 'You\'re a long way from home sonny jim!';
+        return <div>You\'re a long way from home sonny jim!'</div>;
     }
   }
 
@@ -87,7 +86,7 @@ class HorizontalStepper extends React.Component {
                   style={{marginRight: 12}}
                 />
                 <RaisedButton
-                  label={stepIndex === 2 ? 'Finish' : 'Next'}
+                  label={stepIndex === 1 ? 'Finish' : 'Next'}
                   primary={true}
                   onTouchTap={this.handleNext}
                   onClick={this.handleNext}
