@@ -14,7 +14,7 @@ import {
   Input,
   Icon,
 } from 'native-base';
-import { StyleSheet, AsyncStorage, AlertIOS, DatePickerIOS } from 'react-native';
+import { StyleSheet, AsyncStorage, AlertIOS, DatePickerIOS, View } from 'react-native';
 import helper from '../utils/helper';
 import Main from './Main';
 
@@ -27,6 +27,7 @@ export default class Information extends React.Component {
       phone: '',
       currentAddress: '',
       futureAddress: '',
+      date: new Date(),
     };
   }
 
@@ -39,6 +40,10 @@ export default class Information extends React.Component {
     });
   }
 
+  // onDateChange(date) {
+  //   this.setState({ date });
+  // }
+
   async submitInfo(context) {
     console.log(context);
     const moveObj = {
@@ -46,6 +51,7 @@ export default class Information extends React.Component {
       phone: context.state.phone,
       currentAddress: context.state.currentAddress,
       futureAddress: context.state.futureAddress,
+      surveyTime: context.state.date,
     };
     console.log(moveObj);
 
@@ -121,11 +127,15 @@ export default class Information extends React.Component {
               </InputGroup>
             </ListItem>
           </List>
-          <DatePickerIOS
-            date={new Date()}
-            mode="date"
-            timeZoneOffsetInMinutes={(-1) * (new Date()).getTimezoneOffset()}
-          />
+          <View style={styles.picker}>
+            <Title>Appointment</Title>
+            <DatePickerIOS
+              date={this.state.date}
+              mode="datetime"
+              timeZoneOffsetInMinutes={(-1) * (new Date()).getTimezoneOffset()}
+              onDateChange={date => this.setState({ date })}
+            />
+          </View>
           <Button
             info
             style={styles.submit}
@@ -134,7 +144,6 @@ export default class Information extends React.Component {
             Submit
           </Button>
         </Content>
-        <Footer />
       </Container>
     );
   }
@@ -142,10 +151,13 @@ export default class Information extends React.Component {
 
 const styles = StyleSheet.create({
   list: {
-    top: 40,
+    top: 15,
+  },
+  picker: {
+    top: 30,
   },
   submit: {
-    top: 70,
+    top: 40,
     alignSelf: 'center',
   },
 });
