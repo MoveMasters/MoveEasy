@@ -3,6 +3,7 @@ import { AppRegistry, Navigator } from 'react-native';
 
 import Main from './components/Main';
 import Login from './components/Login';
+import Information from './components/Information';
 
 class mkmobile extends React.Component {
   constructor(props) {

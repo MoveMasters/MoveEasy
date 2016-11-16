@@ -5,11 +5,13 @@ import {
   Text,
   View,
   TouchableHighlight,
-  Alert,
+  AlertIOS,
   Dimensions,
 } from 'react-native';
 import t from 'tcomb-form-native';
+
 import Main from './Main';
+import Information from './Information';
 import helper from '../utils/helper';
 
 const Form = t.form.Form;
@@ -43,12 +45,20 @@ export default class Login extends React.Component {
     this.userInfo = null;
   }
 
-  goToNext() {
-    this.props.navigator.push({
-      component: Main,
-      passProps: {
-      },
-    });
+  goToNext(type) {
+    if (type === 'signup') {
+      this.props.navigator.push({
+        component: Information,
+        passProps: {
+        },
+      });
+    } else if (type === 'signin') {
+      this.props.navigator.push({
+        component: Main,
+        passProps: {
+        },
+      });
+    }
   }
 
   userAuth(type) {
@@ -58,16 +68,16 @@ export default class Login extends React.Component {
         username: value.username,
         password: value.password,
       };
-
+      console.log(type);
       helper.postUser(user, type)
         .then((response) => {
           const token = response.data.token;
           onValueChange('token', token);
-          this.goToNext();
+          this.goToNext(type);
         })
         .catch((error) => {
           console.log(error);
-          Alert.alert('Invalid username or password. Please try again.');
+          AlertIOS.alert('Invalid username or password. Please try again.');
         });
     }
   }
