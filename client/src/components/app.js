@@ -6,8 +6,8 @@ export default class App extends Component {
   render() {
     return (
       <MuiThemeProvider >
-      	<div style={{ margin: 0 }}>
-	      	<NavigationBar />
+      	<div style={{ margin: 0}}>
+	      	<NavigationBar/>
 	      	{this.props.children}
 	    </div>
       </MuiThemeProvider>

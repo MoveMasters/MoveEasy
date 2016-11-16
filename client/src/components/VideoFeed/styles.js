@@ -1,23 +1,20 @@
 export default {
   localStream: {
     position: 'absolute',
-    left: '65%',
-    'WebkitTransform': 'translateX(-65%)',
-    transform: 'translateX(-65%)',
-    top: '65%',
-    'WebkitTransform': 'translateY(-65%)',
-    transform: 'translateY(-65%)',
-    'Zindex': -1
+    bottom: '10',
+    right: '75',
+    'zIndex': +1
   },
   remoteStream: {
     margin: 'auto',
+    marginLeft: 5,
     position: 'relative',
-    top: '50%',
-    transform: 'translateY(-50%)'
+    maxWidth: '100%',
+    maxHeight: '100%'
   },
   'videoFeed': {
-  	height: '70vh',
-    textAlign: 'center'
+  	height: '65vh',
+    textAlign: 'center',
   },
   grabScreenshot: {
     position: 'relative',

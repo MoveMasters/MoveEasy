@@ -17,7 +17,7 @@ let localStream, remoteStream, container;
 var pcPeers = {};
 
 /************************************* SOCKET IO ******************************************/ 
-const scale = .3;
+const scale = .30;
 
 class VideoFeed extends Component {
 	constructor(props) {
@@ -150,7 +150,7 @@ class VideoFeed extends Component {
 	    dataChannel.onmessage = function (event) {
 	      console.log("dataChannel.onmessage:", event.data);
 	      if (event.data === 'capture') {
-	      	container.props.grabScreenshot();
+	      	container.grabScreenshot();
 	      }
 	    };
 
@@ -210,7 +210,7 @@ class VideoFeed extends Component {
 		console.log(video, 'video')
 		let canvas = container.refs.canvas;
 		canvas.width = this.state.width * scale;
-	  	canvas.height = this.state.width * 2 * scale;
+	  	canvas.height = this.state.width * 1.5 * scale;
 	  	canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
 	  	// create screenshot data object
@@ -222,22 +222,23 @@ class VideoFeed extends Component {
 
 	render() {
 	    return (
-	    		<div style={styles.videoFeed}>
-			        <ReactPlayer playing
-			        	style={styles.localStream}
-			        	url={this.state.localStreamURL}
-			        	width={'30%'}
-			        	height={'15%'} />
+	    		<div className='col-md-12' style={styles.videoFeed}>
+	    			<div style={{backgroundColor: 'pink', height: '65vh', marginTop: '10px'}}>
+				        <ReactPlayer playing
+				        	style={styles.localStream}
+				        	url={this.state.localStreamURL}
+				        	width={'35%'}
+				        	height={'25%'} />
 
-			 
-			        <ReactPlayer playing
-			        	ref='remoteVideo'
-			        	style={styles.remoteStream}  
-			        	url={this.state.remoteStreamURL}
-			        	width={this.state.width * scale}
-			        	height={this.state.width * 2 * scale} />
+				 
+				        <ReactPlayer playing
+				        	ref='remoteVideo'
+				        	style={styles.remoteStream}  
+				        	url={this.state.remoteStreamURL}
+				        	width={this.state.width * scale}
+				        	height={this.state.width * 1.5 * scale} />
+				     </div>
 			       	<canvas ref='canvas' style={{display: 'none'}}></canvas>
-			       	<button style={styles.grabScreenshot} onClick={this.grabScreenshot.bind(this)}>grabScreenshot</button>
 			    </div>
 	    );
 	}

@@ -4,7 +4,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import styles from './styles';
-import InventoryList from '../InventoryList/InventoryList'
+import InventoryList from './../InventoryList/InventoryList';
+import Screenshot from './../Screenshot/Screenshot'
+
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -41,7 +43,16 @@ class HorizontalStepper extends React.Component {
   getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
-        return <div><InventoryList screenshot={this.props.screenshot} /></div>
+        return (
+          <div>
+            <div className='col-md-6' style={styles.colSix}>
+              <Screenshot screenshot={this.props.screenshot} style={styles.colSix} />
+            </div>
+            <div className='col-md-6' style={styles.inventory}>
+              <InventoryList screenshot={this.props.screenshot} handleNext={this.handleNext.bind(this)} />
+            </div>
+          </div>
+          )
       default:
         return <div>You\'re a long way from home sonny jim!'</div>;
     }
@@ -52,10 +63,10 @@ class HorizontalStepper extends React.Component {
     const contentStyle = {margin: '0 16px'};
 
     return (
-      <div style={styles.container}>
+      <div>
         <Stepper activeStep={stepIndex} style={styles.stepper}>
           <Step>
-            <StepLabel>Select Item</StepLabel>
+            <StepLabel onClick={this.handlePrev}>Select Item</StepLabel>
           </Step>
           <Step>
             <StepLabel>Add to Inventory</StepLabel>
@@ -76,20 +87,21 @@ class HorizontalStepper extends React.Component {
             </p>
           ) : (
             <div>
-              <p>{this.getStepContent(stepIndex)}</p>
+              <div>{this.getStepContent(stepIndex)}</div>
               <div style={{marginTop: 12}}>
                 <FlatButton
                   label="Back"
                   disabled={stepIndex === 0}
                   onTouchTap={this.handlePrev}
                   onClick={this.handlePrev}
-                  style={{marginRight: 12}}
+                  style={{marginRight: 12, display: 'none'}}
                 />
                 <RaisedButton
                   label={stepIndex === 1 ? 'Finish' : 'Next'}
                   primary={true}
                   onTouchTap={this.handleNext}
                   onClick={this.handleNext}
+                  style={{display: 'none'}}
                 />
               </div>
             </div>
