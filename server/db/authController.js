@@ -10,7 +10,7 @@ exports.sendClarifaiInfo = (req, res, next) => {
       clarifaiToken: clarifaiToken,
       clarifaiTags: imageUtil.readClarifaiTags(),
       clarifaiItems: imageUtil.readClarifaiItems(),
-      //itemPrototypes: readItemJson(),
+      itemPrototypes: readItemJson(),
       ClarifaiClientId: secret.ClarifaiClientId,
       ClarifaiClientSecret: secret.ClarifaiClientSecret,
       nameMappings: nameMappings

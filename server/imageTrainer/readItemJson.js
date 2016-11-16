@@ -3,7 +3,7 @@ var fs = require('fs');
 
 module.exports = (options) => {
   options = options || {};
-  const fileName = options.fileName || './../../shippingData/shippingData.json';
+  const fileName = options.fileName || './../shippingData/shippingData.json';
   const total = options.total || -1;
   const itemArr = JSON.parse(fs.readFileSync(fileName, 'utf8'));
 
