@@ -3,12 +3,13 @@ const ip = 'localhost';
 const port = '9000'
 
 /************************************ URLS ************************************/
-const postCroppedImageURL = `http://${ip}:${port}/api/item/croppedImage`;
-const getClarifaiTokenURL = `http://${ip}:${port}/api/auth/clarifaiToken`;
+const serverURL = `http://${ip}:${port}`
+const postCroppedImageURL = `${serverURL}/api/item/croppedImage`;
+const getClarifaiTokenURL = `${serverURL}/api/auth/clarifaiToken`;
 //const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;
-const postImageToClarifaiURL = `https://api.clarifai.com/v2/tag/`;
-const getClarifaiInfoURL = `http://${ip}:${port}/api/auth/clarifaiInfo`;
-
+const postImageToClarifaiURL = ' https://api.clarifai.com/v2/models/aaa03c23b3724a16a56b629203edc62c/outputs';
+const getClarifaiInfoURL = `${serverURL}/api/auth/clarifaiInfo`;
+const postItemToServerURL = `${serverURL}/api/item/newItem`;
 
 
 
@@ -60,12 +61,14 @@ const getMatches = tag => {
     checkList.push(nameMappings[tag]);
   }
   var matches = [];
-  clarifaiTags.forEach( item => {
+  clarifaiItems.forEach( item => {
     var lowered = item.toLowerCase().split(' ');
     for (var i = 0; i < checkList.length; i ++) {
       var tagcheck = checkList[i];
       if (lowered.indexOf(tagcheck) > -1) {
-        matches.push(item);
+        if (matches.indexOf(item) < 0) {
+          matches.push(item);
+        }
         break;
       }
     }
@@ -87,7 +90,20 @@ const predict = (concepts) => {
   return possibilities;
 };
 
-
+const filterSearch = (searchTerm) => {
+  if (!searchTerm) {
+    return clarifaiItems;
+  }
+  searchTerm = searchTerm.toLowerCase();
+  var results = [];
+  clarifaiItems.forEach( item => {
+    const lowered = item.toLowerCase();
+    if (lowered.includes(searchTerm)) {
+      results.push(item);
+    }
+  });
+  return results;
+};
 
 
 const postImageToClarifai = (base64Image) => {
@@ -127,8 +143,27 @@ const postImageToClarifai = (base64Image) => {
 }
 
 
+const postItemToServer = (item) => {
+  return axios.post(postItemToServerURL, { item }).then(
+    (response) => {
+      console.log('postItemToServer success', response);
+      return item.body;
+    }
+  ).catch(
+    (err) => {
+      console.log('postItemToServer err', err);
+      throw err;
+    }
+  );
+}
+
+
+
+
+
+
 
 
 /************************************ EXPORT ************************************/
 
-export default { postCroppedImage, postImageToClarifai, getClarifaiInfo }
+export default { postCroppedImage, postImageToClarifai, getClarifaiInfo, filterSearch}

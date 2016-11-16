@@ -36,6 +36,7 @@ var readClarifaiItems = () => {
   data = String(fs.readFileSync(shippingListFile, 'utf8'));
   const lines = data.split('\n');
   const items = lines.map( line => { return line.trim(); });
+  items.sort();
   return items;
 }
 

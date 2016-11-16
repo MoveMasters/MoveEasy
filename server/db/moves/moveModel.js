@@ -8,17 +8,25 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const moveSchema = new Schema(
+const moveSchema = new Schema ({
   user_id: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
-  items: [{
-    item_id: Schema.Types.ObjectId,
-    ref: 'Item'
-  }]
-
-);
+  name: {
+    type: String
+  },
+  phone: {
+    type: String
+  },
+  currentAddress: {
+    type: String
+  },
+  futureAddress: {
+    type: String
+  }
+});
 
 const Move = mongoose.model('Move', moveSchema);
 module.exports = Move;

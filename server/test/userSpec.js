@@ -68,7 +68,7 @@ describe('User Server API tests', () => {
   });
 
 
-  xit('Should 403 on invalid password', (done) => {
+  it('Should 403 on invalid password', (done) => {
     signupUser1( (err, res) => {
       request.post('/api/user/signin')
       .send({ username: username, password: 'wrongpassword' })
@@ -102,19 +102,6 @@ describe('User Server API tests', () => {
       });
   });
 
-
-  // it('Should respond with a list of all registered users after signing up', (done) => {
-  //   request.get('/api/user/getAllUsers')
-  //     .set('x-access-token', token)
-  //     .expect(200)
-  //     .end(function(err, res) {
-  //       if (err) throw err;
-  //       //console.log('res', res.body);
-  //       expect(res.body.allUsers.indexOf(username2)).to.not.equal(-1);
-  //       expect(res.body.allUsers.indexOf('fakeusername')).to.equal(-1);
-  //       done();
-  //     });
-  // });
 
 
 });

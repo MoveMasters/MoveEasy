@@ -13,6 +13,14 @@ const itemSchema = new Schema({
     type: String,
     required: true
   },
+  move_id: {
+    type: Schema.Types.ObjectId,
+    required: true
+  },
+  url: {
+    type: String,
+    required: true
+  },
   quantity: {
     type: Number,
     required: true,
