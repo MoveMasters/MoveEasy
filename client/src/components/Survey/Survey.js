@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import VideoFeed from '../VideoFeed/VideoFeed';
-import NavigationBar from '../NavigationBar/NavigationBar'
-import ImageCropper from '../ImageCropper/ImageCropper';
+import VideoFeed from './../VideoFeed/VideoFeed';
+import NavigationBar from './../NavigationBar/NavigationBar'
+import ImageCropper from './../ImageCropper/ImageCropper';
 import util from './../../../util/util';
-import PhotoInventory from '../PhotoInventory/PhotoInventory';
-import HorizontalStepper from '../HorizontalStepper/HorizontalStepper';
+import PhotoInventory from './../PhotoInventory/PhotoInventory';
+import HorizontalStepper from './../HorizontalStepper/HorizontalStepper';
 
 let remoteStream;
 
