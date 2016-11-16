@@ -14,7 +14,7 @@ import {
   Input,
   Icon,
 } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, AsyncStorage, AlertIOS, DatePickerIOS } from 'react-native';
 import helper from '../utils/helper';
 import Main from './Main';
 
@@ -39,22 +39,36 @@ export default class Information extends React.Component {
     });
   }
 
-  submitInfo() {
-    const self = this;
-    const info = {
-      name: this.state.name,
-      phone: this.state.phone,
-      currentAddress: this.state.currentAddress,
-      futureAddress: this.state.futureAddress,
+  async submitInfo(context) {
+    console.log(context);
+    const moveObj = {
+      name: context.state.name,
+      phone: context.state.phone,
+      currentAddress: context.state.currentAddress,
+      futureAddress: context.state.futureAddress,
     };
+    console.log(moveObj);
 
-    // use helper to send info to server
-    // receive moveID, save in AsyncStorage to be sent to mover?
-    // should just send token so client sends to mover, who sends to database?
-    // 
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token !== null) {
+        helper.newMove(moveObj, token)
+        .then((response) => {
+          // what do here?
+        })
+        .catch((error) => {
+          console.log(error);
+          AlertIOS.alert('There was a problem saving your information. Please try again.');
+        });
+      }
+    } catch (error) {
+      console.log('Error submitting new move info:', error);
+    }
   }
 
   render() {
+    const self = this;
+
     return (
       <Container>
         <Header>
@@ -68,7 +82,10 @@ export default class Information extends React.Component {
                 <Input
                   inlineLabel label="NAME"
                   placeholder="Name"
-                  onChangeText={name => this.setState({ name })}
+                  onChangeText={(name) => {
+                    this.setState({ name });
+                    console.log('set the new name', name);
+                  }}
                 />
               </InputGroup>
             </ListItem>
@@ -104,10 +121,15 @@ export default class Information extends React.Component {
               </InputGroup>
             </ListItem>
           </List>
+          <DatePickerIOS
+            date={new Date()}
+            mode="date"
+            timeZoneOffsetInMinutes={(-1) * (new Date()).getTimezoneOffset()}
+          />
           <Button
             info
             style={styles.submit}
-            onPress={this.submitInfo}
+            onPress={() => this.submitInfo(self)}
           >
             Submit
           </Button>

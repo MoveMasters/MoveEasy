@@ -16,7 +16,8 @@ exports.handleNewMove = (req, res, next) => {
       name: req.body.name,
       phone: req.body.phone,
       currentAddress: req.body.currentAddress,
-      futureAddress: req.body.futureAddress
+      futureAddress: req.body.futureAddress,
+      surveyTime: req.body.surveyTime
     };
     Move.create(moveObj).then( newMove => {
       res.send(newMove);
