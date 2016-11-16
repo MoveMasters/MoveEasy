@@ -23,3 +23,10 @@ exports.handleNewMove = (req, res, next) => {
     });
   });
 };
+
+
+exports.getAllMoves = (req, res, next) => {
+  Move.find().exec().then(moves => {
+    res.send({moves});
+  });
+}

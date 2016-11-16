@@ -6,6 +6,7 @@
 
 const jwt = require('jwt-simple');
 const User = require('./users/userModel.js');
+const Item = require('./items/itemModel.js');
 
 /**
   * This function is used to find the userId from database given a username.
@@ -93,3 +94,7 @@ exports.checkIsRealUser = (username, callback) => {
 };
 
 
+
+exports.getMoveItems = (move_id) => {
+  return Move.find({id:move_id}).exec();
+}

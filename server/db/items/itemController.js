@@ -6,6 +6,7 @@
 
 const Item = require('./itemModel.js');
 const imageUtil = require('./../imageUtil.js');
+const dbUtil = require('./../dbUtil.js');
 
 
 
@@ -38,13 +39,12 @@ exports.handleNewItem = (req, res, next) => {
   const filePath = 'images/logo.png';
 
   //default
-  const move_id = req.body.moveId || 0; 
   imageUtil.saveAndUpload(filePath, photoData)
   .then((imageUrl) =>{
     console.log('url', imageUrl);
     const itemObj = {
       url: imageUrl,
-      move_id: move_id,
+      move_id: req.body.moveId,
       name: req.body.name,
       ctf: req.body.ctf,
       quantity: req.body.quantity,
@@ -52,7 +52,10 @@ exports.handleNewItem = (req, res, next) => {
       comment: req.body.comment
     };
     Item.create(itemObj).then( newItem => {
-      req.send(newItem);
+      //req.send(newItem);
+      dbUtil.getMoveItems(move_id).then( moveItems => {
+        res.send({moveItems});
+      });
     });
   })
   .then(
