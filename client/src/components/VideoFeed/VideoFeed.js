@@ -17,14 +17,14 @@ let localStream, remoteStream, container;
 var pcPeers = {};
 
 /************************************* SOCKET IO ******************************************/ 
-let width = window.innerWidth;
+let width, height
 
 class VideoFeed extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			localStreamURL: null,
-			remoteStreamURL: null,
+			remoteStreamURL: null
 		}
 	}
 
@@ -51,6 +51,11 @@ class VideoFeed extends Component {
 	componentDidMount() {
 		this.join('MoveKick');
 	}
+
+	// componentWillUpdate() {
+	// 	this.setState({ width: window.innerWidth, height: window.innerHeight});
+	// 	console.log(this.state.width, this.state.height)
+	// }
 
 	logError(error, message) {
 	  console.log(message + ': ', error);
@@ -188,7 +193,25 @@ class VideoFeed extends Component {
 	}
 
 
+	grabScreenshot() {
+		let remoteStream = container.refs.remoteVideo;
+		let video = remoteStream.player.player;
+		let canvas = container.refs.canvas;
+		canvas.width = remoteStream.props.width;
+	  	canvas.height = remoteStream.props.height;
+	  	canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+	  	// create screenshot data object
+  		let screenshot = canvas.toDataURL("image/png");
+
+  		// set that as state in Survey Component
+  		container.props.handleScreenshot(screenshot);
+	}
+
 	render() {
+		{width = window.innerWidth
+		 height = window.innerHeight;
+		console.log(this.state.width, this.state.height)}
 	    return (
 	    		<div style={styles.videoFeed}>
 			        <ReactPlayer playing
@@ -199,13 +222,13 @@ class VideoFeed extends Component {
 
 			 
 			        <ReactPlayer playing
-			        	ref={stream => stream && this.props.setRemoteStream(stream)}
+			        	ref='remoteVideo'
 			        	style={styles.remoteStream}  
 			        	url={this.state.remoteStreamURL}
 			        	width={375}
 			        	height={667} />
-						<button onClick={() => this.props.setPhotoState(true)}>Take Photo</button>
-						<button onClick={this.cropAndSend.bind(this)}>Send Cropped Photo</button>
+			       	<canvas ref='canvas' style={{display: 'none'}}></canvas>
+			       	<button onClick={this.grabScreenshot.bind(this)}>grabScreenshot</button>
 			    </div>
 	    );
 	}

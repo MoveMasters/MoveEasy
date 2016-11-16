@@ -6,15 +6,15 @@ const port = '9000'
 const postCroppedImageURL = `http://${ip}:${port}/api/item/croppedImage`;
 const getClarifaiTokenURL = `http://${ip}:${port}/api/auth/clarifaiToken`;
 const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;
-const getClarfaiInfoURL = `http://${ip}:${port}/api/auth/clarifaiInfo`;
+const getClarifaiInfoURL = `http://${ip}:${port}/api/auth/clarifaiInfo`;
 
 
 
 
 /************************************ PHOTOS ************************************/
-var clarfaiTags;
-var clarfaiToken;
-var clarfaiItems;
+var clarifaiTags;
+var clarifaiToken;
+var clarifaiItems;
 var nameMappings;
 
 
@@ -29,12 +29,12 @@ const postCroppedImage = (image) => {
 }
 
 const getClarifaiInfo = () => {
-	return axios.get(getClarfaiInfoURL)
+	return axios.get(getClarifaiInfoURL)
 	.then( response => {
 		const data = response.data;
-		clarfaiTags = data.clarfaiTags;
-		clarfaiToken = data.clarfaiToken;
-		clarfaiItems = data.clarfaiItems;
+		clarifaiTags = data.clarifaiTags;
+		clarifaiToken = data.clarifaiToken;
+		clarifaiItems = data.clarifaiItems;
 		nameMappings = data.nameMappings;
 		return data;
 	})
@@ -65,10 +65,11 @@ const getMatches = tag => {
 }
 
 
-const predict = concepts => {
+const predict = (concepts) => {
   var possibilities = [];
-  for (var i = 0; i < data.length; i ++) {
-    var tag = data[i].name;
+  for (var i = 0; i < concepts.length; i ++) {
+    // var tag = concepts[i].name;
+    var tag = concepts[i];
     var result = getMatches(tag);
     possibilities = possibilities.concat(result);
   }
@@ -84,15 +85,17 @@ const postImageToClarifai = (base64Image) => {
 		  method: 'post',
 		  model: 'general-v1.3',
 		  headers: {
-		    'Authorization': `Bearer ${clarfaiToken}`
+		    'Authorization': `Bearer ${clarifaiToken}`
 		  },
 		  data: {
-		  	'encoded_data': image
+		  	'encoded_data': base64Image
 		  }
 		})
 	  .then(function (response) {
 	    console.log(response, 'response from inside utils');
-	    const concepts = response.data.outputs[0].data.concepts;
+	    // const concepts = response.data.outputs[0].data.concepts;
+	    const concepts = response.data.results[0].result.tag.classes;
+
 	    return predict(concepts);
 	  })
 	  .catch(function (error) {
