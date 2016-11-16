@@ -58,10 +58,10 @@ class HorizontalStepper extends React.Component {
             <div className='col-md-6' style={styles.colSix}>
               <Screenshot screenshot={this.props.screenshot} style={styles.colSix} />
             </div>
-            <div>
-              <SearchBar onChange={this.updateChoices.bind(this)} />
-            </div>
+
             <div className='col-md-6' style={styles.inventory}>
+              <SearchBar onChange={this.updateChoices.bind(this)} />
+              <hr />
               <InventoryList
                 currentItems={this.state.currentItems}
                 screenshot={this.props.screenshot}
