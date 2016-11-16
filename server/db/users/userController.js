@@ -15,25 +15,6 @@ const createUser = Q.nbind(User.create, User);
 
 module.exports = {
 
-  /**
-  * This function is used to get all users from database.
-  * @method getAllUsers
-  * @param {object} req request object
-  * @param {object} res response object
-  * @param {object} next callback function to execute
-  * @returns {object} all users
-  */
-  // getAllUsers(req, res, next) {
-  //   dbUtil.getUserFromReq(req, next).then((user) => {
-  //     User.find({}, (err, result) => {
-  //       var allUsers = result.map(userEntry => (userEntry.username));
-  //       allUsers = allUsers.filter((item) => {
-  //         return (item !== user.username)
-  //       });
-  //       res.json({ allUsers });
-  //     });
-  //   });
-  // },
 
   /**
   * This function is used to signin a user if user exists in database and passwords match.

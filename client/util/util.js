@@ -3,12 +3,13 @@ const ip = '10.6.27.137';
 const port = '9000'
 
 /************************************ URLS ************************************/
-const postCroppedImageURL = `http://${ip}:${port}/api/item/croppedImage`;
-const getClarifaiTokenURL = `http://${ip}:${port}/api/auth/clarifaiToken`;
+const serverURL = `http://${ip}:${port}`
+const postCroppedImageURL = `${serverURL}/api/item/croppedImage`;
+const getClarifaiTokenURL = `${serverURL}/api/auth/clarifaiToken`;
 //const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;
 const postImageToClarifaiURL = `https://api.clarifai.com/v2/tag/`;
-const getClarifaiInfoURL = `http://${ip}:${port}/api/auth/clarifaiInfo`;
-
+const getClarifaiInfoURL = `${serverURL}/api/auth/clarifaiInfo`;
+const postItemToServerURL = `${serverURL}/api/item/newItem`;
 
 
 
@@ -60,12 +61,14 @@ const getMatches = tag => {
     checkList.push(nameMappings[tag]);
   }
   var matches = [];
-  clarifaiTags.forEach( item => {
+  clarifaiItems.forEach( item => {
     var lowered = item.toLowerCase().split(' ');
     for (var i = 0; i < checkList.length; i ++) {
       var tagcheck = checkList[i];
       if (lowered.indexOf(tagcheck) > -1) {
-        matches.push(item);
+        if (matches.indexOf(item) < 0) {
+          matches.push(item);
+        }
         break;
       }
     }
@@ -125,6 +128,25 @@ const postImageToClarifai = (base64Image) => {
     }
   );
 }
+
+
+const postItemToServer = (item) => {
+  return axios.post(postItemToServerURL, { item }).then(
+    (response) => {
+      console.log('postItemToServer success', response);
+      return item.body;
+    }
+  ).catch(
+    (err) => {
+      console.log('postItemToServer err', err);
+      throw err;
+    }
+  );
+}
+
+
+
+
 
 
 
