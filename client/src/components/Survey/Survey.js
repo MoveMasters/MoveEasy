@@ -4,6 +4,7 @@ import NavigationBar from './../NavigationBar/NavigationBar'
 import util from './../../../util/util';
 import PhotoInventory from './../PhotoInventory/PhotoInventory';
 import HorizontalStepper from './../HorizontalStepper/HorizontalStepper';
+import styles from './styles'
 
 
 class Survey extends Component {
@@ -35,16 +36,18 @@ class Survey extends Component {
 	render() {
 		return (
 			<div className='row'>
-	    		<div className='col-md-6'>
-					<VideoFeed 
-						handleScreenshot={this.handleScreenshot.bind(this)}/>	
-					<hr />	
-
-					<PhotoInventory />			
+	    		<div className='col-md-4' style={styles.column}>
+					<VideoFeed handleScreenshot={this.handleScreenshot.bind(this)}/>			
 				</div>
 
-				<div className='col-md-6'>
+				<div className='col-md-8' style={styles.column}>
 					<HorizontalStepper screenshot={this.state.screenshot}/>
+				</div>
+
+				<div className='col-md-12'>
+					<hr />	
+					<PhotoInventory />
+					<hr />		
 				</div>
 			</div>
 		)

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const ip = '10.6.27.137';
+const ip = 'localhost';
 const port = '9000'
 
 /************************************ URLS ************************************/
