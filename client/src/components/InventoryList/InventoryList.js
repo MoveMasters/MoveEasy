@@ -6,7 +6,7 @@ const InventoryList = (props) => {
 	return (
 		<div>
 			<ul className='list-group' style={styles.imageContainer}>
-				<img style={styles.image} width='75' height='175' src={props.screenshot} />
+				<img style={styles.image} src={props.screenshot} />
 			</ul>
 
 		    <ul className='list-group InventoryList'>

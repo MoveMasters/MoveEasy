@@ -17,15 +17,19 @@ let localStream, remoteStream, container;
 var pcPeers = {};
 
 /************************************* SOCKET IO ******************************************/ 
-let width, height
+const scale = .3;
 
 class VideoFeed extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			localStreamURL: null,
-			remoteStreamURL: null
+			remoteStreamURL: null,
+			width: window.innerWidth,
+			height: window.innerHeight
 		}
+
+		this._handleWindowResize = this._handleWindowResize.bind(this);
 	}
 
 	componentWillMount() {
@@ -50,12 +54,19 @@ class VideoFeed extends Component {
 
 	componentDidMount() {
 		this.join('MoveKick');
+  		window.addEventListener('resize', this._handleWindowResize);
 	}
 
-	// componentWillUpdate() {
-	// 	this.setState({ width: window.innerWidth, height: window.innerHeight});
-	// 	console.log(this.state.width, this.state.height)
-	// }
+	componentWillUnmount() {
+	    window.removeEventListener('resize', this._handleWindowResize);
+	}
+
+	_handleWindowResize() {
+		console.log('setting window width and height');
+		this.setState({ width: window.innerWidth, height: window.innerHeight })
+		console.log(this.state.width, this.state.height)
+
+	}
 
 	logError(error, message) {
 	  console.log(message + ': ', error);
@@ -139,7 +150,7 @@ class VideoFeed extends Component {
 	    dataChannel.onmessage = function (event) {
 	      console.log("dataChannel.onmessage:", event.data);
 	      if (event.data === 'capture') {
-	      	container.props.setPhotoState(true);
+	      	container.props.grabScreenshot();
 	      }
 	    };
 
@@ -196,9 +207,10 @@ class VideoFeed extends Component {
 	grabScreenshot() {
 		let remoteStream = container.refs.remoteVideo;
 		let video = remoteStream.player.player;
+		console.log(video, 'video')
 		let canvas = container.refs.canvas;
-		canvas.width = remoteStream.props.width;
-	  	canvas.height = remoteStream.props.height;
+		canvas.width = this.state.width * scale;
+	  	canvas.height = this.state.width * 2 * scale;
 	  	canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
 	  	// create screenshot data object
@@ -209,26 +221,23 @@ class VideoFeed extends Component {
 	}
 
 	render() {
-		{width = window.innerWidth
-		 height = window.innerHeight;
-		console.log(this.state.width, this.state.height)}
 	    return (
 	    		<div style={styles.videoFeed}>
 			        <ReactPlayer playing
 			        	style={styles.localStream}
 			        	url={this.state.localStreamURL}
-			        	width={200}
-			        	height={150} />
+			        	width={'30%'}
+			        	height={'15%'} />
 
 			 
 			        <ReactPlayer playing
 			        	ref='remoteVideo'
 			        	style={styles.remoteStream}  
 			        	url={this.state.remoteStreamURL}
-			        	width={375}
-			        	height={667} />
+			        	width={this.state.width * scale}
+			        	height={this.state.width * 2 * scale} />
 			       	<canvas ref='canvas' style={{display: 'none'}}></canvas>
-			       	<button onClick={this.grabScreenshot.bind(this)}>grabScreenshot</button>
+			       	<button style={styles.grabScreenshot} onClick={this.grabScreenshot.bind(this)}>grabScreenshot</button>
 			    </div>
 	    );
 	}

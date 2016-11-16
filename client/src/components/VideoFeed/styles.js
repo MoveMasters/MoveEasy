@@ -1,24 +1,27 @@
 export default {
   localStream: {
-  	width: 320,
-  	height: 180,
-  	position: 'absolute',
-  	top: 350,
-  	left: 30
+    position: 'absolute',
+    left: '65%',
+    'WebkitTransform': 'translateX(-65%)',
+    transform: 'translateX(-65%)',
+    top: '65%',
+    'WebkitTransform': 'translateY(-65%)',
+    transform: 'translateY(-65%)',
+    'Zindex': -1
   },
   remoteStream: {
-  	width: 500,
-  	height: 360
-  },
-  imageContainer: {
-  	width: 400,
-  	height: 350
-  },
-  'imageContainer img': {
-  	'max-width': '100%'
+    margin: 'auto',
+    position: 'relative',
+    top: '50%',
+    transform: 'translateY(-50%)'
   },
   'videoFeed': {
-  	'margin':'0 auto'
+  	height: '70vh',
+    textAlign: 'center'
+  },
+  grabScreenshot: {
+    position: 'relative',
+    'Zindex': -1
   }
 };
 

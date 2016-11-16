@@ -28,8 +28,8 @@ class Survey extends Component {
 
 	handleScreenshot(screenshot) {
 		this.setState({ screenshot });
-		let base64Image = screenshot.replace(/^data:image\/(jpeg|png|jpg);base64,/, "").toString('base64')
-		util.postImageToClarifai(base64Image).then(data => console.log(data));
+		// let base64Image = screenshot.replace(/^data:image\/(jpeg|png|jpg);base64,/, "").toString('base64')
+		// util.postImageToClarifai(base64Image).then(data => console.log(data));
 	}
 
 	render() {
