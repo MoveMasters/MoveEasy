@@ -223,7 +223,7 @@ class VideoFeed extends Component {
 	render() {
 	    return (
 	    		<div className='col-md-12' style={styles.videoFeed}>
-	    			<div style={{backgroundColor: 'pink', height: '65vh', marginTop: '10px'}}>
+	    			<div style={styles.videoContainer}>
 				        <ReactPlayer playing
 				        	style={styles.localStream}
 				        	url={this.state.localStreamURL}
