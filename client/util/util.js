@@ -19,6 +19,7 @@ var clarifaiTags;
 var clarifaiToken;
 var clarifaiItems;
 var nameMappings;
+var itemPrototypes;
 
 
 
@@ -40,6 +41,7 @@ const getClarifaiInfo = () => {
 		clarifaiToken = data.clarifaiToken;
 		clarifaiItems = data.clarifaiItems;
 		nameMappings = data.nameMappings;
+    itemPrototypes = data.itemPrototypes;
 
     clarApp = new Clarifai.App(
       data.ClarifaiClientId,
@@ -158,6 +160,14 @@ const postItemToServer = (item) => {
 }
 
 
+const getCft = (itemName) => {
+  if (!(itemName in itemPrototypes)) {
+    return 10;
+  }
+  return Math.round(itemPrototypes[itemName].cft);
+}
+
+
 
 
 
@@ -166,4 +176,4 @@ const postItemToServer = (item) => {
 
 /************************************ EXPORT ************************************/
 
-export default { postCroppedImage, postImageToClarifai, getClarifaiInfo, filterSearch}
+export default { postCroppedImage, postImageToClarifai, getClarifaiInfo, filterSearch, getCft}
