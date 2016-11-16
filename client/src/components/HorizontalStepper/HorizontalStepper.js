@@ -76,7 +76,7 @@ class HorizontalStepper extends React.Component {
     const contentStyle = {margin: '0 16px'};
 
     return (
-      <div>
+      <div style={styles.container}>
         <Stepper activeStep={stepIndex} style={styles.stepper}>
           <Step>
             <StepLabel onClick={this.handlePrev}>Select Item</StepLabel>

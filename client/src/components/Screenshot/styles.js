@@ -2,10 +2,8 @@ export default {
 	imageContainer: {
 		backgroundColor: 'orange',
 		textAlign: 'center',
-		width: '100%',
 		height: '55vh',
-		paddingTop: 20,
-		paddingBottom: 20
+		marginBottom: '30px'
 	},
 	image: {
 		maxHeight: '100%',

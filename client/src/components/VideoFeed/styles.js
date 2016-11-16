@@ -1,8 +1,8 @@
 export default {
   localStream: {
     position: 'absolute',
-    bottom: '10',
-    right: '75',
+    bottom: '-15vh',
+    right: '5vw',
     'zIndex': +1
   },
   remoteStream: {
@@ -19,6 +19,12 @@ export default {
   grabScreenshot: {
     position: 'relative',
     'Zindex': -1
+  },
+  videoContainer: {
+    backgroundColor: 'pink', 
+    height: '80vh', 
+    marginTop: '10px', 
+    marginLeft: '15px'
   }
 };
 
