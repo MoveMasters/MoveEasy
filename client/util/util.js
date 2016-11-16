@@ -91,18 +91,19 @@ const predict = (concepts) => {
 };
 
 const filterSearch = (searchTerm) => {
+  if (!searchTerm) {
+    return clarifaiItems;
+  }
   searchTerm = searchTerm.toLowerCase();
   var results = [];
   clarifaiItems.forEach( item => {
     const lowered = item.toLowerCase();
-    lowered.forEach( term => {
-      if (lowered.includes(searchTerm)) {
-        results.push(item);
-      }
-    });
+    if (lowered.includes(searchTerm)) {
+      results.push(item);
+    }
   });
   return results;
-}
+};
 
 
 const postImageToClarifai = (base64Image) => {

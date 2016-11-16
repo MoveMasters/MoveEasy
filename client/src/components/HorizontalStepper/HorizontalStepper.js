@@ -1,11 +1,13 @@
 import React from 'react';
+import util from './../../../util/util';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import styles from './styles';
 import InventoryList from './../InventoryList/InventoryList';
-import Screenshot from './../Screenshot/Screenshot'
+import Screenshot from './../Screenshot/Screenshot';
+import SearchBar from './../SearchBar/SearchBar';
 
 
 // Needed for onTouchTap
@@ -23,6 +25,7 @@ class HorizontalStepper extends React.Component {
   state = {
     finished: false,
     stepIndex: 0,
+    currentItems: []
   };
 
   handleNext = () => {
@@ -40,6 +43,13 @@ class HorizontalStepper extends React.Component {
     }
   };
 
+  updateChoices = (event) => {
+    const searchTerm = event.target.value;
+    this.setState({
+      currentItems: util.filterSearch(searchTerm)
+    });
+  };
+
   getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
@@ -48,8 +58,11 @@ class HorizontalStepper extends React.Component {
             <div className='col-md-6' style={styles.colSix}>
               <Screenshot screenshot={this.props.screenshot} style={styles.colSix} />
             </div>
+            <div>
+              <SearchBar onChange={this.updateChoices.bind(this)} />
+            </div>
             <div className='col-md-6' style={styles.inventory}>
-              <InventoryList screenshot={this.props.screenshot} handleNext={this.handleNext.bind(this)} />
+              <InventoryList currentItems={this.state.currentItems} screenshot={this.props.screenshot} handleNext={this.handleNext.bind(this)} />
             </div>
           </div>
           )
