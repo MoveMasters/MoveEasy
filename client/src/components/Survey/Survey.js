@@ -33,6 +33,19 @@ class Survey extends Component {
 		util.postImageToClarifai(base64Image).then(data => console.log(data));
 	}
 
+	onItemSelection(event) {		const itemName = event.target.textContent;
+		const cft = util.getCft(itemName);
+		var itemObj = {
+			name: itemName,
+			cft: cft,
+			going: true,
+			quantity: 1,
+			comment: ''
+		};
+		console.log('itemSelect', itemObj);
+
+	}
+
 	render() {
 		return (
 			<div className='row'>
@@ -41,7 +54,7 @@ class Survey extends Component {
 				</div>
 
 				<div className='col-md-8' style={styles.column}>
-					<HorizontalStepper screenshot={this.state.screenshot}/>
+					<HorizontalStepper screenshot={this.state.screenshot} onItemSelection={this.onItemSelection.bind(this)}/>
 					<hr />	
 					<PhotoInventory />
 					<hr />	
