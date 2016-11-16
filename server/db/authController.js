@@ -3,11 +3,11 @@ const nameMappings = require('./../imageTrainer/nameMappings');
 
 
 exports.sendClarifaiInfo = (req, res, next) => {
-  imageUtil.getClarifaiToken().then( clarfaiToken => {
+  imageUtil.getClarifaiToken().then( clarifaiToken => {
     const obj = {
-      clarfaiToken: clarfaiToken,
-      clarifaiTags: imageUtil.readClarfaiTags(),
-      clarfaiItems: imageUtil.readClarfaiItems(),
+      clarifaiToken: clarifaiToken,
+      clarifaiTags: imageUtil.readClarifaiTags(),
+      clarifaiItems: imageUtil.readClarifaiItems(),
       nameMappings: nameMappings
     }
     res.send(obj);
