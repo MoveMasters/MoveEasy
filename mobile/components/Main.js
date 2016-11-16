@@ -8,12 +8,13 @@ import {
   View,
   TextInput,
   ListView,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import io from 'socket.io-client/socket.io';
 
-const socket = io.connect('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
+// const socket = io.connect('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
 
 import {
   RTCPeerConnection,
@@ -48,8 +49,8 @@ function getLocalStream(isFront, callback) {
           minHeight: 1334,
           minFrameRate: 30,
         },
-        facingMode: (isFront ? "user" : "environment"),
-        optional: [{ sourceId: sourceInfos.id }, { minxFrameRate: 60 }]
+        facingMode: 'environment',
+        optional: [{ sourceId: sourceInfos.id }],
       }
     }, function (stream) {
       console.log('dddd', stream);
@@ -193,21 +194,21 @@ function leave(socketId) {
   container.setState({info: 'One peer leave!'});
 }
 
-socket.on('exchange', function(data){
-  exchange(data);
-});
-socket.on('leave', function(socketId){
-  leave(socketId);
-});
+// socket.on('exchange', function(data){
+//   exchange(data);
+// });
+// socket.on('leave', function(socketId){
+//   leave(socketId);
+// });
 
-socket.on('connect', function(data) {
-  console.log('connect');
-  getLocalStream(true, function(stream) {
-    localStream = stream;
-    container.setState({selfViewSrc: stream.toURL()});
-    container.setState({status: 'ready', info: 'Please enter or create room ID'});
-  });
-});
+// socket.on('connect', function(data) {
+//   console.log('connect');
+//   getLocalStream(true, function(stream) {
+//     localStream = stream;
+//     container.setState({selfViewSrc: stream.toURL()});
+//     container.setState({status: 'ready', info: 'Please enter or create room ID'});
+//   });
+// });
 
 function logError(error) {
   console.log("logError", error);
@@ -233,41 +234,12 @@ function getStats() {
   }
 }
 
-let container;
-
-const styles = StyleSheet.create({
-  switchButton: {
-    flexDirection: 'row',
-    alignSelf: 'flex-end',
-    justifyContent: 'center',
-    height: 50,
-    width: 50,
-    margin: 20,
-  },
-  selfView: {
-    backgroundColor: 'grey',
-    height: 100,
-    width: 100,
-    top: 20,
-    left: 15,
-  },
-  remoteView: {
-    flex: 1,
-    backgroundColor: 'black',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  listViewContainer: {
-    height: 150,
-  },
-});
 
 /** **********************************************************  **/
 /** ***************************APP****************************  **/
 /** **********************************************************  **/
+let container;
+let socket;
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -277,7 +249,7 @@ export default class Main extends React.Component {
       info: 'Initializing',
       status: 'init',
       roomID: '',
-      isFront: true,
+      isFront: false,
       selfViewSrc: null,
       remoteViewSrc: null,
       textRoomConnected: false,
@@ -285,7 +257,7 @@ export default class Main extends React.Component {
       textRoomValue: '',
     };
 
-    this._switchVideoType = this._switchVideoType.bind(this);
+    // this._switchVideoType = this._switchVideoType.bind(this);
     this._textRoomPress = this._textRoomPress.bind(this);
     this._press = this._press.bind(this);
     this.receiveTextData = this.receiveTextData.bind(this);
@@ -294,6 +266,21 @@ export default class Main extends React.Component {
 
   componentDidMount() {
     container = this;
+
+    // Create socket connection AFTER this component has loaded
+    // Necessary because attempting to create the connection on
+    // initial load of the app crashes the application
+    socket = io.connect('https://react-native-webrtc.herokuapp.com', { transports: ['websocket'] });
+    socket.on('exchange', data => exchange(data));
+    socket.on('leave', socketId => leave(socketId));
+    socket.on('connect', (data) => {
+      console.log('connect');
+      getLocalStream(true, (stream) => {
+        localStream = stream;
+        container.setState({ selfViewSrc: stream.toURL() });
+        container.setState({ status: 'ready', info: 'Please enter or create room ID' });
+      });
+    });
   }
 
   _press() {
@@ -302,27 +289,27 @@ export default class Main extends React.Component {
     join(this.state.roomID);
   }
 
-  _switchVideoType() {
-    console.log('this is', this);
-    const isFront = !this.state.isFront;
-    this.setState({ isFront });
-    getLocalStream(isFront, (stream) => {
-      if (localStream) {
-        for (const id in pcPeers) {
-          const pc = pcPeers[id];
-          pc && pc.removeStream(localStream);
-        }
-        localStream.release();
-      }
-      localStream = stream;
-      container.setState({ selfViewSrc: stream.toURL() });
+  // _switchVideoType() {
+  //   // console.log('this is', this);
+  //   // const isFront = !this.state.isFront;
+  //   // this.setState({ isFront });
+  //   // getLocalStream(isFront, (stream) => {
+  //   //   if (localStream) {
+  //   //     for (const id in pcPeers) {
+  //   //       const pc = pcPeers[id];
+  //   //       pc && pc.removeStream(localStream);
+  //   //     }
+  //   //     localStream.release();
+  //   //   }
+  //   //   localStream = stream;
+  //   //   container.setState({ selfViewSrc: stream.toURL() });
 
-      for (const id in pcPeers) {
-        const pc = pcPeers[id];
-        pc && pc.addStream(localStream);
-      }
-    });
-  }
+  //   //   // for (const id in pcPeers) {
+  //   //   //   const pc = pcPeers[id];
+  //   //   //   pc && pc.addStream(localStream);
+  //   //   // }
+  //   // });
+  // }
 
   receiveTextData(data) {
     const textRoomData = this.state.textRoomData.slice();
@@ -335,17 +322,6 @@ export default class Main extends React.Component {
       const pc = pcPeers[key];
       pc.textDataChannel.send('capture');
     }
-
-    // if (!this.state.textRoomValue) {
-    //   return;
-    // }
-    // const textRoomData = this.state.textRoomData.slice();
-    // textRoomData.push({ user: 'Me', message: this.state.textRoomValue });
-    // for (const key in pcPeers) {
-    //   const pc = pcPeers[key];
-    //   pc.textDataChannel.send('capture');
-    // }
-    // this.setState({ textRoomData, textRoomValue: '' });
   }
 
   _renderTextRoom() {
@@ -386,16 +362,41 @@ export default class Main extends React.Component {
             </TouchableHighlight>
           </View>) : null
         }
-        <RTCView streamURL={this.state.remoteViewSrc} style={styles.remoteView}>
-          <RTCView streamURL={this.state.selfViewSrc} style={styles.selfView} />
-          <TouchableHighlight style={styles.switchButton} onPress={this._switchVideoType.bind(this)}>
-            <Icon name="ios-reverse-camera" size={40} style={{ color: 'white' }} />
-          </TouchableHighlight>
+        <RTCView streamURL={this.state.selfViewSrc} style={styles.remoteView}>
+          <RTCView streamURL={this.state.remoteViewSrc} style={styles.selfView} />
           <TouchableHighlight style={styles.switchButton} onPress={this._textRoomPress}>
-            <Icon name="md-aperture" size={50} style={{ color: 'white' }} />
+            <Icon name="md-aperture" size={60} style={{ color: 'white' }} />
           </TouchableHighlight>
         </RTCView>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  switchButton: {
+    height: 60,
+    width: 60,
+    margin: 20,
+    alignSelf: 'center',
+  },
+  selfView: {
+    backgroundColor: 'grey',
+    height: 100,
+    width: 100,
+    top: 20,
+    left: 15,
+  },
+  remoteView: {
+    flex: 1,
+    justifyContent: 'space-between',
+    backgroundColor: 'black',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+  },
+  listViewContainer: {
+    height: 150,
+  },
+});

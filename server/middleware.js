@@ -12,9 +12,9 @@ const session = require('express-sessions');
 module.exports = (app, express) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(morgan('dev'));
   app.use(cookieParser());
   //app.use(session({secret: '1234567890QWERTY'}));
 
-  app.use(morgan('dev'));
   app.use(express.static(path.join(__dirname, '/../')));
 };
