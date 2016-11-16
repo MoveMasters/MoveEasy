@@ -1,9 +1,6 @@
 export default {
 	container: {
 		width: '100%',
-		height: '10vh',
-		alignIitems: 'center',
-		justifyContent: 'center'
 	},
 	stepper: {
 		marginLeft: 80,
@@ -17,7 +14,8 @@ export default {
 	},
 	inventory: {
 		overflow: 'auto',
-		height: '55vh'
+		height: '55vh',
+		marginBottom: '30px'
 	}
 
 }

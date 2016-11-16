@@ -42,12 +42,9 @@ class Survey extends Component {
 
 				<div className='col-md-8' style={styles.column}>
 					<HorizontalStepper screenshot={this.state.screenshot}/>
-				</div>
-
-				<div className='col-md-12'>
 					<hr />	
 					<PhotoInventory />
-					<hr />		
+					<hr />	
 				</div>
 			</div>
 		)
