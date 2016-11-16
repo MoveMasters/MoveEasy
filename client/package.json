@@ -42,6 +42,7 @@
   "dependencies": {
     "axios": "^0.15.2",
     "babel-loader": "^6.2.7",
+    "babel-preset-airbnb": "^2.1.1",
     "babel-preset-stage-1": "^6.1.18",
     "clarifai": "^2.0.15",
     "cropperjs": "^0.8.1",

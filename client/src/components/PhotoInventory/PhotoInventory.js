@@ -47,7 +47,7 @@ const tilesData = [
  */
 const PhotoInventory = () => (
   <div style={styles.root}>
-    <GridList style={styles.gridList} cols={2.2} cellHeight={150}>
+    <GridList style={styles.gridList} cols={2.2} cellHeight={125}>
       {tilesData.map((tile) => (
         <GridTile
           key={tile.img}

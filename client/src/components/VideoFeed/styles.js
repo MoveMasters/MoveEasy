@@ -1,24 +1,24 @@
 export default {
   localStream: {
-  	width: 320,
-  	height: 180,
-  	position: 'absolute',
-  	top: 350,
-  	left: 30
+    position: 'absolute',
+    bottom: '10',
+    right: '75',
+    'zIndex': +1
   },
   remoteStream: {
-  	width: 500,
-  	height: 360
-  },
-  imageContainer: {
-  	width: 400,
-  	height: 350
-  },
-  'imageContainer img': {
-  	'max-width': '100%'
+    margin: 'auto',
+    marginLeft: 5,
+    position: 'relative',
+    maxWidth: '100%',
+    maxHeight: '100%'
   },
   'videoFeed': {
-  	'margin':'0 auto'
+  	height: '65vh',
+    textAlign: 'center',
+  },
+  grabScreenshot: {
+    position: 'relative',
+    'Zindex': -1
   }
 };
 
