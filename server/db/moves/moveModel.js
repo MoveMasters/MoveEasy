@@ -25,6 +25,9 @@ const moveSchema = new Schema ({
   },
   futureAddress: {
     type: String
+  },
+  surveyTime: {
+    type: Date
   }
 });
 
