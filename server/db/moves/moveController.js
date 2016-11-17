@@ -21,6 +21,9 @@ exports.handleNewMove = (req, res, next) => {
     };
     Move.create(moveObj).then( newMove => {
       res.send(newMove);
+    }).catch( err => {
+      console.log('handleNewMove err', err);
+      throw err;
     });
   });
 };
