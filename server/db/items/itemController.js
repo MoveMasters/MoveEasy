@@ -32,6 +32,9 @@ exports.handleNewItem = (req, res, next) => {
       dbUtil.getMoveItems(move_id).then( moveItems => {
         res.send({moveItems});
       });
+    }).catch( err => {
+      console.log('Creating new item err', err);
+      throw err;
     });
   }, err => {
     res.status(500).end(err);

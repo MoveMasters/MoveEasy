@@ -13,25 +13,20 @@ let formats = {
 };
 
 
-const defaultEvents = [{
-  title: 'test',
-  start: moment().add(1, 'days').subtract(5, 'hours').toDate(),
-  end: moment().add(1, 'days').subtract(4, 'hours').toDate(),
-  allDay: false
-},
-{
-  title: 'test all day',
-  start: moment().toDate(),
-  end: moment().toDate(),
-  allDay: true
-}];
+
 
 
 const moveToEvent = (move) => {
+  const surveyTime = new Date(move.surveyTime);
+  const endTime = new Date(surveyTime);
+  endTime.setDate(surveyTime.getDate() + 30/(24*60));
   return {
     title: move.name,
-    start: move.surveyTime
-  }
+    start: surveyTime,
+    end: endTime,
+    allDay: false,
+    moveId: move._id
+  };
 }
 
 class Dashboard extends React.Component {
@@ -40,14 +35,20 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      events: defaultEvents
+      events: []
     };
     this.getAllMoves();
   }
 
+  onSelectEvent (moveEvent) {
+    console.log('gest', moveEvent);
+    //this.props.router.push('/survey/' + moveEvent.moveId);
+  }
+
   getAllMoves() {
     util.getAllMoves().then( moves => {
-      //this.setState({events: moves.map(moveToEvent)});
+      const moveEvents = moves.map(moveToEvent);
+      this.setState({events: moveEvents});
     });
   }
 
@@ -56,14 +57,16 @@ class Dashboard extends React.Component {
       <div>
         <BigCalendar
         defaultView="week"
-        views={['week', 'day', 'agenda']}
+        views={['week', 'day']}
         timeslots={4}
         step={15}
-        min={moment('12:00am', 'h:mma').toDate()}
-        max={moment('11:59pm', 'h:mma').toDate()}
         events={this.state.events}
         defaultDate={new Date()}
         formats={formats}
+        min={moment('6:00am', 'h:mma').toDate()}
+        max={moment('8:00pm', 'h:mma').toDate()}
+        popup= {true}
+        onSelectEvent= {this.onSelectEvent.bind(this)}
         />
       </div>
     )

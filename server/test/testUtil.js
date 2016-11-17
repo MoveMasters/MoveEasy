@@ -80,7 +80,14 @@ exports.signupUser1CreateMove1 = (request) => {
   return new Promise( (resolve, reject) => {
     exports.signupUser1(request).then( user => {
       request.post('/api/move/newMove')
-      .send({user_id:user.id})
+      .send({
+        user_id:user.id,
+        surveyTime: surveyTime,
+        name:name1,
+        phone:phone1,
+        currentAddress: currentAddress1,
+        futureAddress: futureAddress1
+      })
       .set('x-access-token', user.token)
       .end( (err, res) => {
         if(err) {

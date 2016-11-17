@@ -130,7 +130,7 @@ const getCft = (itemName) => {
 
 const getAllMoves = () => {
   return axios.get(getAllMovesUrl).then( response => {
-    return response.body;
+    return response.data.moves;
   });
 }
 
