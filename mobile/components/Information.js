@@ -18,6 +18,26 @@ import { StyleSheet, AsyncStorage, AlertIOS, DatePickerIOS, View } from 'react-n
 import helper from '../utils/helper';
 import Main from './Main';
 
+const storeItem = async (item, selectedValue) => {
+  try {
+    await AsyncStorage.setItem(item, selectedValue);
+    console.log('stored', item);
+  } catch (error) {
+    console.log(`AsyncStorage error: ${error.message}`);
+  }
+};
+
+const getItem = async (item, cb) => {
+  try {
+    const value = await AsyncStorage.getItem(item);
+    if (value !== null) {
+      cb(value);
+    }
+  } catch (error) {
+    console.log('Error submitting new move info:', error);
+  }
+};
+
 export default class Information extends React.Component {
   constructor(props) {
     super(props);
@@ -44,41 +64,35 @@ export default class Information extends React.Component {
   //   this.setState({ date });
   // }
 
-  async submitInfo(context) {
-    console.log(context);
+  submitInfo() {
     const moveObj = {
-      name: context.state.name,
-      phone: context.state.phone,
-      currentAddress: context.state.currentAddress,
-      futureAddress: context.state.futureAddress,
-      surveyTime: context.state.date,
+      name: this.state.name,
+      phone: this.state.phone,
+      currentAddress: this.state.currentAddress,
+      futureAddress: this.state.futureAddress,
+      surveyTime: this.state.date,
     };
-    console.log(moveObj);
 
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (token !== null) {
-        helper.newMove(moveObj, token)
-        .then((response) => {
-          // what do here?
-        })
-        .catch((error) => {
-          console.log(error);
-          AlertIOS.alert('There was a problem saving your information. Please try again.');
-        });
-      }
-    } catch (error) {
-      console.log('Error submitting new move info:', error);
-    }
+    getItem('token', (token) => {
+      helper.newMove(moveObj, token)
+      .then((response) => {
+        const moveId = response.data._id;
+
+        storeItem('moveId', moveId);
+        this.goToMain();
+      })
+      .catch((error) => {
+        console.log(error);
+        AlertIOS.alert('There was a problem saving your information. Please try again.');
+      });
+    });
   }
 
   render() {
-    const self = this;
-
     return (
       <Container>
         <Header>
-          <Title>MoveKick</Title>
+          <Title style={styles.title}>MoveKick</Title>
         </Header>
         <Content>
           <List style={styles.list}>
@@ -88,10 +102,7 @@ export default class Information extends React.Component {
                 <Input
                   inlineLabel label="NAME"
                   placeholder="Name"
-                  onChangeText={(name) => {
-                    this.setState({ name });
-                    console.log('set the new name', name);
-                  }}
+                  onChangeText={name => this.setState({ name })}
                 />
               </InputGroup>
             </ListItem>
@@ -128,7 +139,7 @@ export default class Information extends React.Component {
             </ListItem>
           </List>
           <View style={styles.picker}>
-            <Title>Appointment</Title>
+            <Title style={styles.title}>Schedule Survey</Title>
             <DatePickerIOS
               date={this.state.date}
               mode="datetime"
@@ -139,7 +150,7 @@ export default class Information extends React.Component {
           <Button
             info
             style={styles.submit}
-            onPress={() => this.submitInfo(self)}
+            onPress={() => this.submitInfo()}
           >
             Submit
           </Button>
@@ -150,6 +161,9 @@ export default class Information extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 20,
+  },
   list: {
     top: 15,
   },
