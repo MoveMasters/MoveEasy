@@ -1,5 +1,4 @@
 const express = require('express');
-const dbUtil = require('./../db/dbUtil');
 const userController = require('./../db/users/userController');
 
 

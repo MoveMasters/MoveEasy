@@ -15,6 +15,7 @@ const userObj1 = testUtil.userObj1;
 describe('Move Server APIs', () => {
   var user_id;
   var move_id;
+
   before((done) => {
     testUtil.clearDatabase().then(done);
   });

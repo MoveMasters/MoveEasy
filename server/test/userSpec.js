@@ -3,6 +3,7 @@ const supertest = require('supertest');
 const server = require('./../server.js');
 const User = require('./../db/users/userModel.js');
 const jwt = require('jwt-simple');
+const testUtil = require('./testUtil');
 
 const request = supertest.agent(server);
 
@@ -22,19 +23,11 @@ describe('User Server API tests', () => {
   var username2 = 'user';
   var password2 = 'userword';
 
-  // var signupUser1 = (cb) => {
-  //   request.post('/api/user/signup')
-  //   .send({ username: username, password: password }).end(cb);
-  // };
 
   before((done) => {
-    User.remove({}).exec().then(done());
+    testUtil.clearDatabase().then(done);
   });
 
-
-  // it('Should respond with html given a non-api request', (done) => {
-  //   request.get('/').expect(200, /<html/, done);
-  // });
 
 
   it('Should respond with a token on valid sign up', (done) => {
