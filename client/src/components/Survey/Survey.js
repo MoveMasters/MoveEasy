@@ -33,7 +33,8 @@ class Survey extends Component {
 		util.postImageToClarifai(base64Image).then(data => console.log(data));
 	}
 
-	onItemSelection(event) {		const itemName = event.target.textContent;
+	onItemSelection(event) {		
+		const itemName = event.target.textContent;
 		const cft = util.getCft(itemName);
 		var itemObj = {
 			name: itemName,
@@ -48,7 +49,7 @@ class Survey extends Component {
 
 	render() {
 		return (
-			<div className='row'>
+			<div className='row' style={{margin: '0 15px'}}>
 	    		<div className='col-md-4' style={styles.column}>
 					<VideoFeed handleScreenshot={this.handleScreenshot.bind(this)}/>			
 				</div>

@@ -1,20 +1,14 @@
 export default {
   localStream: {
     position: 'absolute',
-    bottom: '-15vh',
-    right: '5vw',
-    'zIndex': +1
+    display: 'flex',
+    'zIndex': 1,
+    alignSelf: 'flex-end',
+    left: 0
   },
   remoteStream: {
-    margin: 'auto',
-    marginLeft: 5,
+    margin: '0 auto',
     position: 'relative',
-    maxWidth: '100%',
-    maxHeight: '100%'
-  },
-  'videoFeed': {
-  	height: '65vh',
-    textAlign: 'center',
   },
   grabScreenshot: {
     position: 'relative',
@@ -22,9 +16,11 @@ export default {
   },
   videoContainer: {
     backgroundColor: 'pink', 
-    height: '80vh', 
-    marginTop: '10px', 
-    marginLeft: '15px'
+    height: '86vh', 
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 };
 
