@@ -26,7 +26,7 @@ class mkmobile extends React.Component {
     return (
       <Navigator
         style={{ flex: 1 }}
-        initialRoute={{ name: 'Login', component: Login }}
+        initialRoute={{ name: 'Dashboard', component: Dashboard }}
         renderScene={this.renderScene}
         configureScene={() => Navigator.SceneConfigs.FadeAndroid}
       />

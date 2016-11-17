@@ -3,11 +3,11 @@
 import React from 'react';
 import {
   Button,
+  Container,
   Header,
+  Content,
   Footer,
   Title,
-  Container,
-  Content,
   List,
   ListItem,
   InputGroup,
