@@ -60,8 +60,6 @@ module.exports = {
     const username = req.body.username;
     const password = req.body.password;
 
-    console.log('singup', username);
-
     /** Check to see if username exists already */
     findUser({ username })
       .then((user) => {

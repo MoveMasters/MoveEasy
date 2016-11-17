@@ -31,9 +31,18 @@ const itemSchema = new Schema({
     required: true,
     default: true
   },
+  room: {
+    type: String,
+    required: true
+  },
   cft: {
     type: Number,
     required: true
+  },
+  pbo: {
+    type: Boolean,
+    required: true,
+    default: false
   },
   comment: {
     type: String

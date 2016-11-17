@@ -1,7 +1,11 @@
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
+const _ = require('underscore');
+const fs = require('fs');
+const path = require('path');
 const User = require('./../db/users/userModel');
 const Move = require('./../db/moves/moveModel');
+const Item = require('./../db/items/itemModel');
 const dbUtil = require('./../db/dbUtil');
 
 
@@ -15,6 +19,11 @@ const surveyTime = new Date();
 
 const userObj1 = { username: username1, password: password1 };
 exports.userObj1 = userObj1;
+
+
+const imagePath1 = path.resolve(__dirname, 'itemImage1.png');
+
+
 
 
 //natives
@@ -50,7 +59,8 @@ const getUser1FromRoute = (request, route) => {
 exports.clearDatabase = () => {
   const userPromise = User.remove().exec();
   const movePromise = Move.remove().exec();
-  return Promise.all([userPromise, movePromise]).then( result => {
+  const itemPromise = Item.remove().exec();
+  return Promise.all([userPromise, movePromise, itemPromise]).then( result => {
     return null;
   });
 };
@@ -80,6 +90,30 @@ exports.signupUser1CreateMove1 = (request) => {
           resolve([user, res.body]);
         }  
       });
+    }).catch( err => {
+      throw err;
     });
   });
 };
+
+exports.clearToMove1 = (request) => {
+  return exports.clearDatabase().then( () => {
+    return exports.signupUser1CreateMove1(request);
+  });
+}
+
+exports.getClientItemObj1 = (move_id) => {
+  const imageData = fs.readFileSync(imagePath1, 'base64');
+  return {
+    name: 'Chair - Office',
+    moveId: move_id,
+    image: imageData,
+    quantity: 1,
+    going: true,
+    room: 'living room',
+    cft: 4,
+    pbo: false,
+    comment: 'This is a comment'
+  };
+}
+

@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const supertest = require('supertest');
 const server = require('./../server.js');
 const authController = require('./../db/authController');
+const testUtil = require('./testUtil');
 
 const request = supertest.agent(server);
 
@@ -15,6 +16,11 @@ describe('Meta Testing', () => {
 
 
 describe('Auth Server APIs', () => {
+  
+  before((done) => {
+    testUtil.clearDatabase().then(done);
+  });
+
   it('Should send auth token and other info for Clarifai', (done) => {
     setTimeout( () => {
       console.log('start')
