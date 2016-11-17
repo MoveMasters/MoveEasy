@@ -12,12 +12,21 @@ class Survey extends Component {
 		super(props)
 
 		this.state = {
-			takePhoto: false
+			currentItems: [],
+			screenshots: [],
+			predictions: []
 		}
 	}
 
 	componentWillMount() {
 		this.setClarfaiInfo();
+	}
+
+	dequeueItem() {
+		let screenshots = this.state.screenshots.slice(1);
+		let predictions = this.state.predictions.slice(1);
+		let currentItems = predictions[0] || [];
+		this.setState({ screenshots, predictions, currentItems })
 	}
 
 
@@ -28,24 +37,24 @@ class Survey extends Component {
 	}
 
 	handleScreenshot(screenshot) {
-		this.setState({ screenshot });
-		let base64Image = screenshot.replace(/^data:image\/(jpeg|png|jpg);base64,/, "").toString('base64')
-		util.postImageToClarifai(base64Image).then(data => console.log(data));
+		// add image to screenshot queue
+		let screenshots = [...this.state.screenshots, screenshot]
+		this.setState({ screenshots });
+		
+		// get predictions and add to predictions queue
+		util.postImageToClarifai(screenshot)
+			.then(predictionSet => {
+				let predictions = [...this.state.predictions, predictionSet];
+				let currentItems = predictions[0];
+
+				this.setState({ predictions, currentItems })
+			})
 	}
 
-	onItemSelection(event) {		
-		const itemName = event.target.textContent;
-		const cft = util.getCft(itemName);
-		var itemObj = {
-			name: itemName,
-			cft: cft,
-			going: true,
-			quantity: 1,
-			comment: ''
-		};
-		console.log('itemSelect', itemObj);
-
-	}
+	updateChoices(event) {
+	  let currentItems = util.filterSearch(event.target.value);
+	  this.setState({ currentItems });
+	};
 
 	render() {
 		return (
@@ -55,7 +64,11 @@ class Survey extends Component {
 				</div>
 
 				<div className='col-md-8' style={styles.column}>
-					<HorizontalStepper screenshot={this.state.screenshot} onItemSelection={this.onItemSelection.bind(this)}/>
+					<HorizontalStepper 
+						screenshots={this.state.screenshots} 
+						currentItems={this.state.currentItems}
+						updateChoices={this.updateChoices.bind(this)}
+						dequeueItem={this.dequeueItem.bind(this)}/>
 					<hr />	
 					<PhotoInventory />
 					<hr />	

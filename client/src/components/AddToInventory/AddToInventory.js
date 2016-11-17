@@ -8,12 +8,31 @@ class AddToInventory extends Component {
 		super(props);
 
 		this.state = {
-			count: 1,
-			cubicFt: 0,
-			isGoing: true,
+			quantity: 1,
+			cft: 0,
+			going: true,
 			pbo: false,
-			note: ''
+			comment: ''
 		};
+	}
+
+	componentWillMount() {
+		console.log('NEED TO PLACE UTILITY FUNCTION TO GRAB AND SET PHOTOTYPE INFO TO STATE')
+	}
+
+	handleIncrement(boundState) {
+		this.setState({[boundState]: this.state[boundState] + 1})
+	}
+
+	handleDecrement(boundState) {
+		this.setState({[boundState]: this.state[boundState] > 0 ? this.state[boundState] - 1 : 0})
+	}
+
+	addToInventory() {
+		console.log('SEND THIS OBJECT TO SERVER', Object.assign({}, this.state, {image: this.props.screenshots[0]}));
+		// NEED TO DELETE FIRST ITEM FROM ARRAY
+		this.props.dequeueItem()
+		this.props.handleNext();
 	}
 
 	renderCounter(title, boundState) {
@@ -21,9 +40,15 @@ class AddToInventory extends Component {
 			<div style={styles.parent}>
 				{title}
 				<div style={styles.counter}>
-					<span onClick={() => this.handleDecrement(boundState)} className="fa fa-angle-left fa-2x" aria-hidden="true"></span>
+					<span 
+						onClick={() => this.handleDecrement(boundState)} 
+						className="fa fa-angle-left fa-2x" 
+						aria-hidden="true"></span>
 					<span>{this.state[boundState]}</span>
-					<span onClick={() => this.handleIncrement(boundState)} className="fa fa-angle-right fa-2x" aria-hidden="true"></span>
+					<span 
+						onClick={() => this.handleIncrement(boundState)} 
+						className="fa fa-angle-right fa-2x" 
+						aria-hidden="true"></span>
 				</div>
 			</div>
 		)
@@ -43,19 +68,6 @@ class AddToInventory extends Component {
 		)
 	}
 
-	handleIncrement(boundState) {
-		this.setState({[boundState]: this.state[boundState] + 1})
-	}
-
-	handleDecrement(boundState) {
-		this.setState({[boundState]: this.state[boundState] > 0 ? this.state[boundState] - 1 : 0})
-	}
-
-	addToInventory() {
-		console.log('SEND TO SERVER', this.state);
-		this.props.handleNext
-	}
-
 	render() {
 		return (
 			<div style={styles.container}>
@@ -63,16 +75,16 @@ class AddToInventory extends Component {
 					<div>{this.props.selectedItem}</div>
 				</div>
 				
-				<div style={styles.hr}><hr /></div>
+				<div style={styles.hr}><hr/></div>
 
-				{this.renderCounter('Item Count', 'count')}
-				{this.renderCounter('Cubic Feet', 'cubicFt')}
-				{this.renderCheckbox('Is Going', 'isGoing')}
+				{this.renderCounter('Item Count', 'quantity')}
+				{this.renderCounter('Cubic Feet', 'cft')}
+				{this.renderCheckbox('Is Going', 'going')}
 				{this.renderCheckbox('Packed by Owner', 'pbo')}
 
 				<div style={styles.parent}>
 				  <textarea rows='4' 
-				  	onChange={(event) => this.setState({note: event.target.value})} 
+				  	onChange={(event) => this.setState({comment: event.target.value})} 
 				  	value={this.state.note}
 				  	style={styles.textarea}
 				  	placeholder={'Add Notes'}></textarea>
