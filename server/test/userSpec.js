@@ -22,14 +22,13 @@ describe('User Server API tests', () => {
   var username2 = 'user';
   var password2 = 'userword';
 
-  var signupUser1 = (cb) => {
-    request.post('/api/user/signup')
-    .send({ username: username, password: password }).end(cb);
-  };
+  // var signupUser1 = (cb) => {
+  //   request.post('/api/user/signup')
+  //   .send({ username: username, password: password }).end(cb);
+  // };
 
   before((done) => {
-    User.remove({}).exec();
-    done();
+    User.remove({}).exec().then(done());
   });
 
 
@@ -54,6 +53,7 @@ describe('User Server API tests', () => {
       .send({ username: username, password: password }).end( (err, res) => {
         token = res.body.token;
         expect(token).to.be.ok;
+        expect(res.status).to.equal(200);
         done();
       });
   });
@@ -69,13 +69,11 @@ describe('User Server API tests', () => {
 
 
   it('Should 403 on invalid password', (done) => {
-    signupUser1( (err, res) => {
-      request.post('/api/user/signin')
-      .send({ username: username, password: 'wrongpassword' })
-      .end(function(err, res) {
-        expect(res.status).to.equal(403);
-        done();
-      });
+    request.post('/api/user/signin')
+    .send({ username: username, password: 'wrongpassword' })
+    .end(function(err, res) {
+      expect(res.status).to.equal(403);
+      done();
     });
   });
 
@@ -101,7 +99,5 @@ describe('User Server API tests', () => {
         done();
       });
   });
-
-
 
 });
