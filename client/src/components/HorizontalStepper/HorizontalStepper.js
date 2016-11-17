@@ -1,14 +1,12 @@
 import React from 'react';
-import util from './../../../util/util';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import styles from './styles';
 import InventoryList from './../InventoryList/InventoryList';
 import Screenshot from './../Screenshot/Screenshot';
 import SearchBar from './../SearchBar/SearchBar';
-import AddToInventory from './../AddToInventory/AddToInventory'
+import AddToInventory from './../AddToInventory/AddToInventory';
+import WaitingBar from './../WaitingBar/WaitingBar';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -85,22 +83,31 @@ class HorizontalStepper extends React.Component {
       return (
         <div className='col-md-12' style={styles.colSix}>
           <p>Waiting for another item...</p>
+          <WaitingBar />
         </div>
       )
     }
   }
 
+  renderWelcomeScreen() {
+    return (
+      <div className='col-md-12' style={styles.colSix}>
+        <p>Welcome to Move Kick</p>
+      </div>
+    )
+  }
+
   render() {
     const {finished, stepIndex} = this.state;
     const contentStyle = {width: '100%', marginRight: 15};
+    let itemsLeft = this.props.screenshots.length;
+
     return (
       <div style={styles.container}>
         {this.renderStepper(stepIndex)}
-
         <div style={contentStyle}>
-
           {finished ? this.renderNextItem(stepIndex) : 
-
+           itemsLeft === 0 && !finished ? this.renderWelcomeScreen() :
           (
             <div>
               <div className='col-md-6' style={styles.colSix}>
