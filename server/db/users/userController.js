@@ -13,6 +13,8 @@ const dbUtil = require('./../dbUtil.js');
 const findUser = Q.nbind(User.findOne, User);
 const createUser = Q.nbind(User.create, User);
 
+
+
 module.exports = {
 
 
@@ -31,14 +33,12 @@ module.exports = {
     findUser({ username })
       .then((user) => {
         if (!user) {
-          //return next(new Error('User does not exist'));
           return res.status(403).json({Error: 'No user exists'});
         }
         return user.comparePasswords(password)
           .then((foundUser) => {
             if (foundUser) {
-              const token = jwt.encode(user, 'secret');
-              return res.json({ token });
+              return dbUtil.encodeSendUser(user, res);
             }
             return res.status(403).json({Error: 'Wrong password'});
           });
@@ -60,6 +60,8 @@ module.exports = {
     const username = req.body.username;
     const password = req.body.password;
 
+    console.log('singup', username);
+
     /** Check to see if username exists already */
     findUser({ username })
       .then((user) => {
@@ -74,10 +76,8 @@ module.exports = {
         });
       })
       .then((user) => {
-
         /** Create a session token and send back for authorization */
-        const token = jwt.encode(user, 'secret');
-        res.json({ token });
+        dbUtil.encodeSendUser(user, res);
       })
       .fail((error) => {
         next(error);

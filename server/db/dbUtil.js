@@ -6,6 +6,22 @@
 
 const jwt = require('jwt-simple');
 const User = require('./users/userModel.js');
+const Item = require('./items/itemModel.js');
+const Move = require('./moves/moveModel.js');
+const mongoose = require('mongoose');
+const Promimse = require('bluebird');
+
+
+const passwordSecret = process.env.passwordSecret || 'secret';
+
+
+exports.encodeSendUser = (user, res) => {
+  const token = jwt.encode(user, passwordSecret);
+  exports.getLastMove(user._id).then( lastMove => {
+    res.json({ token, lastMove});
+  });
+};
+
 
 /**
   * This function is used to find the userId from database given a username.
@@ -33,7 +49,7 @@ exports.getUsernameFromReq = (req, next) => {
     next(new Error('No token'));
     return null;
   }
-  const username = jwt.decode(token, 'secret').username;
+  const username = jwt.decode(token, passwordSecret).username;
   return username;
 };
 
@@ -64,7 +80,7 @@ exports.checkAuth = (req, res, next) => {
     return null;
   }
   try {
-    const username = jwt.decode(token, 'secret').username;
+    const username = jwt.decode(token, passwordSecret).username;
     next();
     return true;
   } catch (e) {
@@ -91,5 +107,37 @@ exports.checkIsRealUser = (username, callback) => {
     }
   });
 };
+
+
+
+exports.getMoveItems = (move_id) => {
+  return Move.find({id:move_id}).exec();
+}
+
+exports.getUserMoves = (user_id) => {
+  return new Promimse( (resolve, reject) => {
+    Move.find({user_id})
+    //.populate({options: {sort: {createdAt:-1}}})
+    .sort({createdAt:-1})
+    .exec().then(
+      moves => {
+        resolve(moves);
+      },
+      err => {
+        console.log('getUserMoves err', err);
+        reject(err);
+      }
+    );
+  });
+}
+
+exports.getLastMove = (user_id) => {
+  return exports.getUserMoves(user_id).then( moves => {
+    if (moves.length === 0) {
+      return null;
+    }
+    return moves[moves.length - 1];
+  });
+}
 
 
