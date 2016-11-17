@@ -1,32 +1,22 @@
 import React from 'react';
-import util from './../../../util/util';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import styles from './styles';
 import InventoryList from './../InventoryList/InventoryList';
 import Screenshot from './../Screenshot/Screenshot';
 import SearchBar from './../SearchBar/SearchBar';
-import AddToInventory from './../AddToInventory/AddToInventory'
-
+import AddToInventory from './../AddToInventory/AddToInventory';
+import WaitingBar from './../WaitingBar/WaitingBar';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-/**
- * Horizontal steppers are ideal when the contents of one step depend on an earlier step.
- * Avoid using long step names in horizontal steppers.
- *
- * Linear steppers require users to complete one step in order to move on to the next.
- */
 class HorizontalStepper extends React.Component {
 
   state = {
     finished: false,
     stepIndex: 0,
-    currentItems: [],
     selectedItem: null
   };
 
@@ -46,26 +36,16 @@ class HorizontalStepper extends React.Component {
     }
   };
 
-  updateChoices = (event) => {
-    const searchTerm = event.target.value;
-    this.setState({
-      currentItems: util.filterSearch(searchTerm)
-    });
-  };
-
-  getStepContent(stepIndex) {
+  renderStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
         return (
             <div className='col-md-6' style={styles.inventory}>
-              <SearchBar onChange={this.updateChoices.bind(this)} />
+              <SearchBar updateChoices={this.props.updateChoices.bind(this)} />
               <hr />
               <InventoryList
-                currentItems={this.state.currentItems}
-                screenshot={this.props.screenshot}
-                handleNext={this.handleNext.bind(this)}
-                onItemSelection={this.props.onItemSelection}
-              />
+                currentItems={this.props.currentItems}
+                handleNext={this.handleNext.bind(this)} />
             </div>
           )
       default:
@@ -74,55 +54,67 @@ class HorizontalStepper extends React.Component {
               <AddToInventory 
                 selectedItem={this.state.selectedItem} 
                 stepIndex={stepIndex}
-                handleNext={this.handleNext.bind(this)}/>
+                handleNext={this.handleNext.bind(this)}
+                screenshots={this.props.screenshots}
+                dequeueItem={this.props.dequeueItem}/>
             </div>
         )
     }
   }
 
+  renderStepper(stepIndex) {
+    return (
+      <Stepper activeStep={stepIndex} style={styles.stepper}>
+        <Step>
+          <StepLabel onClick={this.handlePrev}>Select Item</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Add to Inventory</StepLabel>
+        </Step>
+      </Stepper>
+    )
+  }
+
+  renderNextItem(stepIndex) {
+    if (this.props.screenshots.length > 0) {
+      event.preventDefault();
+      this.setState({stepIndex: 0, finished: false});
+    } else {
+      return (
+        <div className='col-md-12' style={styles.colSix}>
+          <p>Waiting for another item...</p>
+          <WaitingBar />
+        </div>
+      )
+    }
+  }
+
+  renderWelcomeScreen() {
+    return (
+      <div className='col-md-12' style={styles.colSix}>
+        <p>Welcome to Move Kick</p>
+      </div>
+    )
+  }
+
   render() {
     const {finished, stepIndex} = this.state;
     const contentStyle = {width: '100%', marginRight: 15};
+    let itemsLeft = this.props.screenshots.length;
 
     return (
       <div style={styles.container}>
-        <Stepper activeStep={stepIndex} style={styles.stepper}>
-          <Step>
-            <StepLabel onClick={this.handlePrev}>Select Item</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Add to Inventory</StepLabel>
-          </Step>
-        </Stepper>
+        {this.renderStepper(stepIndex)}
         <div style={contentStyle}>
-          {finished ? (
-            <div className='col-md-12' style={styles.colSix}>
-              <a
-                href="#"
-                onClick={(event) => {
-                  event.preventDefault();
-                  this.setState({stepIndex: 0, finished: false});
-                }}
-              >
-                Click here
-              </a> to reset the example.
-            </div>
-          ) : (
+          {finished ? this.renderNextItem(stepIndex) : 
+           itemsLeft === 0 && !finished ? this.renderWelcomeScreen() :
+          (
             <div>
               <div className='col-md-6' style={styles.colSix}>
-                <Screenshot screenshot={this.props.screenshot} style={styles.colSix} />
+                <Screenshot screenshots={this.props.screenshots} style={styles.colSix} />
               </div>
-              <div>{this.getStepContent(stepIndex)}</div>
-              <div style={{marginTop: 12}}>
-                <FlatButton
-                  label="Back"
-                  disabled={stepIndex === 0}
-                  onTouchTap={this.handlePrev}
-                  onClick={this.handlePrev}
-                  style={{marginRight: 12, display: 'none'}}
-                />
-                
-              </div>
+
+              {this.renderStepContent(stepIndex)}
             </div>
           )}
         </div>

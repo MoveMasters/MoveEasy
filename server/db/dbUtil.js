@@ -111,7 +111,7 @@ exports.checkIsRealUser = (username, callback) => {
 
 
 exports.getMoveItems = (move_id) => {
-  return Item.find({move_id}).exec();
+  return Item.find({move_id}).sort({createdAt:-1}).exec();
 }
 
 exports.getUserMoves = (user_id) => {

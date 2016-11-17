@@ -7,7 +7,7 @@ const SearchBar = (props) => {
       <input 
       	type="text" 
       	id="item-search-bar" 
-      	onChange={props.onChange} 
+      	onChange={props.updateChoices} 
       	style={styles.searchbar}
       	placeholder={'Search for Items'} />
     </div>

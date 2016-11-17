@@ -25,7 +25,7 @@ describe('Move Server APIs', () => {
       const user = items[0];
       const move = items[1];
       user_id = String(user._id);
-      move_id = String(move._id)
+      move_id = String(move._id);
       expect(user_id).to.equal(String(move.user_id));
       done();
     });
