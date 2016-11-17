@@ -17,7 +17,8 @@ let localStream, remoteStream, container;
 var pcPeers = {};
 
 /************************************* SOCKET IO ******************************************/ 
-const scale = .30;
+const scale = .33;
+const aspect = 1.3
 
 class VideoFeed extends Component {
 	constructor(props) {
@@ -210,7 +211,7 @@ class VideoFeed extends Component {
 		console.log(video, 'video')
 		let canvas = container.refs.canvas;
 		canvas.width = this.state.width * scale;
-	  	canvas.height = this.state.width * 1.5 * scale;
+	  	canvas.height = this.state.width * aspect * scale;
 	  	canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
 	  	// create screenshot data object
@@ -222,13 +223,14 @@ class VideoFeed extends Component {
 
 	render() {
 	    return (
-	    		<div className='col-md-12' style={styles.videoFeed}>
 	    			<div style={styles.videoContainer}>
+	    				<div style={{flex: 1}}>
 				        <ReactPlayer playing
 				        	style={styles.localStream}
 				        	url={this.state.localStreamURL}
-				        	width={'35%'}
-				        	height={'25%'} />
+				        	width={'150'}
+				        	height={150 * (3/4)} />
+
 
 				 
 				        <ReactPlayer playing
@@ -236,10 +238,11 @@ class VideoFeed extends Component {
 				        	style={styles.remoteStream}  
 				        	url={this.state.remoteStreamURL}
 				        	width={this.state.width * scale}
-				        	height={this.state.width * 1.5 * scale} />
+				        	height={this.state.width * aspect * scale} />
+				        </div>
+
+			       		<canvas ref='canvas' style={{display: 'none'}}></canvas>
 				     </div>
-			       	<canvas ref='canvas' style={{display: 'none'}}></canvas>
-			    </div>
 	    );
 	}
 }
