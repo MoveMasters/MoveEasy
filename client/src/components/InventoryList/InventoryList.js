@@ -3,11 +3,11 @@ import styles from './styles';
 
 const InventoryList = (props) => {
 
-	const listItems = props.currentItems.map( (item) => {
+	const listItems = props.currentItems.map( (item, index) => {
 		return (
 			<li 
 				className='list-group-item' 
-				key={item} 
+				key={index} 
 				onClick={() => props.handleNext(item)}>
 				{item}
 				<span className="fa fa-angle-right fa-2x pull-right" aria-hidden="true"></span>

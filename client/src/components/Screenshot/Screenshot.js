@@ -5,7 +5,7 @@ const Screenshot = (props) => {
 	return (
 		<div>
 			<ul className='list-group' style={styles.imageContainer}>
-			  <img style={styles.image} src={props.screenshot} />
+			  <img style={styles.image} src={props.screenshots[0]} />
 			</ul>
 		</div>
 	);

@@ -1,9 +1,9 @@
 import axios from 'axios';
 const ip = 'localhost';
 const port = '9000'
+const serverURL = `http://${ip}:${port}`
 
 /************************************ URLS ************************************/
-const serverURL = `http://${ip}:${port}`
 const postCroppedImageURL = `${serverURL}/api/item/croppedImage`;
 const getClarifaiTokenURL = `${serverURL}/api/auth/clarifaiToken`;
 //const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;
@@ -14,12 +14,7 @@ const postItemToServerURL = `${serverURL}/api/item/newItem`;
 
 
 /************************************ PHOTOS ************************************/
-var clarApp;
-var clarifaiTags;
-var clarifaiToken;
-var clarifaiItems;
-var nameMappings;
-var itemPrototypes;
+let clarApp, clarifaiTags, clarifaiToken, clarifaiItems, nameMappings, itemPrototypes;
 
 
 
@@ -57,7 +52,7 @@ const getClarifaiInfo = () => {
 }
 
 
-const getMatches = tag => {
+const getMatches = (tag) => {
   var checkList = [tag];
   if (tag in nameMappings) {
     checkList.push(nameMappings[tag]);
@@ -80,61 +75,25 @@ const getMatches = tag => {
 
 
 const predict = (concepts) => {
-  var possibilities = [];
-  for (var i = 0; i < concepts.length; i ++) {
-    var tag = concepts[i].name;
-    //var tag = concepts[i];
-    console.log('tag', tag);
-    var result = getMatches(tag);
-    possibilities = possibilities.concat(result);
-  }
-  console.log('possibilities', possibilities);
-  return possibilities;
-};
+  console.log('calling predict')
+  var predictions = [];
 
-const filterSearch = (searchTerm) => {
-  if (!searchTerm) {
-    return clarifaiItems;
-  }
-  searchTerm = searchTerm.toLowerCase();
-  var results = [];
-  clarifaiItems.forEach( item => {
-    const lowered = item.toLowerCase();
-    if (lowered.includes(searchTerm)) {
-      results.push(item);
-    }
-  });
-  return results;
+  concepts.forEach(concept => {
+    predictions.push(getMatches(concept.name))
+  })
+
+  let flatPredictions = [].concat(...predictions)
+  return [...new Set( flatPredictions )];
 };
 
 
-const postImageToClarifai = (base64Image) => {
-	// return axios(postImageToClarifaiURL, {
-	// 	  method: 'post',
-	// 	  model: 'general-v1.3',
-	// 	  headers: {
-	// 	    'Authorization': `Bearer ${clarifaiToken}`
-	// 	  },
-	// 	  data: {
-	// 	  	'encoded_data': base64Image
-	// 	  }
-	// 	})
-	//   .then(function (response) {
-	//     console.log(response, 'response from inside utils');
-	//     // const concepts = response.data.outputs[0].data.concepts;
-	//     const concepts = response.data.results[0].result.tag.classes;
-
-	//     return predict(concepts);
-	//   })
-	//   .catch(function (error) {
-	//     console.log('Error postImageToClarifai:', error);
-	//     throw error;
-	//   });
-
+const postImageToClarifai = (screenshot) => {
+  let base64Image = screenshot.replace(/^data:image\/(jpeg|png|jpg);base64,/, "").toString('base64');
 
   return  clarApp.models.predict(Clarifai.GENERAL_MODEL, {base64: base64Image}).then(
     (response) => {
-      const concepts = response.data.outputs[0].data.concepts;
+      console.log('Success', 'postImageToClarifai')
+      let concepts = response.data.outputs[0].data.concepts;
       return predict(concepts);
     },
     (err) => {
@@ -167,13 +126,50 @@ const getCft = (itemName) => {
   return Math.round(itemPrototypes[itemName].cft);
 }
 
+/************************************ SEARCHBAR ************************************/
 
-
-
-
-
-
+const filterSearch = (searchTerm) => {
+ if (!searchTerm) {
+   return clarifaiItems;
+ }
+ searchTerm = searchTerm.toLowerCase();
+ var results = [];
+ clarifaiItems.forEach( item => {
+   const lowered = item.toLowerCase();
+   if (lowered.includes(searchTerm)) {
+     results.push(item);
+   }
+ });
+ return [...new Set( results )];
+};
 
 /************************************ EXPORT ************************************/
 
 export default { postCroppedImage, postImageToClarifai, getClarifaiInfo, filterSearch, getCft}
+
+
+
+// const postImageToClarifai = (base64Image) => {
+  // return axios(postImageToClarifaiURL, {
+  //    method: 'post',
+  //    model: 'general-v1.3',
+  //    headers: {
+  //      'Authorization': `Bearer ${clarifaiToken}`
+  //    },
+  //    data: {
+  //      'encoded_data': base64Image
+  //    }
+  //  })
+  //   .then(function (response) {
+  //     console.log(response, 'response from inside utils');
+  //     // const concepts = response.data.outputs[0].data.concepts;
+  //     const concepts = response.data.results[0].result.tag.classes;
+
+  //     return predict(concepts);
+  //   })
+  //   .catch(function (error) {
+  //     console.log('Error postImageToClarifai:', error);
+  //     throw error;
+  //   });
+//     );
+// }
