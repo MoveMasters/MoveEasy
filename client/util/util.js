@@ -10,6 +10,7 @@ const getClarifaiTokenURL = `${serverURL}/api/auth/clarifaiToken`;
 const postImageToClarifaiURL = ' https://api.clarifai.com/v2/models/aaa03c23b3724a16a56b629203edc62c/outputs';
 const getClarifaiInfoURL = `${serverURL}/api/auth/clarifaiInfo`;
 const postItemToServerURL = `${serverURL}/api/item/newItem`;
+const getAllMovesUrl = `${serverURL}/api/move/allMoves`;
 
 
 
@@ -169,6 +170,12 @@ const getCft = (itemName) => {
 
 
 
+const getAllMoves = () => {
+  return axios.get(getAllMovesUrl).then( response => {
+    return response.body;
+  });
+}
+
 
 
 
@@ -176,4 +183,4 @@ const getCft = (itemName) => {
 
 /************************************ EXPORT ************************************/
 
-export default { postCroppedImage, postImageToClarifai, getClarifaiInfo, filterSearch, getCft}
+export default { postCroppedImage, postImageToClarifai, getClarifaiInfo, filterSearch, getCft, getAllMoves}
