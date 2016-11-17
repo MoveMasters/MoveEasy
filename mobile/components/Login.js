@@ -63,57 +63,61 @@ export default class Login extends React.Component {
 
   userAuth(type) {
     const value = this.refs.form.getValue();
+
     if (value) {
       const user = {
         username: value.username,
         password: value.password,
       };
-      console.log(type);
+
       helper.postUser(user, type)
-        .then((response) => {
-          const token = response.data.token;
-          onValueChange('token', token);
-          this.goToNext(type);
-        })
-        .catch((error) => {
-          console.log(error);
-          AlertIOS.alert('Invalid username or password. Please try again.');
-        });
+      .then((response) => {
+        const token = response.data.token;
+        const lastMove = response.data.lastMove;
+
+        if (response.data.lastMove) { onValueChange('lastMove', lastMove); }
+        onValueChange('token', token);
+        this.goToNext(type);
+      })
+      .catch((error) => {
+        console.log(error);
+        AlertIOS.alert('Invalid username or password. Please try again.');
+      });
     }
   }
 
   render() {
     return (
       <View style={styles.main}>
+        <View style={styles.row}>
+          <Text style={styles.title}>MoveKick</Text>
+        </View>
+        <View style={styles.container}>
           <View style={styles.row}>
-            <Text style={styles.title}>MoveKick</Text>
+            <Form
+              ref="form"
+              style={{borderColor: 'red'}}
+              type={Person}
+              options={options}
+            />
           </View>
-          <View style={styles.container}>
-            <View style={styles.row}>
-              <Form
-                ref="form"
-                style={{borderColor: 'red'}}
-                type={Person}
-                options={options}
-              />
-            </View>
-            <View style={styles.row}>
-              <TouchableHighlight
-                style={styles.button}
-                onPress={() => this.userAuth('signin')}
-                underlayColor="limegreen"
-              >
-                <Text style={styles.buttonText}>Login</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={styles.button}
-                onPress={() => this.userAuth('signup')}
-                underlayColor="limegreen"
-              >
-                <Text style={styles.buttonText}>Signup</Text>
-              </TouchableHighlight>
-            </View>
+          <View style={styles.row}>
+            <TouchableHighlight
+              style={styles.button}
+              onPress={() => this.userAuth('signin')}
+              underlayColor="limegreen"
+            >
+              <Text style={styles.buttonText}>Login</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              style={styles.button}
+              onPress={() => this.userAuth('signup')}
+              underlayColor="limegreen"
+            >
+              <Text style={styles.buttonText}>Signup</Text>
+            </TouchableHighlight>
           </View>
+        </View>
       </View>
     );
   }

@@ -4,6 +4,7 @@ import { AppRegistry, Navigator } from 'react-native';
 import Main from './components/Main';
 import Login from './components/Login';
 import Information from './components/Information';
+import Dashboard from './components/Dashboard';
 
 class mkmobile extends React.Component {
   constructor(props) {
