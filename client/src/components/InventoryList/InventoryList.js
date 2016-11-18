@@ -4,7 +4,7 @@ import styles from './styles';
 const InventoryList = (props) => {
 	
 	const handleItemClick = (item) => {
-		props.handleNext(item);
+		props.handleNext();
 		props.setSelectedItem(item);
 	}
 

@@ -18,7 +18,15 @@ class AddToInventory extends Component {
 	}
 
 	componentWillMount() {
-		console.log('NEED TO PLACE UTILITY FUNCTION TO GRAB AND SET PHOTOTYPE INFO TO STATE')
+		console.log('NEED TO PLACE UTILITY FUNCTION TO GRAB AND SET PHOTOTYPE INFO TO STATE');
+		this.getCft()
+	}
+
+	getCft() {
+		const name = this.props.selectedItem;
+		const cft = util.getCft(name);
+		console.log('Setting cft to:', cft)
+		this.setState({ cft })
 	}
 
 	handleIncrement(boundState) {
@@ -30,23 +38,29 @@ class AddToInventory extends Component {
 	}
 
 	addToInventory() {
+		// grab item from local storage
+		let image = localStorage.getItem(this.props.screenshots[0]);
+
 		let item = Object.assign({}, this.state, 
 			{
-			image: this.props.screenshots[0], 
+			image: image, 
 			moveId: this.props.moveId,
 			name: this.props.selectedItem,
 			room: 'hey ho'
 		});
 
-		// util.postItemToServer(item).then( (inventory) => {
-			
-		// })
+		console.log('Posting Item to server:', item);
 
-		console.log('FIX postItemToServer AND MOVE EQUATION INTO .THEN INSIDE AddToInventory')
-		// this.props.updateInventory(inventory)
+		util.postItemToServer(item).then( (inventory) => {
+			this.props.updateInventory(inventory);			
+		})
+
 		this.props.dequeueItem();
 		this.props.handleNext();
-		this.props.openNote()		
+		this.props.openNote()
+
+		console.log('POSSIBLE BUG CAUSED BY DELETING ITEM BEFORE POSTING TO SERVER')
+	
 	}
 
 	renderItemNotification() {

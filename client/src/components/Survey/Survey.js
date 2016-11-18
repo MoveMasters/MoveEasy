@@ -23,6 +23,7 @@ class Survey extends Component {
 		};
 
 		document.cookie = `moveId=${this.props.params.moveId}`;
+		console.log(this.props.params.moveId, 'moveId')
 	}
 
 	componentWillMount() {
@@ -40,11 +41,10 @@ class Survey extends Component {
 		this.setState({ noteOpen: true });
 	}
 
-	closeNote() {
-		// this.setState({ noteOpen: false });
-	}
-
 	dequeueItem() {
+		// delete image from local storage
+		localStorage.removeItem(`${this.state.screenshots[0]}`);
+
 		let screenshots = this.state.screenshots.slice(1);
 		let predictions = this.state.predictions.slice(1);
 		let currentItems = predictions[0] || [];
@@ -63,14 +63,16 @@ class Survey extends Component {
 	}
 
 	handleScreenshot(screenshot) {
-		console.log('adding image to screenshots')
 		// add image to screenshot queue
 		let screenshots = [...this.state.screenshots, screenshot]
 		this.setState({ screenshots });
 		
 		console.log('posting image to clarifai')
 		// get predictions and add to predictions queue
-		util.postImageToClarifai(screenshot).then(predictionSet => {
+		// grab image from local storage
+		let image = localStorage.getItem(screenshot);
+
+		util.postImageToClarifai(image).then(predictionSet => {
 			let predictions = [...this.state.predictions, predictionSet];
 			let currentItems = predictions[0];
 			this.setState({ predictions, currentItems })
@@ -101,7 +103,7 @@ class Survey extends Component {
 						currentItems={this.state.currentItems}
 						updateChoices={this.updateChoices.bind(this)}
 						dequeueItem={this.dequeueItem.bind(this)}
-						moveId={this.state.moveId}
+						moveId={this.props.params.moveId}
 						updateInventory={this.updateInventory.bind(this)}
 						openNote={this.openNote.bind(this)}
 						setSelectedItem={this.setSelectedItem.bind(this)}

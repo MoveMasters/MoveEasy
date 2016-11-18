@@ -1,5 +1,5 @@
 import axios from 'axios';
-const ip = 'localhost';
+const ip = '10.6.27.137';
 const port = '9000'
 const serverURL = `http://${ip}:${port}`
 
@@ -15,7 +15,7 @@ axios.interceptors.request.use( config => {
 /************************************ URLS ************************************/
 const postCroppedImageURL = `${serverURL}/api/item/croppedImage`;
 const getClarifaiTokenURL = `${serverURL}/api/auth/clarifaiToken`;
-const postImageToClarifaiURL = ' https://api.clarifai.com/v2/models/aaa03c23b3724a16a56b629203edc62c/outputs';
+const postImageToClarifaiURL = 'https://api.clarifai.com/v2/models/aaa03c23b3724a16a56b629203edc62c/outputs';
 const getClarifaiInfoURL = `${serverURL}/api/auth/clarifaiInfo`;
 const postItemToServerURL = `${serverURL}/api/item/newItem`;
 const getAllMovesURL = `${serverURL}/api/move/allMoves`;
@@ -119,6 +119,7 @@ const postItemToServer = (item) => {
 
 
 const getCft = (itemName) => {
+  console.log("name/prototypes get cft", itemName, itemPrototypes)
   if (!(itemName in itemPrototypes)) {
     return 10;
   }
