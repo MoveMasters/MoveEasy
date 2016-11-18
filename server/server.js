@@ -10,7 +10,11 @@ const express = require('express');
 const app = express();
 
 
-const port = process.env.PORT || 9000;
+
+const testPort = process.env.TEST_PORT || 8000;
+const prodPort = process.env.PORT || 9000;
+const port = process.env.IS_TEST ? testPort : prodPort;
+
 const server = app.listen(port);
 
 console.log('listening on port', port);

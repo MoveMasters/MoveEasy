@@ -33,4 +33,14 @@ exports.getAllMoves = (req, res, next) => {
   Move.find().exec().then(moves => {
     res.send({moves});
   });
-}
+};
+
+exports.getExistingMove = (req, res, next) => {
+  const move_id = req.cookies.moveId;
+  Move.findOne({_id:move_id}).exec().then(move => {
+    res.send({move});
+  }).catch( err => {
+    console.log('handleNewMove err', err);
+    throw err;
+  });
+};

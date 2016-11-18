@@ -64,7 +64,10 @@ module.exports = {
     findUser({ username })
       .then((user) => {
         if (user) {
-          return next(new Error('User already ' + username + ' exist!'));
+          //return next(new Error('User already ' + username + ' exist!'));
+          const text = 'User already ' + username + ' exist!';
+          res.status(500).send(text);
+          return;
         }
 
         /** Make a new user entry in database if username doesn't exist */
