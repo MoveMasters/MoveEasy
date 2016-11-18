@@ -3,6 +3,7 @@ import util from './../../../util/util';
 import styles from './styles';
 import moment from 'moment';
 import BigCalendar, {events} from 'react-big-calendar';
+import { browserHistory } from 'react-router'
 
 
 BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
@@ -40,9 +41,12 @@ class Dashboard extends React.Component {
     this.getAllMoves();
   }
 
-  onSelectEvent (moveEvent) {
-    console.log('gest', moveEvent);
+  onSelectEvent (event) {
+    console.log('gest', event.moveId);
+    const moveId = event.moveId;
     //this.props.router.push('/survey/' + moveEvent.moveId);
+    const path = `/survey/${moveId}`
+    browserHistory.push(path)
   }
 
   getAllMoves() {

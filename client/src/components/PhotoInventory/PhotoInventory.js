@@ -10,7 +10,7 @@ const PhotoInventory = (props) => (
     <GridList style={styles.gridList} cols={2.2} cellHeight={125}>
       {props.inventory.map((item) => (
         <GridTile
-          key={item.img}
+          key={item._id}
           title={item.name}
           actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
           titleStyle={styles.titleStyle}

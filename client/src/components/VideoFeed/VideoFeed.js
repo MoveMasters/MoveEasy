@@ -6,19 +6,18 @@ import styles from './styles';
 /************************************* SOCKET IO******************************************/ 
 
 // let socket = io('https://localhost:4443/');
-let socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
-
 let RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection || window.msRTCPeerConnection;
 let RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription || window.msRTCSessionDescription;
 navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia || navigator.msGetUserMedia;
 
 var configuration = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
-let localStream, remoteStream, container;
+let socket, localStream, remoteStream, container;
 var pcPeers = {};
 
 /************************************* SOCKET IO ******************************************/ 
 const scale = .329;
-const aspect = 1.3
+const aspect = 1.3;
+const room = 'ErikSuds';
 
 class VideoFeed extends Component {
 	constructor(props) {
@@ -35,7 +34,12 @@ class VideoFeed extends Component {
 
 	componentWillMount() {
 		container = this;
+		// establish socket connection
+		socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
+	}
 
+	componentDidMount() {
+		// 
 		socket.on('connect', (data) => {
 		  console.log('connect');
 		  this.getLocalStream();
@@ -50,12 +54,10 @@ class VideoFeed extends Component {
 		  container.leave(socketId);
 		});
 
-		 // auto join room MoveKick
-	}
+  	window.addEventListener('resize', this._handleWindowResize);
 
-	componentDidMount() {
-		this.join('MoveKick')
-  		window.addEventListener('resize', this._handleWindowResize);
+		// auto join room
+		this.join(this.props.moveId);
 	}
 
 	componentWillUnmount() {
@@ -63,10 +65,7 @@ class VideoFeed extends Component {
 	}
 
 	_handleWindowResize() {
-		console.log('setting window width and height');
 		this.setState({ width: window.innerWidth, height: window.innerHeight })
-		console.log(this.state.width, this.state.height)
-
 	}
 
 	logError(error, message) {
@@ -210,19 +209,19 @@ class VideoFeed extends Component {
 		let video = remoteStream.player.player;
 		let canvas = container.refs.canvas;
 		canvas.width = this.state.width * scale;
-	  	canvas.height = this.state.width * aspect * scale;
-	  	canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+  	canvas.height = this.state.width * aspect * scale;
+  	canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
-	  	// create screenshot data object
-  		let screenshot = canvas.toDataURL("image/png");
+  	// create screenshot data object
+		let screenshot = canvas.toDataURL("image/png");
 
-  		// set that as state in Survey Component
-  		container.props.handleScreenshot(screenshot);
+		// set that as state in Survey Component
+		container.props.handleScreenshot(screenshot);
 	}
 
 	render() {
 	    return (
-			<div style={styles.videoContainer}>
+			<div onClick={() => this.grabScreenshot()} style={styles.videoContainer}>
 				<div style={{flex: 1}}>
 		        <ReactPlayer playing
 		        	style={styles.localStream}
@@ -239,7 +238,6 @@ class VideoFeed extends Component {
 		        	width={this.state.width * scale}
 		        	height={this.state.width * aspect * scale} />
 		        </div>
-
 	       		<canvas ref='canvas' style={{display: 'none'}}></canvas>
 		     </div>
 	    );
