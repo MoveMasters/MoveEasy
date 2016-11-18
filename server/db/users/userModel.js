@@ -41,8 +41,6 @@ userSchema.methods.comparePasswords = function(candidatePassword) {
 
   return new Q.Promise((resolve, reject) => {
     bcrypt.compare(candidatePassword, savedPassword, (err, isMatch) => {
-      console.log('Error: ', err);
-      console.log('Passwards match?: ', isMatch);
       if (err) {
         reject(err);
       } else {
