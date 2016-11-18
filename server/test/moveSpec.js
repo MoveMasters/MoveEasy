@@ -33,14 +33,25 @@ describe('Move Server APIs', () => {
 
   it('Should find existing move for exiting user', (done) => {
     request.post('/api/user/signin')
-      .send(userObj1)
-      .end(function(err, res) {
-        expect(res.status).to.equal(200);
-        expect(res.body.lastMove.user_id).to.equal(user_id);
-        done();
-      });
+    .send(userObj1)
+    .end(function(err, res) {
+      expect(res.status).to.equal(200);
+      expect(res.body.lastMove.user_id).to.equal(user_id);
+      done();
+    });
+  });
+
+  it('Should grab the move with the move id', (done) => {
+    request.get('/api/move/existingMove')
+    .set('cookies', `moveId=${move_id}`)
+    .end(function(err, res) {
+      expect(res.status).to.equal(200);
+      expect(res.body.move._id).to.equal(move_id);
+      done();
+    });
   });
 });
+
 
 
 

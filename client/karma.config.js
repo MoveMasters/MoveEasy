@@ -1,14 +1,14 @@
 module.exports = function (config) {
   config.set({
     browsers: ['PhantomJS'],
-    files: [ 'test/test.js' ],
+    files: [ 'test/*Spec.js' ],
     frameworks: [
       'jasmine',
       'sinon'
     ],
     //singleRun: true,
     preprocessors: {
-      'test/test.js': [ 'webpack' ]
+      'test/*Spec.js': [ 'webpack' ]
     },
     webpack: { //kind of a copy of your webpack config
       devtool: 'inline-source-map', //just do inline source maps instead of the default
