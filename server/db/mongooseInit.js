@@ -12,8 +12,6 @@ const isTest = !!process.env.LOADED_MOCHA_OPTS;
 
 const mongoURI = isTest ? mongoTestURI : mongoProdURI;
 
-console.log('mongoURI', mongoURI);
-
 
 module.exports = () => {
   mongoose.connect(mongoURI);
