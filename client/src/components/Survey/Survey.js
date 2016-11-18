@@ -8,15 +8,18 @@ import styles from './styles';
 
 class Survey extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
+		const moveId = '582e2f3e47fae614fb30911a';
+		document.cookie = 'moveId=' + moveId;
 
 		this.state = {
 			currentItems: [],
 			screenshots: [],
 			predictions: [],
-			moveId: '582e2f3e47fae614fb30911a',
+			moveId: moveId,
 			inventory: []
-		}
+		};
+
 	}
 
 	componentWillMount() {
@@ -34,13 +37,18 @@ class Survey extends Component {
 
 
 	setClarfaiInfo() {
-		util.getClarifaiInfo().then(clarfaiInfo => {
-			console.log('clarfaiInfo', clarfaiInfo);
-		});
+		util.getClarifaiInfo();
 	}
 
 	getInitialInventory() {
-		console.log('REFERENCE UTIL FUNCTION TO GRAB INVENTORY ON LOAD')
+		util.getInitialInventory().then( moveItems => {
+			console.log('moveItems', moveItems);
+			this.setState({inventory:moveItems});
+		})
+		.catch( err => {
+			console.log('getInitialInventory err', err);
+			throw err;
+		});
 	}
 
 	handleScreenshot(screenshot) {

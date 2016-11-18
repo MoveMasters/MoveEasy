@@ -111,7 +111,16 @@ exports.checkIsRealUser = (username, callback) => {
 
 
 exports.getMoveItems = (move_id) => {
-  return Item.find({move_id}).sort({createdAt:-1}).exec();
+  console.log('move_id', move_id);
+  return new Promimse( (resolve, reject) => {
+    Item.find({move_id:move_id}).sort({createdAt:-1}).exec().then( moveItems => {
+      resolve(moveItems);
+    },
+    err => {
+      console.log('getMoveItems err', err);
+      reject(err);
+    });
+  });
 }
 
 exports.getUserMoves = (user_id) => {
