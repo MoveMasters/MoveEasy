@@ -15,7 +15,7 @@ export default (
 		<div>
 			<Route path='/' component={App}>
 				<IndexRoute component={Landing} />
-				<Route path='survey' component={Survey} />
+				<Route path='survey/:moveId' component={Survey} />
 				<Route path='dashboard' component={Dashboard}/>
 			</Route>
 		

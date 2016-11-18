@@ -9,23 +9,20 @@ import styles from './styles';
 class Survey extends Component {
 	constructor(props) {
 		super(props);
-		const moveId = '582e2f3e47fae614fb30911a';
-		document.cookie = 'moveId=' + moveId;
 
 		this.state = {
 			currentItems: [],
 			screenshots: [],
 			predictions: [],
-			moveId: moveId,
 			inventory: []
 		};
 
+		document.cookie = `moveId=${this.props.params.moveId}`;
 	}
 
 	componentWillMount() {
 		this.setClarfaiInfo();
 		this.getInitialInventory();
-		console.log('NEED TO SET MOVEID FROM DASHBOARD PAGE!! THIS.PROPS.PARAMS ??')
 	}
 
 	dequeueItem() {
@@ -42,13 +39,8 @@ class Survey extends Component {
 
 	getInitialInventory() {
 		util.getInitialInventory().then( moveItems => {
-			console.log('moveItems', moveItems);
 			this.setState({inventory:moveItems});
 		})
-		.catch( err => {
-			console.log('getInitialInventory err', err);
-			throw err;
-		});
 	}
 
 	handleScreenshot(screenshot) {
@@ -57,12 +49,11 @@ class Survey extends Component {
 		this.setState({ screenshots });
 		
 		// get predictions and add to predictions queue
-		util.postImageToClarifai(screenshot)
-			.then(predictionSet => {
-				let predictions = [...this.state.predictions, predictionSet];
-				let currentItems = predictions[0];
-				this.setState({ predictions, currentItems })
-			})
+		util.postImageToClarifai(screenshot).then(predictionSet => {
+			let predictions = [...this.state.predictions, predictionSet];
+			let currentItems = predictions[0];
+			this.setState({ predictions, currentItems })
+		})
 	}
 
 	updateChoices(event) {
@@ -71,7 +62,6 @@ class Survey extends Component {
 	};
 
 	updateInventory(inventory) {
-		console.log('Updating inventory:', inventory)
 		this.setState({ inventory })
 	}
 
@@ -79,7 +69,9 @@ class Survey extends Component {
 		return (
 			<div className='row' style={{margin: '0 15px'}}>
 	    		<div className='col-md-4' style={styles.column}>
-					<VideoFeed handleScreenshot={this.handleScreenshot.bind(this)}/>			
+					<VideoFeed 
+						handleScreenshot={this.handleScreenshot.bind(this)}
+						moveId={this.props.params.moveId}/>			
 				</div>
 
 				<div className='col-md-8' style={styles.column}>
