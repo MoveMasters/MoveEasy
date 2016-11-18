@@ -23,6 +23,9 @@ const userSchema = new Schema({
     required: true,
   },
   salt: String,
+},
+{
+  timestamps: true
 });
 
 

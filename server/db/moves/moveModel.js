@@ -30,6 +30,9 @@ const moveSchema = new Schema ({
     type: Date,
     required: true
   }
+},
+{
+  timestamps: true
 });
 
 const Move = mongoose.model('Move', moveSchema);
