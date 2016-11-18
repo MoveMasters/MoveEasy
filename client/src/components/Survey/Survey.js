@@ -4,8 +4,7 @@ import NavigationBar from './../NavigationBar/NavigationBar'
 import util from './../../../util/util';
 import PhotoInventory from './../PhotoInventory/PhotoInventory';
 import HorizontalStepper from './../HorizontalStepper/HorizontalStepper';
-import styles from './styles'
-
+import styles from './styles';
 
 class Survey extends Component {
 	constructor(props) {
@@ -14,12 +13,16 @@ class Survey extends Component {
 		this.state = {
 			currentItems: [],
 			screenshots: [],
-			predictions: []
+			predictions: [],
+			moveId: '582e2f3e47fae614fb30911a',
+			inventory: []
 		}
 	}
 
 	componentWillMount() {
 		this.setClarfaiInfo();
+		this.getInitialInventory();
+		console.log('NEED TO SET MOVEID FROM DASHBOARD PAGE!! THIS.PROPS.PARAMS ??')
 	}
 
 	dequeueItem() {
@@ -36,6 +39,10 @@ class Survey extends Component {
 		});
 	}
 
+	getInitialInventory() {
+		console.log('REFERENCE UTIL FUNCTION TO GRAB INVENTORY ON LOAD')
+	}
+
 	handleScreenshot(screenshot) {
 		// add image to screenshot queue
 		let screenshots = [...this.state.screenshots, screenshot]
@@ -46,7 +53,6 @@ class Survey extends Component {
 			.then(predictionSet => {
 				let predictions = [...this.state.predictions, predictionSet];
 				let currentItems = predictions[0];
-
 				this.setState({ predictions, currentItems })
 			})
 	}
@@ -55,6 +61,11 @@ class Survey extends Component {
 	  let currentItems = util.filterSearch(event.target.value);
 	  this.setState({ currentItems });
 	};
+
+	updateInventory(inventory) {
+		console.log('Updating inventory:', inventory)
+		this.setState({ inventory })
+	}
 
 	render() {
 		return (
@@ -68,9 +79,11 @@ class Survey extends Component {
 						screenshots={this.state.screenshots} 
 						currentItems={this.state.currentItems}
 						updateChoices={this.updateChoices.bind(this)}
-						dequeueItem={this.dequeueItem.bind(this)}/>
+						dequeueItem={this.dequeueItem.bind(this)}
+						moveId={this.state.moveId}
+						updateInventory={this.updateInventory.bind(this)}/>
 					<hr />	
-					<PhotoInventory />
+					<PhotoInventory inventory={this.state.inventory}/>
 					<hr />	
 				</div>
 			</div>

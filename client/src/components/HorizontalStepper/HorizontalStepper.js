@@ -56,7 +56,9 @@ class HorizontalStepper extends React.Component {
                 stepIndex={stepIndex}
                 handleNext={this.handleNext.bind(this)}
                 screenshots={this.props.screenshots}
-                dequeueItem={this.props.dequeueItem}/>
+                dequeueItem={this.props.dequeueItem}
+                moveId={this.props.moveId}
+                updateInventory={this.props.updateInventory}/>
             </div>
         )
     }
