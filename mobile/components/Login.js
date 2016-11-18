@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import t from 'tcomb-form-native';
 
-import Main from './Main';
+import Dashboard from './Dashboard';
 import Information from './Information';
 import helper from '../utils/helper';
 
@@ -34,6 +34,7 @@ const options = {
 const onValueChange = async (item, selectedValue) => {
   try {
     await AsyncStorage.setItem(item, selectedValue);
+    console.log(`set ${item}: ${selectedValue}`);
   } catch (error) {
     console.log(`AsyncStorage error: ${error.message}`);
   }
@@ -54,7 +55,7 @@ export default class Login extends React.Component {
       });
     } else if (type === 'signin') {
       this.props.navigator.push({
-        component: Main,
+        component: Dashboard,
         passProps: {
         },
       });

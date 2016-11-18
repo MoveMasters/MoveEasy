@@ -13,14 +13,37 @@ import {
   Icon,
 } from 'native-base';
 import helper from '../utils/helper';
+import Main from './Main';
 
 export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-
+      content: null,
     };
+  }
+
+  goToSurvey() {
+    this.props.navigator.push({
+      component: Main,
+      passProps: {
+      },
+    });
+  }
+
+  _renderContent() {
+    if (this.state.content === 'moves') {
+      return (
+        <Button>Hello</Button>
+      );
+    } else if (this.state.content === 'chat') {
+      return (
+        <Icon name="ios-settings-outline" />
+      );
+    }
+
+    return null;
   }
 
   render() {
@@ -34,19 +57,24 @@ export default class Dashboard extends React.Component {
         </Header>
 
         <Content>
+          {this._renderContent()}
         </Content>
 
         <Footer>
-          <FooterTab>
-            <Button>
-              <Icon name="ios-list"/>
+          <FooterTab
+            tabActiveBgColor="#6b6b6b"
+            tabBarActiveTextColor="#6b6b6b"
+            tabBarTextColor="#6b6b6b"
+          >
+            <Button onPress={() => this.setState({ content: 'moves' })}>
+              <Icon name="ios-list-box-outline" />
               Moves
             </Button>
-            <Button>
+            <Button onPress={() => this.goToSurvey()}>
               <Icon name="ios-camera-outline" />
               Survey
             </Button>
-            <Button>
+            <Button onPress={() => this.setState({ content: 'chat' })}>
               <Icon name="ios-chatboxes-outline" />
               Chat
             </Button>
