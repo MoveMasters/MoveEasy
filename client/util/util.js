@@ -3,6 +3,15 @@ const ip = '10.6.27.137';
 const port = '9000'
 const serverURL = `http://${ip}:${port}`
 
+
+/************************************ interceptors ************************************/
+axios.interceptors.request.use( config => {
+  config.headers.cookies = document.cookie;
+  return config;
+}, err => {
+  return Promise.reject(error);
+});
+
 /************************************ URLS ************************************/
 const postCroppedImageURL = `${serverURL}/api/item/croppedImage`;
 const getClarifaiTokenURL = `${serverURL}/api/auth/clarifaiToken`;
@@ -10,7 +19,8 @@ const getClarifaiTokenURL = `${serverURL}/api/auth/clarifaiToken`;
 const postImageToClarifaiURL = ' https://api.clarifai.com/v2/models/aaa03c23b3724a16a56b629203edc62c/outputs';
 const getClarifaiInfoURL = `${serverURL}/api/auth/clarifaiInfo`;
 const postItemToServerURL = `${serverURL}/api/item/newItem`;
-const getAllMovesUrl = `${serverURL}/api/move/allMoves`;
+const getAllMovesURL = `${serverURL}/api/move/allMoves`;
+const getMoveItemsURL = `${serverURL}/api/item/moveItems`;
 
 
 
@@ -117,13 +127,23 @@ const getCft = (itemName) => {
 
 
 const getAllMoves = () => {
-  return axios.get(getAllMovesUrl).then( response => {
+  return axios.get(getAllMovesURL).then( response => {
     return response.data.moves;
   });
 }
 
 
-
+const getInitialInventory = () => {
+  return axios.get(getMoveItemsURL)
+  .then( response => {
+    console.log('tp', response.data);
+    return response.data.moveItems;
+  })
+  .catch( err => {
+    console.log('getInitialInventory err', err);
+    throw err;
+  });
+}
 
 
 /************************************ SEARCHBAR ************************************/
@@ -145,7 +165,7 @@ const filterSearch = (searchTerm) => {
 
 /************************************ EXPORT ************************************/
 
-export default { postImageToClarifai, getClarifaiInfo, filterSearch, getCft, postItemToServer}
+export default { postImageToClarifai, getClarifaiInfo, filterSearch, getCft, postItemToServer, getInitialInventory}
 
 
 // const postImageToClarifai = (base64Image) => {

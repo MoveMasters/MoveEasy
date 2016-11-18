@@ -3,7 +3,6 @@
  */
 
 /** @module Item Controller */
-
 const Item = require('./itemModel.js');
 const imageUtil = require('./../imageUtil.js');
 const dbUtil = require('./../dbUtil.js');
@@ -43,3 +42,13 @@ exports.handleNewItem = (req, res, next) => {
     throw err;
   });
 };
+
+exports.handleMoveItems = (req, res, next) => {
+  const move_id = req.cookies.moveId;
+  dbUtil.getMoveItems(move_id).then( moveItems => {
+    res.send({moveItems});
+  }).catch( err => {
+    console.log('handleMoveItems err', err);
+    throw err;
+  });
+}
