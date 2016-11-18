@@ -1,5 +1,5 @@
 import axios from 'axios';
-const ip = 'localhost';
+const ip = '10.6.27.137';
 const port = '9000'
 const serverURL = `http://${ip}:${port}`
 
@@ -16,18 +16,6 @@ const getAllMovesUrl = `${serverURL}/api/move/allMoves`;
 
 /************************************ PHOTOS ************************************/
 let clarApp, clarifaiTags, clarifaiToken, clarifaiItems, nameMappings, itemPrototypes;
-
-
-
-const postCroppedImage = (image) => {
-	return axios.post(postCroppedImageURL, { image })
-	  .then(function (response) {
-	    console.log('Response from postCroppedImage:', response);
-	  })
-	  .catch(function (error) {
-	    console.log('Error from postCroppedImage:', error);
-	  });
-}
 
 const getClarifaiInfo = () => {
 	return axios.get(getClarifaiInfoURL)
@@ -106,10 +94,10 @@ const postImageToClarifai = (screenshot) => {
 
 
 const postItemToServer = (item) => {
-  return axios.post(postItemToServerURL, { item }).then(
+  return axios.post(postItemToServerURL, item).then(
     (response) => {
       console.log('postItemToServer success', response);
-      return item.body;
+      return response.data.moveItems;
     }
   ).catch(
     (err) => {
@@ -157,8 +145,7 @@ const filterSearch = (searchTerm) => {
 
 /************************************ EXPORT ************************************/
 
-export default { postCroppedImage, postImageToClarifai, getClarifaiInfo, filterSearch, getCft, getAllMoves}
-
+export default { postImageToClarifai, getClarifaiInfo, filterSearch, getCft, postItemToServer}
 
 
 // const postImageToClarifai = (base64Image) => {

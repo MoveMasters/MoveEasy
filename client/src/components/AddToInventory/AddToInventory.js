@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './styles';
 import RaisedButton from 'material-ui/RaisedButton';
-
+import util from './../../../util/util';
 
 class AddToInventory extends Component {
 	constructor(props) {
@@ -29,10 +29,19 @@ class AddToInventory extends Component {
 	}
 
 	addToInventory() {
-		console.log('SEND THIS OBJECT TO SERVER', Object.assign({}, this.state, {image: this.props.screenshots[0]}));
-		// NEED TO DELETE FIRST ITEM FROM ARRAY
-		this.props.dequeueItem()
-		this.props.handleNext();
+		let item = Object.assign({}, this.state, 
+			{
+			image: this.props.screenshots[0], 
+			moveId: this.props.moveId,
+			name: this.props.selectedItem,
+			room: 'hey ho'
+		});
+
+		util.postItemToServer(item).then( (inventory) => {
+			this.props.updateInventory(inventory)
+			this.props.dequeueItem()
+			this.props.handleNext();
+		})		
 	}
 
 	renderCounter(title, boundState) {

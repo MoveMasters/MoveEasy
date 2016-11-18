@@ -54,7 +54,7 @@ class VideoFeed extends Component {
 	}
 
 	componentDidMount() {
-		this.join('MoveKick');
+		this.join('MoveKick')
   		window.addEventListener('resize', this._handleWindowResize);
 	}
 
@@ -208,7 +208,6 @@ class VideoFeed extends Component {
 	grabScreenshot() {
 		let remoteStream = container.refs.remoteVideo;
 		let video = remoteStream.player.player;
-		console.log(video, 'video')
 		let canvas = container.refs.canvas;
 		canvas.width = this.state.width * scale;
 	  	canvas.height = this.state.width * aspect * scale;
