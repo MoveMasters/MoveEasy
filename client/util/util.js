@@ -15,7 +15,6 @@ axios.interceptors.request.use( config => {
 /************************************ URLS ************************************/
 const postCroppedImageURL = `${serverURL}/api/item/croppedImage`;
 const getClarifaiTokenURL = `${serverURL}/api/auth/clarifaiToken`;
-//const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;
 const postImageToClarifaiURL = ' https://api.clarifai.com/v2/models/aaa03c23b3724a16a56b629203edc62c/outputs';
 const getClarifaiInfoURL = `${serverURL}/api/auth/clarifaiInfo`;
 const postItemToServerURL = `${serverURL}/api/item/newItem`;
@@ -165,9 +164,18 @@ const filterSearch = (searchTerm) => {
 
 /************************************ EXPORT ************************************/
 
-export default { postImageToClarifai, getClarifaiInfo, filterSearch, getCft, postItemToServer, getInitialInventory}
+export default 
+{ 
+  postImageToClarifai, 
+  getClarifaiInfo, 
+  filterSearch, 
+  getCft, 
+  postItemToServer, 
+  getInitialInventory,
+  getAllMoves
+}
 
-
+//const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;
 // const postImageToClarifai = (base64Image) => {
   // return axios(postImageToClarifaiURL, {
   //    method: 'post',

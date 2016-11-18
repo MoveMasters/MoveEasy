@@ -6,14 +6,12 @@ import styles from './styles';
 /************************************* SOCKET IO******************************************/ 
 
 // let socket = io('https://localhost:4443/');
-let socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
-
 let RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection || window.msRTCPeerConnection;
 let RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription || window.msRTCSessionDescription;
 navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia || navigator.msGetUserMedia;
 
 var configuration = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
-let localStream, remoteStream, container;
+let socket, localStream, remoteStream, container;
 var pcPeers = {};
 
 /************************************* SOCKET IO ******************************************/ 
@@ -36,7 +34,12 @@ class VideoFeed extends Component {
 
 	componentWillMount() {
 		container = this;
+		// establish socket connection
+		socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
+	}
 
+	componentDidMount() {
+		// 
 		socket.on('connect', (data) => {
 		  console.log('connect');
 		  this.getLocalStream();
@@ -51,13 +54,10 @@ class VideoFeed extends Component {
 		  container.leave(socketId);
 		});
 
-		 // auto join room MoveKick
-	}
-
-	componentDidMount() {
-		this.join(room);
-
   	window.addEventListener('resize', this._handleWindowResize);
+
+		// auto join room
+		this.join(this.props.moveId);
 	}
 
 	componentWillUnmount() {
@@ -65,10 +65,7 @@ class VideoFeed extends Component {
 	}
 
 	_handleWindowResize() {
-		console.log('setting window width and height');
 		this.setState({ width: window.innerWidth, height: window.innerHeight })
-		console.log(this.state.width, this.state.height)
-
 	}
 
 	logError(error, message) {
