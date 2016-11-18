@@ -18,7 +18,6 @@ console.log('listening on port', port);
 require('./middleware')(app, express, server);
 require('./router')(app, express, server);
 
-
 module.exports = app;
 
 
