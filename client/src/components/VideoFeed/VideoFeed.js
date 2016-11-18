@@ -18,7 +18,8 @@ var pcPeers = {};
 
 /************************************* SOCKET IO ******************************************/ 
 const scale = .329;
-const aspect = 1.3
+const aspect = 1.3;
+const room = 'ErikSuds';
 
 class VideoFeed extends Component {
 	constructor(props) {
@@ -54,8 +55,9 @@ class VideoFeed extends Component {
 	}
 
 	componentDidMount() {
-		this.join('MoveKick')
-  		window.addEventListener('resize', this._handleWindowResize);
+		this.join(room);
+
+  	window.addEventListener('resize', this._handleWindowResize);
 	}
 
 	componentWillUnmount() {
@@ -210,19 +212,19 @@ class VideoFeed extends Component {
 		let video = remoteStream.player.player;
 		let canvas = container.refs.canvas;
 		canvas.width = this.state.width * scale;
-	  	canvas.height = this.state.width * aspect * scale;
-	  	canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+  	canvas.height = this.state.width * aspect * scale;
+  	canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
-	  	// create screenshot data object
-  		let screenshot = canvas.toDataURL("image/png");
+  	// create screenshot data object
+		let screenshot = canvas.toDataURL("image/png");
 
-  		// set that as state in Survey Component
-  		container.props.handleScreenshot(screenshot);
+		// set that as state in Survey Component
+		container.props.handleScreenshot(screenshot);
 	}
 
 	render() {
 	    return (
-			<div style={styles.videoContainer}>
+			<div onClick={() => this.grabScreenshot()} style={styles.videoContainer}>
 				<div style={{flex: 1}}>
 		        <ReactPlayer playing
 		        	style={styles.localStream}
@@ -239,7 +241,6 @@ class VideoFeed extends Component {
 		        	width={this.state.width * scale}
 		        	height={this.state.width * aspect * scale} />
 		        </div>
-
 	       		<canvas ref='canvas' style={{display: 'none'}}></canvas>
 		     </div>
 	    );
