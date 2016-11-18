@@ -1,5 +1,5 @@
 import axios from 'axios';
-const ip = 'localhost';
+const ip = '10.6.27.137';
 const port = '9000'
 const serverURL = `http://${ip}:${port}`
 
@@ -18,15 +18,15 @@ let clarApp, clarifaiTags, clarifaiToken, clarifaiItems, nameMappings, itemProto
 
 
 
-const postCroppedImage = (image) => {
-	return axios.post(postCroppedImageURL, { image })
-	  .then(function (response) {
-	    console.log('Response from postCroppedImage:', response);
-	  })
-	  .catch(function (error) {
-	    console.log('Error from postCroppedImage:', error);
-	  });
-}
+// const postCroppedImage = (image) => {
+// 	return axios.post(postCroppedImageURL, { image })
+// 	  .then(function (response) {
+// 	    console.log('Response from postCroppedImage:', response);
+// 	  })
+// 	  .catch(function (error) {
+// 	    console.log('Error from postCroppedImage:', error);
+// 	  });
+// }
 
 const getClarifaiInfo = () => {
 	return axios.get(getClarifaiInfoURL)
@@ -105,10 +105,10 @@ const postImageToClarifai = (screenshot) => {
 
 
 const postItemToServer = (item) => {
-  return axios.post(postItemToServerURL, { item }).then(
+  return axios.post(postItemToServerURL, item).then(
     (response) => {
       console.log('postItemToServer success', response);
-      return item.body;
+      return response.data.moveItems;
     }
   ).catch(
     (err) => {
@@ -145,7 +145,7 @@ const filterSearch = (searchTerm) => {
 
 /************************************ EXPORT ************************************/
 
-export default { postCroppedImage, postImageToClarifai, getClarifaiInfo, filterSearch, getCft}
+export default { postImageToClarifai, getClarifaiInfo, filterSearch, getCft, postItemToServer}
 
 
 
