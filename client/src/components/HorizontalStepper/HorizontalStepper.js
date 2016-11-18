@@ -16,16 +16,15 @@ class HorizontalStepper extends React.Component {
 
   state = {
     finished: false,
-    stepIndex: 0,
-    selectedItem: null
+    stepIndex: 0
   };
 
   handleNext = (item) => {
     const {stepIndex} = this.state;
+
     this.setState({
       stepIndex: stepIndex + 1,
-      finished: stepIndex >= 1,
-      selectedItem: item
+      finished: stepIndex >= 1
     });
   };
 
@@ -45,20 +44,22 @@ class HorizontalStepper extends React.Component {
               <hr />
               <InventoryList
                 currentItems={this.props.currentItems}
-                handleNext={this.handleNext.bind(this)} />
+                handleNext={this.handleNext.bind(this)} 
+                setSelectedItem={this.props.setSelectedItem}/>
             </div>
           )
       default:
         return (
             <div className='col-md-6' style={styles.inventory}>
               <AddToInventory 
-                selectedItem={this.state.selectedItem} 
+                selectedItem={this.props.selectedItem} 
                 stepIndex={stepIndex}
                 handleNext={this.handleNext.bind(this)}
                 screenshots={this.props.screenshots}
                 dequeueItem={this.props.dequeueItem}
                 moveId={this.props.moveId}
-                updateInventory={this.props.updateInventory}/>
+                updateInventory={this.props.updateInventory}
+                openNote={this.props.openNote}/>
             </div>
         )
     }

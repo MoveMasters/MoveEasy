@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './styles';
 import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
 import util from './../../../util/util';
 
 class AddToInventory extends Component {
@@ -37,11 +38,28 @@ class AddToInventory extends Component {
 			room: 'hey ho'
 		});
 
-		util.postItemToServer(item).then( (inventory) => {
-			this.props.updateInventory(inventory)
-			this.props.dequeueItem()
-			this.props.handleNext();
-		})		
+		// util.postItemToServer(item).then( (inventory) => {
+			
+		// })
+
+		console.log('FIX postItemToServer AND MOVE EQUATION INTO .THEN INSIDE AddToInventory')
+		// this.props.updateInventory(inventory)
+		this.props.dequeueItem();
+		this.props.handleNext();
+		this.props.openNote()		
+	}
+
+	renderItemNotification() {
+		return (
+			<div>
+			  <Snackbar
+			    open={this.state.open}
+			    message="Event added to your calendar"
+			    autoHideDuration={1000}
+			    onRequestClose={this.handleRequestClose}
+			  />
+			</div>
+		)
 	}
 
 	renderCounter(title, boundState) {
@@ -104,6 +122,7 @@ class AddToInventory extends Component {
 				  primary={true}
 				  onClick={this.addToInventory.bind(this)}
 				  style={styles.RaisedButton}/>
+
 			</div>
 		)
 	}

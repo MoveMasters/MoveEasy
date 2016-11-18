@@ -5,17 +5,11 @@ import moment from 'moment';
 import BigCalendar, {events} from 'react-big-calendar';
 import { browserHistory } from 'react-router'
 
-
 BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
-
-let formats = {
+const formats = {
    dayFormat: 'ddd MM/DD'
 };
-
-
-
-
 
 const moveToEvent = (move) => {
   const surveyTime = new Date(move.surveyTime);
@@ -31,20 +25,18 @@ const moveToEvent = (move) => {
 }
 
 class Dashboard extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       events: []
     };
+
     this.getAllMoves();
   }
 
   onSelectEvent (event) {
-    console.log('gest', event.moveId);
     const moveId = event.moveId;
-    //this.props.router.push('/survey/' + moveEvent.moveId);
     const path = `/survey/${moveId}`
     browserHistory.push(path)
   }
@@ -76,6 +68,5 @@ class Dashboard extends React.Component {
     )
   }
 };
-
 
 export default Dashboard;

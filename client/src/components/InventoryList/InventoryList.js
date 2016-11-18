@@ -2,13 +2,19 @@ import React from 'react';
 import styles from './styles';
 
 const InventoryList = (props) => {
+	
+	const handleItemClick = (item) => {
+		props.handleNext(item);
+		props.setSelectedItem(item);
+	}
+
 
 	const listItems = props.currentItems.map( (item, index) => {
 		return (
 			<li 
 				className='list-group-item' 
 				key={index} 
-				onClick={() => props.handleNext(item)}>
+				onClick={() => handleItemClick(item)}>
 				{item}
 				<span className="fa fa-angle-right fa-2x pull-right" aria-hidden="true"></span>
 			</li>

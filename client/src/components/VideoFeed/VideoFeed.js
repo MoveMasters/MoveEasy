@@ -57,7 +57,10 @@ class VideoFeed extends Component {
   	window.addEventListener('resize', this._handleWindowResize);
 
 		// auto join room
-		this.join(this.props.moveId);
+		console.log("CHANGE BACK TO: this.props.moveId")
+		// this.join(this.props.moveId);
+		this.join(room);
+
 	}
 
 	componentWillUnmount() {
@@ -221,7 +224,7 @@ class VideoFeed extends Component {
 
 	render() {
 	    return (
-			<div onClick={() => this.grabScreenshot()} style={styles.videoContainer}>
+			<div style={styles.videoContainer}>
 				<div style={{flex: 1}}>
 		        <ReactPlayer playing
 		        	style={styles.localStream}

@@ -5,6 +5,9 @@ import util from './../../../util/util';
 import PhotoInventory from './../PhotoInventory/PhotoInventory';
 import HorizontalStepper from './../HorizontalStepper/HorizontalStepper';
 import styles from './styles';
+import Snackbar from 'material-ui/Snackbar';
+
+let message = 'hey ho';
 
 class Survey extends Component {
 	constructor(props) {
@@ -14,7 +17,9 @@ class Survey extends Component {
 			currentItems: [],
 			screenshots: [],
 			predictions: [],
-			inventory: []
+			inventory: [],
+			selectedItem: null,
+			noteOpen: false
 		};
 
 		document.cookie = `moveId=${this.props.params.moveId}`;
@@ -23,6 +28,20 @@ class Survey extends Component {
 	componentWillMount() {
 		this.setClarfaiInfo();
 		this.getInitialInventory();
+	}
+
+	setSelectedItem(selectedItem) {
+		console.log('setting selectedItem to:', selectedItem)
+		this.setState({ selectedItem });
+	}
+
+	openNote() {
+		console.log('calling open note')
+		this.setState({ noteOpen: true });
+	}
+
+	closeNote() {
+		// this.setState({ noteOpen: false });
 	}
 
 	dequeueItem() {
@@ -44,10 +63,12 @@ class Survey extends Component {
 	}
 
 	handleScreenshot(screenshot) {
+		console.log('adding image to screenshots')
 		// add image to screenshot queue
 		let screenshots = [...this.state.screenshots, screenshot]
 		this.setState({ screenshots });
 		
+		console.log('posting image to clarifai')
 		// get predictions and add to predictions queue
 		util.postImageToClarifai(screenshot).then(predictionSet => {
 			let predictions = [...this.state.predictions, predictionSet];
@@ -81,11 +102,22 @@ class Survey extends Component {
 						updateChoices={this.updateChoices.bind(this)}
 						dequeueItem={this.dequeueItem.bind(this)}
 						moveId={this.state.moveId}
-						updateInventory={this.updateInventory.bind(this)}/>
+						updateInventory={this.updateInventory.bind(this)}
+						openNote={this.openNote.bind(this)}
+						setSelectedItem={this.setSelectedItem.bind(this)}
+						selectedItem={this.state.selectedItem}/>
 					<hr />	
 					<PhotoInventory inventory={this.state.inventory}/>
 					<hr />	
 				</div>
+
+				<Snackbar
+				  open={this.state.noteOpen}
+				  message={`Added ${this.state.selectedItem} to Inventory`}
+				  autoHideDuration={4000}
+				  onRequestClose={() => this.setState({ noteOpen: false })}
+				/>
+
 			</div>
 		)
 		
