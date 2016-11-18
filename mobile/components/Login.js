@@ -73,11 +73,11 @@ export default class Login extends React.Component {
 
       helper.postUser(user, type)
       .then((response) => {
-        const token = response.data.token;
-        const lastMove = JSON.stringify(response.data.lastMove);
-
-        if (response.data.lastMove) { onValueChange('lastMove', lastMove); }
-        onValueChange('token', token);
+        if (response.data.lastMove) {
+          const moveId = response.data.lastMove._id;
+          onValueChange('moveId', moveId);
+        }
+        
         this.goToNext(type);
       })
       .catch((error) => {

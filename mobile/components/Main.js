@@ -372,9 +372,7 @@ export default class Main extends React.Component {
   }
 
   joinRoom() {
-    getItem('lastMove', (lastMove) => {
-      const moveId = JSON.parse(lastMove)._id;
-      console.log('moveId is', moveId);
+    getItem('moveId', (moveId) => {
       join(moveId);
       this.setState({ content: 'loading' });
     });
