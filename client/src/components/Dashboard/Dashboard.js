@@ -1,9 +1,9 @@
 import React from 'react';
 import util from './../../../util/util';
+import AppointmentPopup from './../AppointmentPopup/AppointmentPopup.js';
 import styles from './styles';
 import moment from 'moment';
 import BigCalendar, {events} from 'react-big-calendar';
-import { browserHistory } from 'react-router'
 
 
 BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
@@ -12,9 +12,6 @@ BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 let formats = {
    dayFormat: 'ddd MM/DD'
 };
-
-
-
 
 
 const moveToEvent = (move) => {
@@ -36,23 +33,30 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      events: []
+      events: [],
+      popupMove: null
     };
+    this.actions = [];
     this.getAllMoves();
   }
 
   onSelectEvent (event) {
-    console.log('gest', event.moveId);
     const moveId = event.moveId;
-    //this.props.router.push('/survey/' + moveEvent.moveId);
-    const path = `/survey/${moveId}`
-    browserHistory.push(path)
+    this.setState({popupMove: this.movesById[moveId]});
+  }
+
+  resetSelection () {
+    this.setState({popupMove: null});
   }
 
   getAllMoves() {
     util.getAllMoves().then( moves => {
       const moveEvents = moves.map(moveToEvent);
       this.setState({events: moveEvents});
+
+      //store the actual moves by their id
+      this.movesById = {};
+      moves.forEach( move => {this.movesById[move._id] = move });
     });
   }
 
@@ -72,6 +76,13 @@ class Dashboard extends React.Component {
         popup= {true}
         onSelectEvent= {this.onSelectEvent.bind(this)}
         />
+      {
+        this.state.popupMove ?
+          <div>
+            <AppointmentPopup move={this.state.popupMove} resetSelection={this.resetSelection.bind(this)}/>
+          </div>
+          : null
+      }
       </div>
     )
   }

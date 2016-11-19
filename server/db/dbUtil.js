@@ -111,7 +111,6 @@ exports.checkIsRealUser = (username, callback) => {
 
 
 exports.getMoveItems = (move_id) => {
-  console.log('move_id', move_id);
   return new Promimse( (resolve, reject) => {
     Item.find({move_id:move_id}).sort({createdAt:-1}).exec().then( moveItems => {
       resolve(moveItems);
@@ -126,7 +125,6 @@ exports.getMoveItems = (move_id) => {
 exports.getUserMoves = (user_id) => {
   return new Promimse( (resolve, reject) => {
     Move.find({user_id})
-    //.populate({options: {sort: {createdAt:-1}}})
     .sort({createdAt:-1})
     .exec().then(
       moves => {
@@ -149,4 +147,24 @@ exports.getLastMove = (user_id) => {
   });
 }
 
+exports.findItemAndUpdate = (item) => {
+  //const query = Item.where({_id: item._id});
+  //return Item.findOneAndUpdate(query, item).exec().then( updatedItem => {
+  //return query.update({$set: item}).exec().then( updatedItem => {
+  return Item.findById(item._id).exec().then( retrievedItem => {
+    Object.assign(retrievedItem, item);
+    retrievedItem.save();
+    return retrievedItem;
+  }).catch( err => {
+    console.log('findItemAndUpdate err', err);
+    throw err;
+  });
+}
+
+
+// exports.fixMovePopulate = (move) => {
+//   move.username = move.user_id.username;
+//   move.user_id = move.user_id._id;
+//   return move;
+// }
 
