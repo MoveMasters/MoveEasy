@@ -18,6 +18,7 @@ describe('Move Server APIs', () => {
 
   before((done) => {
     testUtil.clearDatabase().then(done);
+    //testUtil.clearDatabase(done)
   });
 
   it('Should create a new move', (done) => {

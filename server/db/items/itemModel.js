@@ -15,6 +15,7 @@ const itemSchema = new Schema({
   },
   move_id: {
     type: Schema.Types.ObjectId,
+    ref: 'Move',
     required: true
   },
   url: {
