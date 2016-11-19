@@ -16,12 +16,13 @@ import {
 } from 'native-base';
 import { StyleSheet, AsyncStorage, AlertIOS, DatePickerIOS, View } from 'react-native';
 import helper from '../utils/helper';
-import Main from './Main';
+// import Main from './Main';
+import Dashboard from './Dashboard';
 
 const storeItem = async (item, selectedValue) => {
   try {
     await AsyncStorage.setItem(item, selectedValue);
-    console.log('stored', item);
+    console.log(`stored ${item}: ${selectedValue}`);
   } catch (error) {
     console.log(`AsyncStorage error: ${error.message}`);
   }
@@ -53,7 +54,7 @@ export default class Information extends React.Component {
 
   goToMain() {
     this.props.navigator.push({
-      component: Main,
+      component: Dashboard,
       passProps: {
 
       },
@@ -78,7 +79,7 @@ export default class Information extends React.Component {
       .then((response) => {
         const moveId = response.data._id;
 
-        storeItem('moveId', moveId);
+        storeItem('lastMove', moveId);
         this.goToMain();
       })
       .catch((error) => {

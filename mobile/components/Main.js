@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {
+  AsyncStorage,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -10,7 +11,13 @@ import {
   ListView,
   Dimensions,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  Button,
+  Icon,
+  Spinner,
+  Title,
+} from 'native-base';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 import io from 'socket.io-client/socket.io';
 
@@ -50,7 +57,7 @@ function getLocalStream(isFront, callback) {
           minFrameRate: 30,
         },
         facingMode: 'environment',
-        optional: [{ sourceId: sourceInfos.id }],
+        optional: [{ sourceId: sourceInfos.id }, { minFrameRate: 60 }],
       }
     }, function (stream) {
       console.log('dddd', stream);
@@ -114,11 +121,12 @@ function createPC(socketId, isOffer) {
 
   pc.onaddstream = function (event) {
     console.log('onaddstream', event.stream);
-    container.setState({info: 'One peer join!'});
+    container.setState({ info: 'One peer join!' });
 
     // const remoteList = container.state.remoteList;
     // remoteList[socketId] = event.stream.toURL();
     container.setState({ remoteViewSrc: event.stream.toURL() });
+    container.setState({ content: 'survey' });
   };
   pc.onremovestream = function (event) {
     console.log('onremovestream', event.stream);
@@ -188,27 +196,9 @@ function leave(socketId) {
   pc.close();
   delete pcPeers[socketId];
 
-  // const remoteList = container.state.remoteList;
-  // delete remoteList[socketId]
   container.setState({ remoteViewSrc: null });
   container.setState({info: 'One peer leave!'});
 }
-
-// socket.on('exchange', function(data){
-//   exchange(data);
-// });
-// socket.on('leave', function(socketId){
-//   leave(socketId);
-// });
-
-// socket.on('connect', function(data) {
-//   console.log('connect');
-//   getLocalStream(true, function(stream) {
-//     localStream = stream;
-//     container.setState({selfViewSrc: stream.toURL()});
-//     container.setState({status: 'ready', info: 'Please enter or create room ID'});
-//   });
-// });
 
 function logError(error) {
   console.log("logError", error);
@@ -234,6 +224,16 @@ function getStats() {
   }
 }
 
+const getItem = async (item, cb) => {
+  try {
+    const value = await AsyncStorage.getItem(item);
+    if (value !== null) {
+      cb(value);
+    }
+  } catch (error) {
+    console.log('Error submitting new move info:', error);
+  }
+};
 
 /** **********************************************************  **/
 /** ***************************APP****************************  **/
@@ -255,6 +255,7 @@ export default class Main extends React.Component {
       textRoomConnected: false,
       textRoomData: [],
       textRoomValue: '',
+      content: 'begin',
     };
 
     // this._switchVideoType = this._switchVideoType.bind(this);
@@ -284,9 +285,9 @@ export default class Main extends React.Component {
   }
 
   _press() {
-    this.refs.roomID.blur();
-    this.setState({ status: 'connect', info: 'Connecting' });
-    join(this.state.roomID);
+    // this.refs.roomID.blur();
+    // this.setState({ status: 'connect', info: 'Connecting' });
+    getItem('moveId', moveId => join(moveId));
   }
 
   // _switchVideoType() {
@@ -345,27 +346,48 @@ export default class Main extends React.Component {
     );
   }
 
+  renderContent() {
+    console.log('this is the state', this.state.content);
+    if (this.state.content === 'begin') {
+      return (
+        <View alignSelf="center">
+          <Button
+            success
+            onPress={() => this.joinRoom()}
+          >
+            Begin Survey
+          </Button>
+        </View>
+      );
+    } else if (this.state.content === 'loading') {
+      return (
+        <View alignSelf="center">
+          <Title>Waiting for your surveyor to connect...</Title>
+          <Spinner color="blue" />
+        </View>
+      );
+    }
+
+    return null;
+  }
+
+  joinRoom() {
+    getItem('lastMove', (lastMove) => {
+      const moveId = JSON.parse(lastMove)._id;
+      console.log('moveId is', moveId);
+      join(moveId);
+      this.setState({ content: 'loading' });
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        { this.state.status === 'ready' ?
-          (<View>
-            <TextInput
-              ref='roomID'
-              autoCorrect={false}
-              style={{ width: 200, height: 40, borderColor: 'gray', borderWidth: 1 }}
-              onChangeText={text => this.setState({ roomID: text })}
-              value={this.state.roomID}
-            />
-            <TouchableHighlight onPress={this._press}>
-              <Text>Enter room</Text>
-            </TouchableHighlight>
-          </View>) : null
-        }
-        <RTCView streamURL={this.state.selfViewSrc} style={styles.remoteView}>
-          <RTCView streamURL={this.state.remoteViewSrc} style={styles.selfView} />
+        {this.renderContent()}
+        <RTCView streamURL={this.state.selfViewSrc} style={this.state.content === 'survey' ? styles.selfView : styles.hidden}>
+          <RTCView streamURL={this.state.remoteViewSrc} style={styles.remoteView} />
           <TouchableHighlight style={styles.switchButton} onPress={this._textRoomPress}>
-            <Icon name="md-aperture" size={60} style={{ color: 'white' }} />
+            <Ionicon name="md-aperture" size={60} style={{ color: 'white' }} />
           </TouchableHighlight>
         </RTCView>
       </View>
@@ -380,14 +402,14 @@ const styles = StyleSheet.create({
     margin: 20,
     alignSelf: 'center',
   },
-  selfView: {
+  remoteView: {
     backgroundColor: 'grey',
     height: 100,
     width: 100,
     top: 20,
     left: 15,
   },
-  remoteView: {
+  selfView: {
     flex: 1,
     justifyContent: 'space-between',
     backgroundColor: 'black',
@@ -395,8 +417,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5FCFF',
+    justifyContent: 'center',
   },
   listViewContainer: {
     height: 150,
   },
+  hidden: {
+    height: 0,
+    width: 0,
+  },
 });
+
+        // { this.state.status === 'ready' ?
+        //   (<View>
+        //     <TextInput
+        //       ref='roomID'
+        //       autoCorrect={false}
+        //       style={{ width: 200, height: 40, borderColor: 'gray', borderWidth: 1 }}
+        //       onChangeText={text => this.setState({ roomID: text })}
+        //       value={this.state.roomID}
+        //     />
+        //     <TouchableHighlight onPress={() => getItem('moveId', moveId => join(moveId))}>
+        //       <Text>Enter room</Text>
+        //     </TouchableHighlight>
+        //   </View>) : null
+        // }
