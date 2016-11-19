@@ -23,8 +23,19 @@ export default class Dashboard extends React.Component {
     this.state = {
       content: null,
       tab: 'survey',
-      title: 'Inventory',
+      title: 'MoveKick',
     };
+
+    this.moveItems = [];
+  }
+
+  componentWillMount() {
+    helper.getMoveItems()
+    .then((response) => {
+      this.moveItems = response.data.moveItems;
+      console.log(this.moveItems);
+    })
+    .catch(error => console.log('Error getting move items', error));
   }
 
   goToSurvey() {
@@ -37,12 +48,10 @@ export default class Dashboard extends React.Component {
 
   _renderContent() {
     if (this.state.content === 'moves') {
-      this.setState({ title: 'Inventory' });
       return (
-        <Inventory />
+        <Inventory moveItems={this.moveItems} />
       );
     } else if (this.state.content === 'chat') {
-      this.setState({ title: 'Chat' });
       return (
         <Icon name="ios-settings-outline" />
       );
@@ -55,7 +64,7 @@ export default class Dashboard extends React.Component {
     return (
       <Container>
         <Header flexDirection="row-reverse">
-          <Title style={styles.title}>this.state.title</Title>
+          <Title style={styles.title}>{this.state.title}</Title>
           <Button backgroundColor="transparent">
             <Icon name="ios-settings-outline" style={styles.profile} />
           </Button>
@@ -71,15 +80,15 @@ export default class Dashboard extends React.Component {
             tabBarActiveTextColor="#6b6b6b"
             tabBarTextColor="#6b6b6b"
           >
-            <Button onPress={() => this.setState({ content: 'moves' })}>
+            <Button onPress={() => this.setState({ content: 'moves', title: 'Inventory' })}>
               <Icon name="ios-list-box-outline" />
-              Moves
+              Inventory
             </Button>
             <Button onPress={() => this.goToSurvey()}>
               <Icon name="ios-camera-outline" />
               Survey
             </Button>
-            <Button onPress={() => this.setState({ content: 'chat' })}>
+            <Button onPress={() => this.setState({ content: 'chat', title: 'Chat' })}>
               <Icon name="ios-chatboxes-outline" />
               Chat
             </Button>
