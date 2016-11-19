@@ -14,6 +14,7 @@ import {
 } from 'native-base';
 import helper from '../utils/helper';
 import Main from './Main';
+import Inventory from './Inventory';
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -21,6 +22,8 @@ export default class Dashboard extends React.Component {
 
     this.state = {
       content: null,
+      tab: 'survey',
+      title: 'Inventory',
     };
   }
 
@@ -34,10 +37,12 @@ export default class Dashboard extends React.Component {
 
   _renderContent() {
     if (this.state.content === 'moves') {
+      this.setState({ title: 'Inventory' });
       return (
-        <Button>Hello</Button>
+        <Inventory />
       );
     } else if (this.state.content === 'chat') {
+      this.setState({ title: 'Chat' });
       return (
         <Icon name="ios-settings-outline" />
       );
@@ -50,7 +55,7 @@ export default class Dashboard extends React.Component {
     return (
       <Container>
         <Header flexDirection="row-reverse">
-          <Title style={styles.title}>MoveKick</Title>
+          <Title style={styles.title}>this.state.title</Title>
           <Button backgroundColor="transparent">
             <Icon name="ios-settings-outline" style={styles.profile} />
           </Button>
