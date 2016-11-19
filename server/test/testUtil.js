@@ -14,8 +14,8 @@ const username1 = 'username1';
 const password1 = 'password1';
 const name1 = 'Stephen Cefali';
 const phone1 = '909-454-3432';
-const currentAddress1 = '434 Barley Ave, San Francisco, CA, 91407';
-const futureAddress1 = '12 Grimald Pl, San Francisco, CA, 91407';
+const currentAddress1 = '944 Market St, San Francisco, CA, 91402';
+const futureAddress1 = '916 Kearny St, San Francisco, CA, 94133';
 const surveyTime = new Date();
 
 //item

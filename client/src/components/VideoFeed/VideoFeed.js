@@ -57,7 +57,10 @@ class VideoFeed extends Component {
   	window.addEventListener('resize', this._handleWindowResize);
 
 		// auto join room
+		console.log("CHANGE BACK TO: this.props.moveId")
 		this.join(this.props.moveId);
+		// this.join(room);
+
 	}
 
 	componentWillUnmount() {
@@ -214,22 +217,22 @@ class VideoFeed extends Component {
 
   	// create screenshot data object
 		let screenshot = canvas.toDataURL("image/png");
-
+		let id = Date.now();
+		localStorage.setItem(id, screenshot);
+		
 		// set that as state in Survey Component
-		container.props.handleScreenshot(screenshot);
+		container.props.handleScreenshot(id);
 	}
 
 	render() {
 	    return (
-			<div onClick={() => this.grabScreenshot()} style={styles.videoContainer}>
+			<div onClick={this.grabScreenshot.bind(this)} style={styles.videoContainer}>
 				<div style={{flex: 1}}>
 		        <ReactPlayer playing
 		        	style={styles.localStream}
 		        	url={this.state.localStreamURL}
 		        	width={'150'}
 		        	height={150 * (3/4)} />
-
-
 		 
 		        <ReactPlayer playing
 		        	ref='remoteVideo'
