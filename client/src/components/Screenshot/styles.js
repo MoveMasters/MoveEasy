@@ -9,7 +9,7 @@ export default {
 		justifyContent: 'center'
 	},
 	image: {
-		maxHeight: '100%',
+		maxHeight: '55vh',
 		maxWidth: '100%'
 	}
 }
