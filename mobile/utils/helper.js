@@ -59,5 +59,5 @@ exports.getMoveItems = () => {
 };
 
 exports.updateItem = (item) => {
-  return axios.post(`${url}/api/item/updateItem`, item);
+  return axios.post(`${url}/api/item/updateItem`, { item });
 };
