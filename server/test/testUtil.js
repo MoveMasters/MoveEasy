@@ -70,6 +70,9 @@ exports.clearDatabase = () => {
   const itemPromise = Item.remove().exec();
   return Promise.all([userPromise, movePromise, itemPromise]).then( result => {
     return null;
+  }).catch( err => {
+    console.log('clearDatabase err', err);
+    throw err;
   });
 };
 
