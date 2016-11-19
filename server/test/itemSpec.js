@@ -31,7 +31,7 @@ describe('Item Server APIs', () => {
       expect(res.status).to.equal(200);
       done();
     });
-  });
+  }).timeout(3000);
 
 
 });

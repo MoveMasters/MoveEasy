@@ -22,15 +22,12 @@ describe('Auth Server APIs', () => {
   });
 
   it('Should send auth token and other info for Clarifai', (done) => {
-    setTimeout( () => {
-      console.log('start')
-      request.get('/api/auth/clarifaiInfo')
-      .send().end( (err, res) => {
-        expect(res.body.clarifaiToken).to.not.be.null;
-        expect(res.status).to.equal(200);
-        done();
-      });
-    }, 300);
+    request.get('/api/auth/clarifaiInfo')
+    .send().end( (err, res) => {
+      expect(res.body.clarifaiToken).to.not.be.null;
+      expect(res.status).to.equal(200);
+      done();
+    });
   });
 });
     
