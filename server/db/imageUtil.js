@@ -58,6 +58,7 @@ exports.saveAndUpload = (filePath, photoData) => {
     return new Promise( (resolve, reject) => {
       s3.upload(filePath, {}, (err, versions) => {
         if (err) {
+          console.log('S3 upload error', err);
           reject(err);
         } else if (versions.length < 1) {
           reject('No images uploaded');
@@ -67,6 +68,9 @@ exports.saveAndUpload = (filePath, photoData) => {
         }
       });
     });
+  }).catch( err => {
+    console.log('Saving local image err', err);
+    throw err;
   });
 };
 

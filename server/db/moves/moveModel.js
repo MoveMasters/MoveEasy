@@ -29,6 +29,12 @@ const moveSchema = new Schema ({
   surveyTime: {
     type: Date,
     required: true
+  },
+  surveyCompleteTime: {
+    type: Date
+  },
+  moveTime: {
+    type: Date
   }
 },
 {
