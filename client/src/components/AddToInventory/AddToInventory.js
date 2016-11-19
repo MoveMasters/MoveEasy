@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './styles';
 import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
 import util from './../../../util/util';
 
 class AddToInventory extends Component {
@@ -17,7 +18,17 @@ class AddToInventory extends Component {
 	}
 
 	componentWillMount() {
-		console.log('NEED TO PLACE UTILITY FUNCTION TO GRAB AND SET PHOTOTYPE INFO TO STATE')
+		console.log('NEED TO PLACE UTILITY FUNCTION TO GRAB AND SET PHOTOTYPE INFO TO STATE');
+		this.getCft()
+	}
+
+	getCft() {
+		const { getCurrentItem } = this.props;
+
+		const name = getCurrentItem().name;
+		const cft = util.getCft(name);
+		console.log('Setting cft to:', cft)
+		this.setState({ cft })
 	}
 
 	handleIncrement(boundState) {
@@ -29,19 +40,48 @@ class AddToInventory extends Component {
 	}
 
 	addToInventory() {
+		let { getCurrentItem, dequeueItem, handleNext, updateInventory, moveId, openSnackbar } = this.props;
+		console.log(getCurrentItem(), 'getCurrentItem')
+		let { id, name } = getCurrentItem();
+
+		// grab item from local storage
+		let image = localStorage.getItem(id);
+
 		let item = Object.assign({}, this.state, 
 			{
-			image: this.props.screenshots[0], 
-			moveId: this.props.moveId,
-			name: this.props.selectedItem,
+			image: image, 
+			moveId: moveId,
+			name: name,
 			room: 'hey ho'
 		});
 
+		console.log('Posting Item to server:', item);
+
 		util.postItemToServer(item).then( (inventory) => {
-			this.props.updateInventory(inventory)
-			this.props.dequeueItem()
-			this.props.handleNext();
-		})		
+			console.log('updateInventory', inventory)
+			updateInventory(inventory);			
+		})
+
+		dequeueItem();
+		handleNext();
+		openSnackbar(name)
+
+		// this.props.openNote()
+
+	
+	}
+
+	renderItemNotification() {
+		return (
+			<div>
+			  <Snackbar
+			    open={this.state.open}
+			    message="Event added to your calendar"
+			    autoHideDuration={1000}
+			    onRequestClose={this.handleRequestClose}
+			  />
+			</div>
+		)
 	}
 
 	renderCounter(title, boundState) {
@@ -78,10 +118,12 @@ class AddToInventory extends Component {
 	}
 
 	render() {
+		const { getCurrentItem } = this.props;
+		let { name } = getCurrentItem()
 		return (
 			<div style={styles.container}>
 				<div style={styles.titleContainer}>
-					<div>{this.props.selectedItem}</div>
+					<div>{ name }</div>
 				</div>
 				
 				<div style={styles.hr}><hr/></div>
@@ -104,6 +146,7 @@ class AddToInventory extends Component {
 				  primary={true}
 				  onClick={this.addToInventory.bind(this)}
 				  style={styles.RaisedButton}/>
+
 			</div>
 		)
 	}

@@ -5,11 +5,9 @@ import styles from './styles';
 import moment from 'moment';
 import BigCalendar, {events} from 'react-big-calendar';
 
-
 BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
-
-let formats = {
+const formats = {
    dayFormat: 'ddd MM/DD'
 };
 
@@ -28,7 +26,6 @@ const moveToEvent = (move) => {
 }
 
 class Dashboard extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -36,6 +33,7 @@ class Dashboard extends React.Component {
       events: [],
       popupMove: null
     };
+
     this.actions = [];
     this.getAllMoves();
   }
@@ -47,6 +45,8 @@ class Dashboard extends React.Component {
 
   resetSelection () {
     this.setState({popupMove: null});
+    const path = `/survey/${moveId}`
+    browserHistory.push(path)
   }
 
   getAllMoves() {
@@ -87,6 +87,5 @@ class Dashboard extends React.Component {
     )
   }
 };
-
 
 export default Dashboard;

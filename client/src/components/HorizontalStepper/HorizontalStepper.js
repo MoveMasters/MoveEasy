@@ -37,29 +37,41 @@ class HorizontalStepper extends React.Component {
   };
 
   renderStepContent(stepIndex) {
+    const { 
+      updateChoices, 
+      inventoryList, 
+      attachName, 
+      getCurrentItem, 
+      dequeueItem, 
+      updateInventory,
+      moveId,
+      openSnackbar
+    } = this.props;
+
     switch (stepIndex) {
       case 0:
         return (
             <div className='col-md-6' style={styles.inventory}>
-              <SearchBar updateChoices={this.props.updateChoices.bind(this)} />
+              <SearchBar updateChoices={updateChoices.bind(this)} />
               <hr />
               <InventoryList
-                currentItems={this.props.currentItems}
-                handleNext={this.handleNext.bind(this)} />
+                inventoryList={ inventoryList }
+                handleNext={this.handleNext.bind(this)} 
+                attachName={ attachName }/>
             </div>
           )
       default:
         return (
-            <div className='col-md-6' style={styles.inventory}>
-              <AddToInventory 
-                selectedItem={this.state.selectedItem} 
-                stepIndex={stepIndex}
-                handleNext={this.handleNext.bind(this)}
-                screenshots={this.props.screenshots}
-                dequeueItem={this.props.dequeueItem}
-                moveId={this.props.moveId}
-                updateInventory={this.props.updateInventory}/>
-            </div>
+          <div className='col-md-6' style={styles.inventory}>
+            <AddToInventory 
+              getCurrentItem={ getCurrentItem } 
+              stepIndex={ stepIndex }
+              handleNext={this.handleNext.bind(this)}
+              dequeueItem={ dequeueItem }
+              updateInventory={ updateInventory }
+              moveId={ moveId }
+              openSnackbar={ openSnackbar }/>
+          </div>
         )
     }
   }
@@ -78,42 +90,31 @@ class HorizontalStepper extends React.Component {
   }
 
   renderNextItem(stepIndex) {
-    if (this.props.screenshots.length > 0) {
-      event.preventDefault();
-      this.setState({stepIndex: 0, finished: false});
-    } else {
-      return (
-        <div className='col-md-12' style={styles.colSix}>
-          <p>Waiting for another item...</p>
-          <WaitingBar />
-        </div>
-      )
-    }
+    event.preventDefault();
+    this.setState({stepIndex: 0, finished: false});
   }
 
-  renderWelcomeScreen() {
-    return (
-      <div className='col-md-12' style={styles.colSix}>
-        <p>Welcome to Move Kick</p>
-      </div>
-    )
-  }
 
   render() {
-    const {finished, stepIndex} = this.state;
+    console.log(this.props, 'from HorizontalStepper')
+    const { finished, stepIndex } = this.state;
     const contentStyle = {width: '100%', marginRight: 15};
-    let itemsLeft = this.props.screenshots.length;
+    const { queue, dequeueItem } = this.props;
 
     return (
       <div style={styles.container}>
         {this.renderStepper(stepIndex)}
         <div style={contentStyle}>
+
           {finished ? this.renderNextItem(stepIndex) : 
-           itemsLeft === 0 && !finished ? this.renderWelcomeScreen() :
+
           (
             <div>
               <div className='col-md-6' style={styles.colSix}>
-                <Screenshot screenshots={this.props.screenshots} style={styles.colSix} />
+                <Screenshot 
+                  queue={queue}
+                  dequeueItem={ dequeueItem } 
+                  style={styles.colSix} />
               </div>
 
               {this.renderStepContent(stepIndex)}
