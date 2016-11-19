@@ -36,13 +36,8 @@ export default class Dashboard extends React.Component {
     helper.getMoveItems()
     .then((response) => {
       this.setState({ moveItems: response.data.moveItems });
-      console.log(this.state.moveItems);
     })
     .catch(error => console.log('Error getting move items', error));
-  }
-
-  updateItem(item, i) {
-    //update item here
   }
 
   goToSurvey() {
@@ -56,10 +51,7 @@ export default class Dashboard extends React.Component {
   _renderContent() {
     if (this.state.content === 'moves') {
       return (
-        <Inventory
-          moveItems={this.state.moveItems}
-          changeItem={this.updateItem}
-        />
+        <Inventory moveItems={this.state.moveItems} />
       );
     } else if (this.state.content === 'chat') {
       return (

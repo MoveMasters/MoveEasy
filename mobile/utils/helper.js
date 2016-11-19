@@ -55,5 +55,9 @@ exports.getExistingMove = () => {
 };
 
 exports.getMoveItems = () => {
- return axios.get(`${url}/api/item/moveItems`);
+  return axios.get(`${url}/api/item/moveItems`);
+};
+
+exports.updateItem = (item) => {
+  return axios.post(`${url}/api/item/updateItem`, item);
 };
