@@ -6,6 +6,7 @@ import PhotoInventory from './../PhotoInventory/PhotoInventory';
 import HorizontalStepper from './../HorizontalStepper/HorizontalStepper';
 import styles from './styles';
 import Snackbar from 'material-ui/Snackbar';
+import WaitingBar from './../WaitingBar/WaitingBar';
 
 let message = 'hey ho';
 
@@ -14,52 +15,33 @@ class Survey extends Component {
 		super(props);
 
 		this.state = {
-			currentItems: [],
-			screenshots: [],
-			predictions: [],
+			inventoryList: [],
 			inventory: [],
-			selectedItem: null,
-			noteOpen: false
+			queue: [],
+			items: {},
+			view: 'welcome',
+			openSnackbar: false,
+			snackbarText: null
 		};
 
-		document.cookie = `moveId=${this.props.params.moveId}`;
 		console.log(this.props.params.moveId, 'moveId')
+		document.cookie = `moveId=${this.props.params.moveId}`;
 	}
 
 	componentWillMount() {
-		this.setClarfaiInfo();
+		util.getClarifaiInfo();
 		this.getInitialInventory();
-
 		// clear any extra items in local storage
 		localStorage.clear();
-
-		console.log(this.state, 'surey state')
 	}
 
-	setSelectedItem(selectedItem) {
-		console.log('setting selectedItem to:', selectedItem)
-		this.setState({ selectedItem });
-	}
-
-	openNote() {
-		console.log('calling open note')
-		this.setState({ noteOpen: true });
-	}
-
-	dequeueItem() {
-		// delete image from local storage
-		localStorage.removeItem(`${this.state.screenshots[0]}`);
-
-		let screenshots = this.state.screenshots.slice(1);
-		let predictions = this.state.predictions.slice(1);
-		let currentItems = predictions[0] || [];
-		this.setState({ screenshots, predictions, currentItems })
-		setTimeout(() => console.log(this.state), 500)
-	}
-
-
-	setClarfaiInfo() {
-		util.getClarifaiInfo();
+	routeView() {
+		let { queue, inventory } = this.state;
+		if (queue.length > 0) {
+			this.setState({ view: 'stepper' })
+		} else if (inventory.length > 0) {
+			this.setState({ view: 'waiting'})
+		}
 	}
 
 	getInitialInventory() {
@@ -68,33 +50,145 @@ class Survey extends Component {
 		})
 	}
 
-	handleScreenshot(screenshot) {
-		// add image to screenshot queue
-		let screenshots = [...this.state.screenshots, screenshot]
-		this.setState({ screenshots });
-		
-		console.log('posting image to clarifai')
-		// get predictions and add to predictions queue
-		// grab image from local storage
-		let image = localStorage.getItem(screenshot);
+	openSnackbar(name) {
+		this.setState({ openSnackbar: true, snackbarText: name });
+	}
 
-		util.postImageToClarifai(image).then(predictionSet => {
-			let predictions = [...this.state.predictions, predictionSet];
-			let currentItems = predictions[0];
-			this.setState({ predictions, currentItems })
-		}).then(() => console.log(this.state, 'post clarifai call'))
+	handleScreenshot(id) {
+		this.addIdToQueue(id);
+		// switch view & reset inventoryList
+		this.setState({ view: 'stepper', inventoryList: [] })
+
+		this.addItem(id);
+		this.getTags(id).then(tags => {
+			// set list to clarifai predictions
+			this.setState({ inventoryList: tags })
+			this.attachTags(id, tags)
+		});
+	}
+
+	addIdToQueue(id) {
+		let queue = [...this.state.queue, id];
+		this.setState({ queue });
+	}
+
+	addItem(id) {
+		// build new state
+		let items = Object.assign({}, this.state.items);
+
+		let tags = null;
+		let name = null;
+		items[id] = { tags, name };
+		console.log('AddItem, newstate:', items)
+		this.setState({ items })
+	}
+
+	getTags(id) {
+		// grab image from localStorage
+		let image = localStorage.getItem(id);
+		// return tags
+		return util.postImageToClarifai(image).then(tags => tags)
+	}
+
+	attachTags(id, tags) {
+		let target = this.state.items[id];
+		let item = Object.assign({}, target);
+		// attach tags
+		item.tags = tags;
+		// build new state
+		let items = Object.assign({}, this.state.items);
+		items[id] = item;
+
+		this.setState({ items })
+	}
+
+	attachName(name) {
+		let id = this.state.queue[0];
+		let target = this.state.items[id];
+		let item = Object.assign({}, target);
+		// attach name
+		item.name = name;
+		// build new state
+		let items = Object.assign({}, this.state.items);
+		items[id] = item;
+
+		this.setState({ items })
+	}
+
+	dequeueItem() {
+		console.log('dequeueItem')
+		let id = this.state.queue[0];
+		// delete image from local storage
+		localStorage.removeItem(`${id}`);
+		// build new items state
+		let items = Object.assign({}, this.state.items);
+		delete items[id];
+		// build new queue state
+		let queue = this.state.queue.slice(1);
+		let view = queue.length === 0 ? 'waiting' : 'stepper';
+		this.setState({ items, queue, view })
+	}
+
+	getCurrentItem() {
+		let id = this.state.queue[0];
+		let item = this.state.items[id];
+		let newItem = Object.assign({}, item);
+		newItem.id = id;
+
+		return newItem;
 	}
 
 	updateChoices(event) {
-	  let currentItems = util.filterSearch(event.target.value);
-	  this.setState({ currentItems });
+	  let inventoryList = util.filterSearch(event.target.value);
+	  this.setState({ inventoryList });
 	};
 
 	updateInventory(inventory) {
 		this.setState({ inventory })
 	}
 
+	renderView() {
+			const { queue, inventoryList } = this.state;
+		  switch (this.state.view) {
+		    case 'welcome':
+		      return (
+		      	<div className='col-md-12' style={styles.colSix}>
+      	     	<p>Welcome to Move Kick</p>
+      	   	</div>
+		       )
+		    case 'stepper':
+		      return (
+		      	<div>
+		      		<HorizontalStepper 
+			      		queue={ queue }
+			      		inventoryList={ inventoryList } 
+			      		updateChoices={ this.updateChoices.bind(this) }
+		      			attachName={this.attachName.bind(this)}
+		      			getCurrentItem={this.getCurrentItem.bind(this)}
+		      			dequeueItem={this.dequeueItem.bind(this)}
+		      			updateInventory={this.updateInventory.bind(this)}
+		      			moveId={this.props.params.moveId}
+		      			openSnackbar={this.openSnackbar.bind(this)}/>
+		      	</div>
+		       )
+		    case 'waiting':
+		    	return (
+		    		<div className='col-md-12' style={styles.colSix}>
+		    		  <p>Waiting for another item...</p>
+		    		  <WaitingBar />
+		    		</div>
+		    	)
+		    default:
+		      return (
+		          <div className='col-md-6' style={styles.inventory}>
+		          	Error View Not Found
+		          </div>
+		      )
+		  }
+	}
+
 	render() {
+		const { snackbarText, openSnackbar, inventory } = this.state;
 		return (
 			<div className='row' style={{margin: '0 15px'}}>
 	    		<div className='col-md-4' style={styles.column}>
@@ -104,26 +198,19 @@ class Survey extends Component {
 				</div>
 
 				<div className='col-md-8' style={styles.column}>
-					<HorizontalStepper 
-						screenshots={this.state.screenshots} 
-						currentItems={this.state.currentItems}
-						updateChoices={this.updateChoices.bind(this)}
-						dequeueItem={this.dequeueItem.bind(this)}
-						moveId={this.props.params.moveId}
-						updateInventory={this.updateInventory.bind(this)}
-						openNote={this.openNote.bind(this)}
-						setSelectedItem={this.setSelectedItem.bind(this)}
-						selectedItem={this.state.selectedItem}/>
+
+					{this.renderView.call(this)}
+
 					<hr />	
-					<PhotoInventory inventory={this.state.inventory}/>
+					<PhotoInventory inventory={ inventory }/>
 					<hr />	
 				</div>
 
 				<Snackbar
-				  open={this.state.noteOpen}
-				  message={`Added ${this.state.selectedItem} to Inventory`}
+				  open={ openSnackbar }
+				  message={`${snackbarText} added to inventory`}
 				  autoHideDuration={4000}
-				  onRequestClose={() => this.setState({ noteOpen: false })}
+				  onRequestClose={() => this.setState({ openSnackbar: false })}
 				/>
 
 			</div>

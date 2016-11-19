@@ -23,7 +23,9 @@ class AddToInventory extends Component {
 	}
 
 	getCft() {
-		const name = this.props.selectedItem;
+		const { getCurrentItem } = this.props;
+
+		const name = getCurrentItem().name;
 		const cft = util.getCft(name);
 		console.log('Setting cft to:', cft)
 		this.setState({ cft })
@@ -38,28 +40,34 @@ class AddToInventory extends Component {
 	}
 
 	addToInventory() {
+		let { getCurrentItem, dequeueItem, handleNext, updateInventory, moveId, openSnackbar } = this.props;
+		console.log(getCurrentItem(), 'getCurrentItem')
+		let { id, name } = getCurrentItem();
+
 		// grab item from local storage
-		let image = localStorage.getItem(this.props.screenshots[0]);
+		let image = localStorage.getItem(id);
 
 		let item = Object.assign({}, this.state, 
 			{
 			image: image, 
-			moveId: this.props.moveId,
-			name: this.props.selectedItem,
+			moveId: moveId,
+			name: name,
 			room: 'hey ho'
 		});
 
 		console.log('Posting Item to server:', item);
 
 		util.postItemToServer(item).then( (inventory) => {
-			this.props.updateInventory(inventory);			
+			console.log('updateInventory', inventory)
+			updateInventory(inventory);			
 		})
 
-		this.props.dequeueItem();
-		this.props.handleNext();
-		this.props.openNote()
+		dequeueItem();
+		handleNext();
+		openSnackbar(name)
 
-		console.log('POSSIBLE BUG CAUSED BY DELETING ITEM BEFORE POSTING TO SERVER')
+		// this.props.openNote()
+
 	
 	}
 
@@ -110,10 +118,12 @@ class AddToInventory extends Component {
 	}
 
 	render() {
+		const { getCurrentItem } = this.props;
+		let { name } = getCurrentItem()
 		return (
 			<div style={styles.container}>
 				<div style={styles.titleContainer}>
-					<div>{this.props.selectedItem}</div>
+					<div>{ name }</div>
 				</div>
 				
 				<div style={styles.hr}><hr/></div>

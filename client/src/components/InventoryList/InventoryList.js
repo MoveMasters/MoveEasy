@@ -5,11 +5,12 @@ const InventoryList = (props) => {
 	
 	const handleItemClick = (item) => {
 		props.handleNext();
-		props.setSelectedItem(item);
+		// props.setSelectedItem(item);
+		props.attachName(item);
 	}
 
 
-	const listItems = props.currentItems.map( (item, index) => {
+	const listItems = props.inventoryList.map( (item, index) => {
 		return (
 			<li 
 				className='list-group-item' 

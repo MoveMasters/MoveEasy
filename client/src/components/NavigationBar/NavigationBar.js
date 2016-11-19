@@ -3,7 +3,7 @@ import AppBar from 'material-ui/AppBar';
 
 const NavigationBar = () => (
   <AppBar
-    title="Title"
+    title="MoveKick"
     iconClassNameRight="muidocs-icon-navigation-expand-more"
     style={{marginBottom: '15px'}}
   />
