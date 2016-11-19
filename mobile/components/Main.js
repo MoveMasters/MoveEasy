@@ -20,6 +20,7 @@ import {
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
 import io from 'socket.io-client/socket.io';
+import Dashboard from './Dashboard';
 
 // const socket = io.connect('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
 
@@ -196,7 +197,7 @@ function leave(socketId) {
   pc.close();
   delete pcPeers[socketId];
 
-  container.setState({ remoteViewSrc: null });
+  container.setState({ remoteViewSrc: null,  content: 'end' });
   container.setState({info: 'One peer leave!'});
 }
 
@@ -284,6 +285,15 @@ export default class Main extends React.Component {
     });
   }
 
+  goToDashboard() {
+    this.props.navigator.push({
+      component: Dashboard,
+      passProps: {
+        content: 'inventory',
+      },
+    });
+  }
+
   _press() {
     // this.refs.roomID.blur();
     // this.setState({ status: 'connect', info: 'Connecting' });
@@ -364,6 +374,17 @@ export default class Main extends React.Component {
         <View alignSelf="center">
           <Title>Waiting for your surveyor to connect...</Title>
           <Spinner color="blue" />
+        </View>
+      );
+    } else if (this.state.content === 'end') {
+      return (
+        <View alignSelf="center">
+          <Button
+            success
+            onPress={() => this.goToDashboard()}
+          >
+            End Call
+          </Button>
         </View>
       );
     }

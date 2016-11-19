@@ -22,7 +22,7 @@ export default class Dashboard extends React.Component {
 
     this.state = {
       content: null,
-      tab: 'survey',
+      tab: props.content || 'survey',
       title: 'MoveKick',
       moveItems: [],
     };
@@ -49,7 +49,7 @@ export default class Dashboard extends React.Component {
   }
 
   _renderContent() {
-    if (this.state.content === 'moves') {
+    if (this.state.content === 'inventory') {
       return (
         <Inventory moveItems={this.state.moveItems} />
       );
@@ -82,7 +82,7 @@ export default class Dashboard extends React.Component {
             tabBarActiveTextColor="#6b6b6b"
             tabBarTextColor="#6b6b6b"
           >
-            <Button onPress={() => this.setState({ content: 'moves', title: 'Inventory' })}>
+            <Button onPress={() => this.setState({ content: 'inventory', title: 'Inventory' })}>
               <Icon name="ios-list-box-outline" />
               Inventory
             </Button>
