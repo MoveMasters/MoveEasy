@@ -24,18 +24,25 @@ export default class Dashboard extends React.Component {
       content: null,
       tab: 'survey',
       title: 'MoveKick',
+      moveItems: [],
     };
-
-    this.moveItems = [];
   }
 
   componentWillMount() {
+    this._getMoveItems();
+  }
+
+  _getMoveItems() {
     helper.getMoveItems()
     .then((response) => {
-      this.moveItems = response.data.moveItems;
-      console.log(this.moveItems);
+      this.setState({ moveItems: response.data.moveItems });
+      console.log(this.state.moveItems);
     })
     .catch(error => console.log('Error getting move items', error));
+  }
+
+  updateItem(item, i) {
+    //update item here
   }
 
   goToSurvey() {
@@ -49,7 +56,10 @@ export default class Dashboard extends React.Component {
   _renderContent() {
     if (this.state.content === 'moves') {
       return (
-        <Inventory moveItems={this.moveItems} />
+        <Inventory
+          moveItems={this.state.moveItems}
+          changeItem={this.updateItem}
+        />
       );
     } else if (this.state.content === 'chat') {
       return (

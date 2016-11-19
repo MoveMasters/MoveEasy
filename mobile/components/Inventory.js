@@ -9,23 +9,30 @@ import {
 import helper from '../utils/helper';
 import Swipeout from 'react-native-swipeout';
 
-
 const Inventory = (props) => {
-  console.log(props);
+  const { moveItems } = props;
   return (
     <ScrollView>
       {
-        props.moveItems.map((item, i) => {
+        moveItems.map((item, i) => {
           const swipeoutBtns = [
             {
               text: item.going ? 'Not Going' : 'Going',
-              backgroundColor: item.going ? 'red' : 'green',
+              backgroundColor: item.going ? '#ff0000' : '#00cc00',
               underlayColor: item.going ? '#ff9999' : '#80ff80',
+              onPress: () => {
+                item.going = !item.going;
+                props.changeItem(item, i);
+              },
             },
             {
               text: item.pbo ? 'Not Packing' : 'Packing',
-              backgroundColor: item.pbo ? 'red' : 'green',
+              backgroundColor: item.pbo ? '#ff0000' : '#00cc00',
               underlayColor: item.pbo ? '#ff9999' : '#80ff80',
+              onPress: () => {
+                item.going = !item.going;
+                props.changeItem(item, i);
+              },
             },
           ];
 
