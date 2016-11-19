@@ -36,7 +36,7 @@ exports.handleNewItem = (req, res, next) => {
       throw err;
     });
   }, err => {
-    res.status(500).end(err);
+    res.status(501).end('S3 network error!');
   }).catch( err => {
     console.log('handleNewItem err', err);
     throw err;

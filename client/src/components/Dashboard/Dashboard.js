@@ -64,7 +64,7 @@ class Dashboard extends React.Component {
     return (
       <div>
         <BigCalendar
-        defaultView="week"
+        defaultView='week'
         views={['week', 'day']}
         timeslots={4}
         step={15}

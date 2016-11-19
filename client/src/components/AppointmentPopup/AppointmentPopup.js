@@ -10,6 +10,26 @@ import { browserHistory } from 'react-router';
  *
  * You can also close this dialog by clicking outside the dialog, or with the 'Esc' key.
  */
+
+const getReadableTime = (date) => {
+  if(!date) {
+    return 'TBD';
+  }
+  date = new Date(date);
+  const options = {hour: 'numeric', minute:'numeric'};
+  return date.toLocaleTimeString('en-US', options);
+}
+
+const getReadableDate = (date) => {
+  if(!date) {
+    return 'TBD';
+  }
+  date = new Date(date);
+  const options = { weekday: 'long', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
+}
+
+
 class AppointmentPopup extends React.Component {
 
 
@@ -52,7 +72,9 @@ class AppointmentPopup extends React.Component {
       />,
     ];
 
-    const moveDate = move.moveTime ? new Date(move.moveTime).getDay() : 'TBD'
+
+    const moveDate = getReadableDate(move.moveTime);
+    const surveyTime = getReadableTime(move.surveyTime);
 
     return (
       <div>
@@ -64,7 +86,7 @@ class AppointmentPopup extends React.Component {
           onRequestClose={this.handleClose.bind(this)}
         >
           Phone: {move.phone}<br/>
-          Survey Time: {move.surveyTime}<br/>
+          Survey Time: {surveyTime}<br/>
           Move Date: {moveDate}<br/>
           Current Address: {move.currentAddress}<br/>
           Future Address: {move.futureAddress}
