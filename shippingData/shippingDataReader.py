@@ -33,29 +33,29 @@ class Item:
   def __init__(self, name):
     self.name = name
     self.num = 0
-    self.totalCtf = 0
+    self.totalCft = 0
 
-  def addOne(self, Ctf):
-    self.totalCtf += Ctf
+  def addOne(self, Cft):
+    self.totalCft += Cft
     self.num += 1
 
-  def getAverageCtf(self):
-    return self.totalCtf / self.num
+  def getAverageCft(self):
+    return self.totalCft / self.num
 
   def __str__(self):
-    return "%s, Ctf: %f"%(self.name, self.getAverageCtf())
+    return "%s, Cft: %f"%(self.name, self.getAverageCft())
 
   def __repr__(self):
-    return {"name": self.name, "ctf": self.getAverageCtf()}
+    return {"name": self.name, "cft": self.getAverageCft()}
 
   def getShortInfo(self):
-    return '%s\t%d'%(self.name, self.getAverageCtf())
+    return '%s\t%d'%(self.name, self.getAverageCft())
 
   def __str__(self):
     name = self.name
     num = self.num
-    ctf = self.getAverageCtf()
-    return '{"name": "%(name)s", "ctf": %(ctf)d'%vars()
+    cft = self.getAverageCft()
+    return '{"name": "%(name)s", "cft": %(cft)d'%vars()
 
 
 #check which items to store
@@ -81,16 +81,16 @@ for name in xl_workbook.sheet_names():
     if len(name) > 30:
       print 'name %(name)s too long!'%vars()
       continue
-    ctf_str = str(row[cft_col_num].value)
+    cft_str = str(row[cft_col_num].value)
     try:
-      ctf = float(ctf_str)
+      cft = float(cft_str)
     except:
-      print "Had issue evaluating cell reading %(ctf_str)s on row %(rowNum)d"%vars()
+      print "Had issue evaluating cell reading %(cft_str)s on row %(rowNum)d"%vars()
       continue
     if name not in itemDict:
       itemDict[name] = Item(name)
       itemList.append(itemDict[name])
-    itemDict[name].addOne(ctf)
+    itemDict[name].addOne(cft)
 
 itemList.sort(key = lambda x: x.num, reverse=True)
 itemStrings = map(lambda x: str(x), itemList)
@@ -106,7 +106,7 @@ fileOut.close()
 itemNames = map(lambda x: x.getShortInfo(), itemList)
 
 fileOut = open('shippingData.csv', 'wb')
-fileOut.write('Name\tCtf\n')
+fileOut.write('Name\tCft\n')
 fileOut.write('\n'.join(itemNames))
 fileOut.close()
 

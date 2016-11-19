@@ -5,12 +5,15 @@ const readItemJson = require('./../imageTrainer/readItemJson');
 
 
 exports.sendClarifaiInfo = (req, res, next) => {
+  var itemDict = {};
+  readItemJson().forEach( value => {itemDict[value.name] = value});
+
   imageUtil.getClarifaiToken().then( clarifaiToken => {
     const obj = {
       clarifaiToken: clarifaiToken,
       clarifaiTags: imageUtil.readClarifaiTags(),
       clarifaiItems: imageUtil.readClarifaiItems(),
-      itemPrototypes: readItemJson(),
+      itemPrototypes: itemDict,
       ClarifaiClientId: secret.ClarifaiClientId,
       ClarifaiClientSecret: secret.ClarifaiClientSecret,
       nameMappings: nameMappings
