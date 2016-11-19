@@ -47,6 +47,7 @@ exports.saveAndUpload = (filePath, photoData) => {
   const savePromise = new Promise( (resolve, reject) => {
     fs.writeFile(filePath, photoData, 'base64', (err) => {
       if (err) {
+        console.log('erroring out here');
         reject(err);
       } else {
         resolve(true);

@@ -55,7 +55,7 @@ exports.handleMoveItems = (req, res, next) => {
 
 
 exports.handleUpdateItem = (req, res, next) => {
-  const item = req.body.item;
+  const item = req.body;
   dbUtil.findItemAndUpdate(item).then( item => {
     res.send({item});
   }).catch( err => {

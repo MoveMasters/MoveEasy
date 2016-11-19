@@ -28,17 +28,6 @@ const storeItem = async (item, selectedValue) => {
   }
 };
 
-const getItem = async (item, cb) => {
-  try {
-    const value = await AsyncStorage.getItem(item);
-    if (value !== null) {
-      cb(value);
-    }
-  } catch (error) {
-    console.log('Error submitting new move info:', error);
-  }
-};
-
 export default class Information extends React.Component {
   constructor(props) {
     super(props);
@@ -74,18 +63,16 @@ export default class Information extends React.Component {
       surveyTime: this.state.date,
     };
 
-    getItem('token', (token) => {
-      helper.newMove(moveObj, token)
-      .then((response) => {
-        const moveId = response.data._id;
+    helper.newMove(moveObj)
+    .then((response) => {
+      const moveId = response.data._id;
 
-        storeItem('lastMove', moveId);
-        this.goToMain();
-      })
-      .catch((error) => {
-        console.log(error);
-        AlertIOS.alert('There was a problem saving your information. Please try again.');
-      });
+      storeItem('moveId', moveId);
+      this.goToMain();
+    })
+    .catch((error) => {
+      console.log(error);
+      AlertIOS.alert('There was a problem saving your information. Please try again.');
     });
   }
 

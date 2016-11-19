@@ -14,6 +14,7 @@ import {
 } from 'native-base';
 import helper from '../utils/helper';
 import Main from './Main';
+import Inventory from './Inventory';
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -21,7 +22,22 @@ export default class Dashboard extends React.Component {
 
     this.state = {
       content: null,
+      tab: props.content || 'survey',
+      title: 'MoveKick',
+      moveItems: [],
     };
+  }
+
+  componentWillMount() {
+    this._getMoveItems();
+  }
+
+  _getMoveItems() {
+    helper.getMoveItems()
+    .then((response) => {
+      this.setState({ moveItems: response.data.moveItems });
+    })
+    .catch(error => console.log('Error getting move items', error));
   }
 
   goToSurvey() {
@@ -33,9 +49,9 @@ export default class Dashboard extends React.Component {
   }
 
   _renderContent() {
-    if (this.state.content === 'moves') {
+    if (this.state.content === 'inventory') {
       return (
-        <Button>Hello</Button>
+        <Inventory moveItems={this.state.moveItems} />
       );
     } else if (this.state.content === 'chat') {
       return (
@@ -50,7 +66,7 @@ export default class Dashboard extends React.Component {
     return (
       <Container>
         <Header flexDirection="row-reverse">
-          <Title style={styles.title}>MoveKick</Title>
+          <Title style={styles.title}>{this.state.title}</Title>
           <Button backgroundColor="transparent">
             <Icon name="ios-settings-outline" style={styles.profile} />
           </Button>
@@ -66,15 +82,15 @@ export default class Dashboard extends React.Component {
             tabBarActiveTextColor="#6b6b6b"
             tabBarTextColor="#6b6b6b"
           >
-            <Button onPress={() => this.setState({ content: 'moves' })}>
+            <Button onPress={() => this.setState({ content: 'inventory', title: 'Inventory' })}>
               <Icon name="ios-list-box-outline" />
-              Moves
+              Inventory
             </Button>
             <Button onPress={() => this.goToSurvey()}>
               <Icon name="ios-camera-outline" />
               Survey
             </Button>
-            <Button onPress={() => this.setState({ content: 'chat' })}>
+            <Button onPress={() => this.setState({ content: 'chat', title: 'Chat' })}>
               <Icon name="ios-chatboxes-outline" />
               Chat
             </Button>
