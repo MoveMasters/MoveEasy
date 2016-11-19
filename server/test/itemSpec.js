@@ -12,8 +12,9 @@ const request = supertest.agent(server);
 
 
 describe('Item Server APIs', () => {
-  var user;
-  var move;
+  let user;
+  let move;
+  let item;
 
   before((done) => {
     testUtil.clearToMove1(request).then( data => {
@@ -27,12 +28,25 @@ describe('Item Server APIs', () => {
     const clientItemObj = testUtil.getClientItemObj1(move._id);
     request.post('/api/item/newItem')
     .send(clientItemObj)
-    .end(function(err, res) {
+    .end( (err, res) => {
+      item = res.body.moveItems[0];
       expect(res.status).to.equal(200);
+      expect(item.name).to.equal(testUtil.itemName1);
       done();
     });
   }).timeout(3000);
 
+  it('Should update item', (done) => {
+    item.going = false;
+    request.post('/api/item/updateItem')
+    .send({item})
+    .end( (err, res) => {
+      item = res.body.item;
+      expect(res.status).to.equal(200);
+      expect(item.going).to.equal(false);
+      done();
+    });
+  });
 
 });
     

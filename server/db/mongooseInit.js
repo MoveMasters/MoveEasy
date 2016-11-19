@@ -20,7 +20,7 @@ if(isTest) {
 
 
 module.exports = () => {
-  mongoose.connect(mongoURI);
+  mongoose.connect(mongoURI, {server:{auto_reconnect:true}});
 
   mongoose.connection.on('open', () => {
     console.log('mongoose connection opened');
@@ -28,6 +28,7 @@ module.exports = () => {
 
   mongoose.connection.on('disconnected', () => {
     console.log('mongoose connection closed');
+    mongoose.connect(mongoURI, {server:{auto_reconnect:true}});
   });
 
   mongoose.Promise = Q.Promise;

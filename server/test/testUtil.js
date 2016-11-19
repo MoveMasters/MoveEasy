@@ -9,16 +9,24 @@ const Item = require('./../db/items/itemModel');
 const dbUtil = require('./../db/dbUtil');
 
 
+//user/move
 const username1 = 'username1';
 const password1 = 'password1';
 const name1 = 'Stephen Cefali';
 const phone1 = '909-454-3432';
 const currentAddress1 = '434 Barley Ave, San Francisco, CA, 91407';
-const futureAddress1 = '3 Grimald Pl, San Francisco, CA, 91407';
+const futureAddress1 = '12 Grimald Pl, San Francisco, CA, 91407';
 const surveyTime = new Date();
 
+//item
+const itemName1 = 'Chair - Office';
+
 const userObj1 = { username: username1, password: password1 };
+
+//exports for checking
 exports.userObj1 = userObj1;
+exports.itemName1 = itemName1;
+
 
 
 const imagePath1 = path.resolve(__dirname, 'itemImage1.png');
@@ -112,7 +120,7 @@ exports.clearToMove1 = (request) => {
 exports.getClientItemObj1 = (move_id) => {
   const imageData = fs.readFileSync(imagePath1, 'base64');
   return {
-    name: 'Chair - Office',
+    name: itemName1,
     moveId: move_id,
     image: imageData,
     quantity: 1,
