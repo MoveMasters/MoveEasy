@@ -29,6 +29,11 @@ class Survey extends Component {
 	componentWillMount() {
 		this.setClarfaiInfo();
 		this.getInitialInventory();
+
+		// clear any extra items in local storage
+		localStorage.clear();
+
+		console.log(this.state, 'surey state')
 	}
 
 	setSelectedItem(selectedItem) {
@@ -49,6 +54,7 @@ class Survey extends Component {
 		let predictions = this.state.predictions.slice(1);
 		let currentItems = predictions[0] || [];
 		this.setState({ screenshots, predictions, currentItems })
+		setTimeout(() => console.log(this.state), 500)
 	}
 
 
@@ -76,7 +82,7 @@ class Survey extends Component {
 			let predictions = [...this.state.predictions, predictionSet];
 			let currentItems = predictions[0];
 			this.setState({ predictions, currentItems })
-		})
+		}).then(() => console.log(this.state, 'post clarifai call'))
 	}
 
 	updateChoices(event) {

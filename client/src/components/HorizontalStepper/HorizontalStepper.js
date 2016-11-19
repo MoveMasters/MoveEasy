@@ -79,7 +79,9 @@ class HorizontalStepper extends React.Component {
   }
 
   renderNextItem(stepIndex) {
+    console.log('calling render next')
     if (this.props.screenshots.length > 0) {
+      console.log('rendering next')
       event.preventDefault();
       this.setState({stepIndex: 0, finished: false});
     } else {
@@ -114,7 +116,12 @@ class HorizontalStepper extends React.Component {
           (
             <div>
               <div className='col-md-6' style={styles.colSix}>
-                <Screenshot screenshots={this.props.screenshots} style={styles.colSix} />
+                <Screenshot 
+                  screenshots={this.props.screenshots} 
+                  style={styles.colSix} 
+                  dequeueItem={this.props.dequeueItem}
+                  renderNextItem={this.renderNextItem.bind(this)}
+                  setSelectedItem={this.props.setSelectedItem}/>
               </div>
 
               {this.renderStepContent(stepIndex)}

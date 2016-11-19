@@ -1,5 +1,6 @@
 import axios from 'axios';
-const ip = '10.6.27.137';
+// const ip = '10.6.27.137';
+const ip = 'localhost';
 const port = '9000'
 const serverURL = `http://${ip}:${port}`
 
@@ -41,7 +42,7 @@ const getClarifaiInfo = () => {
       data.ClarifaiClientId,
       data.ClarifaiClientSecret
     );
-
+    
 		return data;
 	})
 	.catch( error => {
