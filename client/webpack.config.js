@@ -5,7 +5,8 @@ module.exports = {
   output: {
     path: __dirname,
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    sourceMapFilename: "bundle.js.map",
   },
   module: {
     loaders: [{
@@ -19,6 +20,8 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
+  devtool: 'inline-source-map',
+  debug: true,
   devServer: {
     historyApiFallback: true,
     contentBase: './'
