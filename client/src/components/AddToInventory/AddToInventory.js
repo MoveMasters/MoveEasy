@@ -26,6 +26,7 @@ class AddToInventory extends Component {
 		const { getCurrentItem } = this.props;
 
 		const name = getCurrentItem().name;
+		console.log('getCft', name)
 		const cft = util.getCft(name);
 		console.log('Setting cft to:', cft)
 		this.setState({ cft })

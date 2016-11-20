@@ -7,6 +7,7 @@ import HorizontalStepper from './../HorizontalStepper/HorizontalStepper';
 import styles from './styles';
 import Snackbar from 'material-ui/Snackbar';
 import WaitingBar from './../WaitingBar/WaitingBar';
+import Paper from 'material-ui/Paper';
 
 let message = 'hey ho';
 
@@ -36,15 +37,6 @@ class Survey extends Component {
 		localStorage.clear();
 	}
 
-	routeView() {
-		let { queue, inventory } = this.state;
-		if (queue.length > 0) {
-			this.setState({ view: 'stepper' })
-		} else if (inventory.length > 0) {
-			this.setState({ view: 'waiting'})
-		}
-	}
-
 	getInitialInventory() {
 		util.getInitialInventory().then( moveItems => {
 			this.setState({inventory:moveItems});
@@ -58,12 +50,12 @@ class Survey extends Component {
 	handleScreenshot(id) {
 		this.addIdToQueue(id);
 		// switch view & reset inventoryList
-		this.setState({ view: 'stepper', inventoryList: [] })
+		this.setState({ view: 'stepper' })
 
 		this.addItem(id);
 		this.getTags(id).then(tags => {
 			// set list to clarifai predictions
-			this.setState({ inventoryList: tags })
+			// this.setState({ inventoryList: tags })
 			this.attachTags(id, tags)
 		});
 	}
@@ -100,7 +92,9 @@ class Survey extends Component {
 		let items = Object.assign({}, this.state.items);
 		items[id] = item;
 
-		this.setState({ items })
+		let inventoryList = items[this.state.queue[0]].tags
+		console.log(inventoryList, 'inventoryList')
+		this.setState({ items, inventoryList })
 	}
 
 	attachName(name) {
@@ -127,7 +121,10 @@ class Survey extends Component {
 		// build new queue state
 		let queue = this.state.queue.slice(1);
 		let view = queue.length === 0 ? 'waiting' : 'stepper';
-		this.setState({ items, queue, view })
+		// reset inventory list if there are items left in the queue
+		let inventoryList = items[queue[0]] ? items[queue[0]].tags : [];
+
+		this.setState({ items, queue, view, inventoryList })
 	}
 
 	getCurrentItem() {
@@ -153,9 +150,14 @@ class Survey extends Component {
 		  switch (this.state.view) {
 		    case 'welcome':
 		      return (
-		      	<div className='col-md-12' style={styles.colSix}>
-      	     	<p>Welcome to Move Kick</p>
-      	   	</div>
+		    		<div className='col-md-12'>
+		    			<div style={styles.roomSelector}>
+		    				<h1>Welcome to MoveKick</h1>
+		    			</div>
+		    			<div style={styles.colSix}>
+		    		  	<p>Hello there</p>
+		    		  </div>
+		    		</div>
 		       )
 		    case 'stepper':
 		      return (
@@ -174,9 +176,13 @@ class Survey extends Component {
 		       )
 		    case 'waiting':
 		    	return (
-		    		<div className='col-md-12' style={styles.colSix}>
-		    		  <p>Waiting for another item...</p>
-		    		  <WaitingBar />
+		    		<div className='col-md-12'>
+		    			<div style={styles.roomSelector}>
+		    				<h1>Waiting for another item...</h1>
+		    			</div>
+		    			<div style={styles.colSix}>
+		    		  	<WaitingBar />
+		    		  </div>
 		    		</div>
 		    	)
 		    default:
@@ -192,10 +198,14 @@ class Survey extends Component {
 		const { snackbarText, openSnackbar, inventory } = this.state;
 		return (
 			<div className='row' style={{margin: '0 15px'}}>
-	    		<div className='col-md-4' style={styles.column}>
-					<VideoFeed 
+	    	<div className='col-md-4' style={styles.videoFeedColumn}>
+	    			<div style={styles.roomSelector}>
+	    				<h1>Room Selector</h1>
+	    			</div>
+
+						<VideoFeed 
 						handleScreenshot={this.handleScreenshot.bind(this)}
-						moveId={this.props.params.moveId}/>			
+						moveId={this.props.params.moveId}/>	
 				</div>
 
 				<div className='col-md-8' style={styles.column}>
