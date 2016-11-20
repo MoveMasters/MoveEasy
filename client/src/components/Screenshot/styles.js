@@ -5,7 +5,6 @@ export default {
 		height: '55vh',
 		marginBottom: '30px',
 		display: 'flex',
-		alignItems: 'center',
 		justifyContent: 'center'
 	},
 	image: {

@@ -8,7 +8,7 @@ const Screenshot = (props) => {
 	return (
 		<div>
 			<ul className='list-group' style={styles.imageContainer}>
-        <div style={{display: 'block', maxWidth: '100%', maxHeight: '100%', margin: 10}}>
+        <div style={{display: 'block', maxWidth: '100%', maxHeight: '100%'}}>
           <TrashButton dequeueItem={ props.dequeueItem }/>
 			   <img style={styles.image} src={image} />
         </div>

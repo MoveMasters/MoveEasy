@@ -20,12 +20,26 @@ export default {
     width: '100%'
   },
   colSix: {
-    height: '55vh'
+    height: '55vh',
+    marginBottom: '30px'
   },
   inventory: {
     overflow: 'auto',
     height: '55vh',
     marginBottom: '30px'
+  },
+  videoFeedColumn: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  },
+  roomSelector: {
+    backgroundColor: 'orange',
+    width: '100%',
+    height: '10vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 
 }
