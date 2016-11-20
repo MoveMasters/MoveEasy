@@ -10,6 +10,7 @@ import WaitingBar from './../WaitingBar/WaitingBar';
 
 let message = 'hey ho';
 
+//props: params.moveId
 class Survey extends Component {
 	constructor(props) {
 		super(props);

@@ -1,12 +1,13 @@
 module.exports = function (config) {
   config.set({
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
     files: [ 'test/*Spec.js' ],
     frameworks: [
       'jasmine',
       'sinon'
     ],
-    //singleRun: true,
+    logLevel: 'debug',
+    singleRun: false,
     preprocessors: {
       'test/*Spec.js': [ 'webpack' ]
     },
