@@ -26,7 +26,8 @@ describe('FILL IN', () => {
   });
 
   it('Should render Landing', done => {
-    shallow(<Survey />);
+    mount(<Survey params={ {moveId:'324wfsadfsf'} } />);
+
     done();
   });
 

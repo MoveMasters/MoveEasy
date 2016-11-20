@@ -14,27 +14,30 @@ injectTapEventPlugin();
 
 class HorizontalStepper extends React.Component {
 
-  state = {
-    finished: false,
-    stepIndex: 0,
-    selectedItem: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      finished: false,
+      stepIndex: 0,
+      selectedItem: null
+    };
+  }
 
-  handleNext = (item) => {
+  handleNext (item) {
     const {stepIndex} = this.state;
     this.setState({
       stepIndex: stepIndex + 1,
       finished: stepIndex >= 1,
       selectedItem: item
     });
-  };
+  }
 
-  handlePrev = () => {
+  handlePrev () {
     const {stepIndex} = this.state;
     if (stepIndex > 0) {
       this.setState({stepIndex: stepIndex - 1});
     }
-  };
+  }
 
   renderStepContent(stepIndex) {
     const { 
