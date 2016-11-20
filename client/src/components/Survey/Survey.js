@@ -54,8 +54,6 @@ class Survey extends Component {
 
 		this.addItem(id);
 		this.getTags(id).then(tags => {
-			// set list to clarifai predictions
-			// this.setState({ inventoryList: tags })
 			this.attachTags(id, tags)
 		});
 	}
