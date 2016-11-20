@@ -10,9 +10,15 @@ const style = {
   marginLeft: '1vw',
 };
 
+
 const TrashButton = (props) => {
+  const handleClick = () => {
+    props.dequeueItem();
+    props.handleNext();
+  }
+
   return (
-    <div onClick={ props.dequeueItem }>
+    <div onClick={ handleClick }>
       <FloatingActionButton mini={true} secondary={true} style={style}>
         <Delete />
       </FloatingActionButton>

@@ -117,7 +117,8 @@ class HorizontalStepper extends React.Component {
                 <Screenshot 
                   queue={queue}
                   dequeueItem={ dequeueItem } 
-                  style={styles.colSix} />
+                  style={styles.colSix} 
+                  handleNext={this.handleNext.bind(this)}/>
               </div>
 
               {this.renderStepContent(stepIndex)}
