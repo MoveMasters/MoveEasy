@@ -226,8 +226,7 @@ class VideoFeed extends Component {
 
 	render() {
 	    return (
-			<div onClick={this.grabScreenshot.bind(this)} style={styles.videoContainer}>
-				<div style={{flex: 1}}>
+			<div onClick={this.grabScreenshot.bind(this)}>
 		        <ReactPlayer playing
 		        	style={styles.localStream}
 		        	url={this.state.localStreamURL}
@@ -240,7 +239,6 @@ class VideoFeed extends Component {
 		        	url={this.state.remoteStreamURL}
 		        	width={this.state.width * scale}
 		        	height={this.state.width * aspect * scale} />
-		        </div>
 	       		<canvas ref='canvas' style={{display: 'none'}}></canvas>
 		     </div>
 	    );
