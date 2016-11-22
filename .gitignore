@@ -1,4 +1,5 @@
 clientV2/node_modules/
+clientV2/bower_components/
 mobile/node_modules/
 mobile/ios/build/
 public/node_modules/
