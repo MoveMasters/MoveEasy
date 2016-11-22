@@ -5,6 +5,7 @@
 /** @module Authentication Utility Server-Side Functions */
 
 const jwt = require('jwt-simple');
+const GeneralUser = require('./generalUsers/generalUserModel.js');
 const User = require('./users/userModel.js');
 const Item = require('./items/itemModel.js');
 const Move = require('./moves/moveModel.js');
@@ -15,8 +16,23 @@ const Promimse = require('bluebird');
 const passwordSecret = process.env.passwordSecret || 'secret';
 
 
+//encode/decode
+const encode = (user) => {
+  return jwt.encode(user, passwordSecret);
+}
+exports.encode = encode;
+
+
+
+const decode = (user) => {
+  return jwt.decode(user, passwordSecret);
+}
+exports.decode = decode;
+
+
+
 exports.encodeSendUser = (user, res) => {
-  const token = jwt.encode(user, passwordSecret);
+  const token = encode(user);
   exports.getLastMove(user._id).then( lastMove => {
     res.json({ token, lastMove});
   });
@@ -49,7 +65,7 @@ exports.getUsernameFromReq = (req, next) => {
     next(new Error('No token'));
     return null;
   }
-  const username = jwt.decode(token, passwordSecret).username;
+  const username = decode(token).username;
   return username;
 };
 
@@ -80,7 +96,7 @@ exports.checkAuth = (req, res, next) => {
     return null;
   }
   try {
-    const username = jwt.decode(token, passwordSecret).username;
+    const username = decode(token).username;
     next();
     return true;
   } catch (e) {
