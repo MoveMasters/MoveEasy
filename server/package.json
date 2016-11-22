@@ -1,5 +1,5 @@
 {
-  "name": "peer-messenger-peerserver",
+  "name": "MoveKick server",
   "version": "0.0.1",
   "scripts": {
     "start": "node server",
