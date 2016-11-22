@@ -10,13 +10,12 @@ const Schema = mongoose.Schema;
 
 
 
-//for mongoose inhereitence
 
 
 const userSchema = new Schema({});
-
-
-
 const User = GeneralUser.discriminator('User', userSchema);
+
+//const userSchema = GeneralUser.schema();
+//const User = GeneralUser.model.discriminator('User', {});
 
 module.exports = User;

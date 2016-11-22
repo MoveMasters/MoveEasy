@@ -7,13 +7,6 @@ const testUtil = require('./testUtil');
 const request = supertest.agent(server);
 
 
-describe('Meta Testing', () => {
-  it('Should be a functioning test', () => {
-    expect(true).to.equal(true);
-  });
-});
-
-
 
 describe('Auth Server APIs', () => {
   
