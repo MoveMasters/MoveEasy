@@ -1,5 +1,5 @@
 {
-  "name": "MoveKick desktop client",
+  "name": "movekick_client",
   "version": "1.0.0",
   "description": "Desktop application for MoveKick client",
   "main": "index.js",
