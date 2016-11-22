@@ -5,7 +5,6 @@
 /** @module User Model */
 
 const mongoose = require('mongoose');
-const extend = require('mongoose-schema-extend');
 const bcrypt = require('bcrypt-nodejs');
 const Q = require('q');
 
