@@ -10,7 +10,7 @@ class Dashboard extends React.Component {
             <ContentWrapper>
                 <div className="content-heading">
                     { /* END Language list */ } 
-                    Dashboard
+                    Main Dashboard
                     <small data-localize="dashboard.WELCOME">Move Stats</small>
                 </div>
 
