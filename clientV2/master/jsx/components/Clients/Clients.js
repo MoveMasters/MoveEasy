@@ -11,7 +11,7 @@ class Clients extends React.Component {
               <div className="content-heading">
                   { /* END Language list */ } 
                   Clients
-                  <small data-localize="dashboard.CLIENTS">Review Current Moves</small>
+                  <small data-localize="dashboard.CLIENTS">Review upcoming moves</small>
               </div>
 
               <Row>                 
