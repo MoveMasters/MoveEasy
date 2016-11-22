@@ -5,6 +5,7 @@
 /** @module User Model */
 
 const mongoose = require('mongoose');
+const extend = require('mongoose-schema-extend');
 const bcrypt = require('bcrypt-nodejs');
 const Q = require('q');
 
@@ -14,7 +15,9 @@ const Schema = mongoose.Schema;
 
 
 //for mongoose inhereitence
-const options = {discriminatorKey: 'kind'};
+const options = {
+  timestamps: true
+};
 
 
 const generalUserSchema = new Schema({
@@ -36,9 +39,6 @@ const generalUserSchema = new Schema({
   salt: {
     type: String
   }
-},
-{
-  timestamps: true
 },
   options
 );
@@ -107,4 +107,7 @@ generalUserSchema.pre('save', function (next) {
 
 
 const GeneralUser = mongoose.model('GeneralUser', generalUserSchema);
+
 module.exports = GeneralUser;
+//exports.schema = generalUserSchema;
+//exports.model = GeneralUser;

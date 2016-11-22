@@ -10,9 +10,11 @@ const Schema = mongoose.Schema;
 
 
 
+
 const moverSchema = new Schema({
   company: {
-    type: String
+    type: String,
+    required: true
   }
 });
 
