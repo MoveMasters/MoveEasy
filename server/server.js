@@ -10,7 +10,6 @@ const express = require('express');
 const app = express();
 
 
-
 const testPort = process.env.TEST_PORT || 8000;
 const prodPort = process.env.PORT || 9000;
 const port = process.env.IS_TEST ? testPort : prodPort;
