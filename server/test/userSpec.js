@@ -4,14 +4,10 @@ const server = require('./../server.js');
 const User = require('./../db/users/userModel.js');
 const jwt = require('jwt-simple');
 const testUtil = require('./testUtil');
+const dbUtil = require('./../db/dbUtil');
 
 const request = supertest.agent(server);
 
-describe('Meta Testing', () => {
-  it('Should be a functioning test', () => {
-    expect(true).to.equal(true);
-  });
-});
 
 
 describe('User Server API tests', () => {
@@ -25,7 +21,8 @@ describe('User Server API tests', () => {
 
 
   before((done) => {
-    testUtil.clearDatabase().then(done);
+    testUtil.clearDatabase()
+    .then(done);
   });
 
 
@@ -34,19 +31,19 @@ describe('User Server API tests', () => {
     request.post('/api/user/signup')
       .send({ username: username, password: password }).end( (err, res) => {
         token = res.body.token;
-        decodedToken = jwt.decode(token, 'secret');
+        decodedToken = dbUtil.decode(token);
         expect(decodedToken.username).to.equal(username);
         done();
       });
   });
 
 
-  xit('Should attach a token for a login post', (done) => {
+  it('Should attach a token for a login post', (done) => {
     request.post('/api/user/signin')
       .send({ username: username, password: password }).end( (err, res) => {
-        token = res.body.token;
-        expect(token).to.be.ok;
+        const testDecoded = dbUtil.decode(res.body.token);
         expect(res.status).to.equal(200);
+        expect(testDecoded.username).to.equal(username);
         done();
       });
   });
@@ -87,7 +84,7 @@ describe('User Server API tests', () => {
   it('Should sign up a second user', (done) => {
     request.post('/api/user/signup')
       .send({ username: username2, password: password2 }).end( (err, res) => {
-        decodedToken2 = jwt.decode(res.body.token, 'secret');
+        decodedToken2 = dbUtil.decode(res.body.token);
         expect(decodedToken2.username).to.equal(username2);
         done();
       });

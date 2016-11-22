@@ -5,6 +5,7 @@ const itemRouter = require('./routers/itemRouter');
 const userRouter = require('./routers/userRouter');
 const authRouter = require('./routers/authRouter');
 const moveRouter = require('./routers/moveRouter');
+const moverRouter = require('./routers/moverRouter');
 
 
 module.exports = (app, express, server) => {
@@ -16,6 +17,7 @@ module.exports = (app, express, server) => {
   app.use('/api/item', itemRouter);
   app.use('/api/auth', authRouter);
   app.use('/api/move', moveRouter);
+  app.use('/api/mover', moverRouter);
 
 
 };

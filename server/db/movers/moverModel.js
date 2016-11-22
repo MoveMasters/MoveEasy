@@ -10,13 +10,14 @@ const Schema = mongoose.Schema;
 
 
 
-//for mongoose inhereitence
+const moverSchema = new Schema({
+  company: {
+    type: String
+  }
+});
 
 
-const userSchema = new Schema({});
+const Mover = GeneralUser.discriminator('Mover', moverSchema);
 
 
-
-const User = GeneralUser.discriminator('User', userSchema);
-
-module.exports = User;
+module.exports = Mover;

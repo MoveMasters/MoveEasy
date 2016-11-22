@@ -13,15 +13,23 @@ const dbUtil = require('./../db/dbUtil');
 const username1 = 'username1';
 const password1 = 'password1';
 const name1 = 'Stephen Cefali';
+const email1 = 'test_email@gmail.com'
 const phone1 = '909-454-3432';
 const currentAddress1 = '944 Market St, San Francisco, CA, 91402';
 const futureAddress1 = '916 Kearny St, San Francisco, CA, 94133';
+
+
 const surveyTime = new Date();
 
 //item
 const itemName1 = 'Chair - Office';
 
-const userObj1 = { username: username1, password: password1 };
+const userObj1 = { 
+  username: username1,
+  password: password1,
+  name: name1,
+  email: email1
+};
 
 //exports for checking
 exports.userObj1 = userObj1;
