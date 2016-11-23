@@ -10,8 +10,12 @@ const moverRouter = require('./routers/moverRouter');
 
 module.exports = (app, express, server) => {
 
-  app.use('/', ExpressPeerServer(server, {debug: true}));
+  // app.use('/', ExpressPeerServer(server, {debug: true}));
+  app.use('/', express.static(path.join(__dirname, '/../clientV2/dist')))
 
+  app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, '/../clientV2/dist/index.html'));
+  });
 
   app.use('/api/user', userRouter);
   app.use('/api/item', itemRouter);
