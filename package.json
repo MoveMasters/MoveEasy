@@ -2,13 +2,15 @@
   "name": "mkmobile",
   "version": "0.0.1",
   "scripts": {
-    "start": "cd clientV2 && bower install && npm install && gulp build && cd .. && node server/server.js",
+    "prestart": "cd clientV2 && bower install && gulp build",
+    "start": "node server/server.js",
     "test": "mocha server/test/*Spec.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
+    "bower": "^1.8.0",
     "clarifai": "^2.0.15",
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
