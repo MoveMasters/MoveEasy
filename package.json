@@ -1,9 +1,9 @@
 {
-  "name": "peer-messenger-peerserver",
+  "name": "mkmobile",
   "version": "0.0.1",
   "scripts": {
-    "start": "node server",
-    "test": "mocha test/*Spec.js"
+    "start": "node server/server.js",
+    "test": "mocha server/test/*Spec.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
