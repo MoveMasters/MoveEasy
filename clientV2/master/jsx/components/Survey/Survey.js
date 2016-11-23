@@ -8,7 +8,7 @@ import styles from './styles';
 import Snackbar from 'material-ui/Snackbar';
 import WaitingBar from './../WaitingBar/WaitingBar';
 import Paper from 'material-ui/Paper';
-import ContentWrapper from '../Layout/ContentWrapper';
+import ContentWrapper from './../Layout/ContentWrapper';
 import { Grid, Row, Col, Dropdown, MenuItem } from 'react-bootstrap';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

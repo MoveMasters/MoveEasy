@@ -1,4 +1,6 @@
 {
+  "name": "movekick",
+  "description": "Server for MoveKick",
   "name": "mkmobile",
   "version": "0.0.1",
   "scripts": {
