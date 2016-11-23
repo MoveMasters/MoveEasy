@@ -17,7 +17,7 @@ const Promise = require('bluebird');
 const bing = new Scraper.Bing();
 
 //setup constants
-const shippingJsonFile = __dirname + '/../shippingData/shippingData.json';
+const shippingJsonFile = __dirname + '/../../shippingData/shippingData.json';
 const clarifaiModelName = process.env.clarifaiModelName || 'furniture';
 const numItems = process.env.numItems || 49;
 const numImagesPerItem = process.env.numImagesPerItem || 100;
