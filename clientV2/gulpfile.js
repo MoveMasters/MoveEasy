@@ -276,6 +276,9 @@ gulp.task('browsersync', function() {
         middlewares = middlewares.concat([
             webpackDevMiddleware(bundler, {
                 publicPath: webpackConfig.output.publicPath,
+                watchOptions: {
+                    poll: true
+                },
                 stats: {
                     colors: true
                 }
