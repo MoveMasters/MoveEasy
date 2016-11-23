@@ -9,7 +9,7 @@ const Promise = require('bluebird');
 
 const shippingListFile = '../shippingData/shippingList.txt';
 const clarifaiTagFile = '../shippingData/clarifaiTags.txt';
-console.log(process.env.USER);
+console.log(process.env.CLARIFAI_CLIENT_ID, process.env.CLARIFAI_CLIENT_SECRET);
 const clarApp = new Clarifai.App(
   process.env.CLARIFAI_CLIENT_ID,
   process.env.CLARIFAI_CLIENT_SECRET
