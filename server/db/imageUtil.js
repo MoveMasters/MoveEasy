@@ -1,7 +1,7 @@
 
 const Upload = require('s3-uploader');
 const Clarifai = require('clarifai');
-const secret = require('./../secret.js');
+// const secret = require('./../secret.js');
 const fs = require('fs'); 
 const s3 = require('./../s3config');
 const Promise = require('bluebird');
@@ -9,14 +9,11 @@ const Promise = require('bluebird');
 
 const shippingListFile = '../shippingData/shippingList.txt';
 const clarifaiTagFile = '../shippingData/clarifaiTags.txt';
-
-
+console.log(process.env.CLARIFAI_CLIENT_ID, process.env.CLARIFAI_CLIENT_SECRET);
 const clarApp = new Clarifai.App(
-  secret.ClarifaiClientId,
-  secret.ClarifaiClientSecret
+  process.env.CLARIFAI_CLIENT_ID,
+  process.env.CLARIFAI_CLIENT_SECRET
 );
-
-
 
 
 

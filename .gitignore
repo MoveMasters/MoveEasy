@@ -1,11 +1,12 @@
+clientV2/node_modules/
+clientV2/bower_components/
 mobile/node_modules/
 mobile/ios/build/
 public/node_modules/
-server/node_modules/
+node_modules/
 server/secret.js
 images
 build/
-dist/
 .DS_Store
 client/node_modules/
 *.log

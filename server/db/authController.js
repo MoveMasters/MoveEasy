@@ -1,5 +1,5 @@
 const imageUtil = require('./imageUtil');
-const secret = require('./../secret');
+// const secret = require('./../secret');
 const nameMappings = require('./../imageTrainer/nameMappings');
 const readItemJson = require('./../imageTrainer/readItemJson');
 
@@ -14,8 +14,8 @@ exports.sendClarifaiInfo = (req, res, next) => {
       clarifaiTags: imageUtil.readClarifaiTags(),
       clarifaiItems: imageUtil.readClarifaiItems(),
       itemPrototypes: itemDict,
-      ClarifaiClientId: secret.ClarifaiClientId,
-      ClarifaiClientSecret: secret.ClarifaiClientSecret,
+      ClarifaiClientId: process.env.CLARIFAI_CLIENT_ID,
+      ClarifaiClientSecret: process.env.CLARIFAI_CLIENT_SECRET,
       nameMappings: nameMappings
     }
     res.send(obj);
