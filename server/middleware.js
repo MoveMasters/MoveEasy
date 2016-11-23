@@ -22,5 +22,5 @@ module.exports = (app, express) => {
   app.use(parseCookies);
   //app.use(session({secret: '1234567890QWERTY'}));
 
-  app.use(express.static(path.join(__dirname, '/../')));
+  app.use(express.static(path.join(__dirname, '/../clientV2/dist/')));
 };
