@@ -272,7 +272,8 @@ export default class Main extends React.Component {
     // Create socket connection AFTER this component has loaded
     // Necessary because attempting to create the connection on
     // initial load of the app crashes the application
-    socket = io.connect('https://react-native-webrtc.herokuapp.com', { transports: ['websocket'] });
+    // socket = io.connect('https://react-native-webrtc.herokuapp.com', { transports: ['websocket'] });
+    socket = io.connect('https://iiiiii.herokuapp.com', { transports: ['websocket'] });
     socket.on('exchange', data => exchange(data));
     socket.on('leave', socketId => leave(socketId));
     socket.on('connect', (data) => {

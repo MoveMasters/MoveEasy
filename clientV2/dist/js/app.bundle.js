@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "8a372759359db7267fb6"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "a96c293e19f62d24518a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -95753,7 +95753,8 @@
 			value: function componentWillMount() {
 				container = this;
 				// establish socket connection
-				socket = (0, _socket2.default)('https://react-native-webrtc.herokuapp.com', { transports: ['websocket'] });
+				// socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
+				socket = (0, _socket2.default)('https://iiiiii.herokuapp.com', { transports: ['websocket'] });
 			}
 		}, {
 			key: 'componentDidMount',
