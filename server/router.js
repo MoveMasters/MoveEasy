@@ -13,9 +13,6 @@ module.exports = (app, express, server) => {
   // app.use('/', ExpressPeerServer(server, {debug: true}));
   app.use('/', express.static(path.join(__dirname, '/../clientV2/dist')))
 
-  app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, '/../clientV2/dist/index.html'));
-  });
 
   app.use('/api/user', userRouter);
   app.use('/api/item', itemRouter);
@@ -23,5 +20,8 @@ module.exports = (app, express, server) => {
   app.use('/api/move', moveRouter);
   app.use('/api/mover', moverRouter);
 
+  app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, '/../clientV2/dist/index.html'));
+  });
 
 };
