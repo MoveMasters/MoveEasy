@@ -35,7 +35,17 @@ FIX ME
 
 ## USAGE
 
-#Mobile
+# First
+- MAKE SURE you set environment variables for:
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_KEY,
+  CLARIFAI_CLIENT_ID,
+  CLARIFAI_CLIENT_SECRET
+- Instructions for Mac:
+  http://osxdaily.com/2015/07/28/set-enviornment-variables-mac-os-x/
+- For other operating systems, look online
+
+# Mobile
 - cd mobile && npm install
 - npm start (starts the React Native Packager)
 - Manually click through files Finder -> MoveKick -> mobile -> ios -> mkmobile.xcodeproj (opens the project in Xcode)
