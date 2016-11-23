@@ -2,7 +2,7 @@
   "name": "mkmobile",
   "version": "0.0.1",
   "scripts": {
-    "start": "cd clientV2 && gulp build && cd .. && node server/server.js",
+    "start": "cd clientV2 && bower install && npm install && gulp build && cd .. && node server/server.js",
     "test": "mocha server/test/*Spec.js"
   },
   "dependencies": {
