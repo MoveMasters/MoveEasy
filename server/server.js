@@ -8,6 +8,8 @@ require('./db/mongooseInit')();
 
 const express = require('express');
 const app = express();
+const fs = require('fs');
+const open = require('open');
 
 
 const testPort = process.env.TEST_PORT || 8000;
