@@ -4,7 +4,7 @@ const request = require('request');
 const bing = new Scraper.Bing();
 
 
-const shippingJsonFile = __dirname + '/../shippingData/shippingData.json';
+const shippingJsonFile = __dirname + '/../../shippingData/shippingData.json';
 const clarifaiModelName = process.env.clarifaiModelName || 'furniture';
 const numItems = process.env.numItems || 10;
 const numImagesPerItem = process.env.numImagesPerItem || 10;
