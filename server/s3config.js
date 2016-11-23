@@ -1,14 +1,14 @@
 'use strict';
 const Upload = require('s3-uploader');
-const secret = require('./secret.js');
+// const secret = require('./secret.js');
 
 module.exports = new Upload('movekick', {
   aws: {
     path: 'images/',
     region: 'us-west-2',
     acl: 'public-read',
-    accessKeyId: secret.AWSAccessKeyId,
-    secretAccessKey: secret.AWSSecretKey,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
   },
 
   cleanup: {
