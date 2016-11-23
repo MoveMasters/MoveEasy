@@ -7,7 +7,6 @@ node_modules/
 server/secret.js
 images
 build/
-dist/
 .DS_Store
 client/node_modules/
 *.log
