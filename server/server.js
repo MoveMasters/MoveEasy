@@ -63,6 +63,9 @@ io.on('connection', function(socket){
   socket.on('exchange', function(data){
     console.log('exchange', data);
     data.from = socket.id;
+    console.log('data.from', data.from);
+    console.log('io.sockets.connected', io.sockets.connected);
+    console.log('data.to', data.to);
     var to = io.sockets.connected[data.to];
     to.emit('exchange', data);
   });
