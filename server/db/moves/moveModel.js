@@ -30,11 +30,18 @@ const moveSchema = new Schema ({
     type: Date,
     required: true
   },
-  surveyCompleteTime: {
-    type: Date
+  surveyComplete: {
+    type: Boolean,
+    required: true,
+    default: false
   },
   moveTime: {
     type: Date
+  },
+  moveComplete: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 },
 {

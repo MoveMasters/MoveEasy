@@ -37,13 +37,22 @@ exports.getAllMoves = (req, res, next) => {
 
 exports.getExistingMove = (req, res, next) => {
   const move_id = req.cookies.moveId;
-  Move.findOne({_id:move_id})
-    //.populate('user_id')
+  Move.findOne({_id: move_id})
     .exec().then( move => {
-      //dbUtil.fixMovePopulate(move);
       res.send({move});
   }).catch( err => {
     console.log('handleNewMove err', err);
+    throw err;
+  });
+};
+
+
+exports.getPendingMoves = (req, res, next) => {
+  Move.find({moveComplete: false})
+    .exec().then( moves => {
+      res.send({moves});
+  }).catch( err => {
+    console.log('getPendingMoves err', err);
     throw err;
   });
 };
