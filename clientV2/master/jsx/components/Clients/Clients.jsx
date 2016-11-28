@@ -35,6 +35,7 @@ class Clients extends React.Component {
     render() {
       const { moves } = this.state;
       const { onTableClick } = this;
+      console.log(moves, 'moves')
       return (
           <ContentWrapper>
             <Row>                 

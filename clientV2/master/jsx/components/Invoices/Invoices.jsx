@@ -8,7 +8,7 @@ class Invoices extends React.Component {
         return (
             <ContentWrapper>
                 <Row>                 
-                    <div>Invoices Goes here!!!</div>
+                    <div>Invoices Goes here!!</div>
                 </Row>
             </ContentWrapper>
         );

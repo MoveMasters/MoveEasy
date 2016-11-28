@@ -32,6 +32,8 @@ import Invoices from './components/Invoices/Invoices';
 import Survey from './components/Survey/Survey';
 import UserProfile from './components/UserProfile/UserProfile';
 
+// test routes
+
 
 import { browserHistory } from 'react-router';
 
@@ -66,10 +68,11 @@ ReactDOM.render(
             <Route path='messages' component={Messages}/>
             <Route path='invoices' component={Invoices}/>
 
-            {/* Subroutes */}
+            {/* Survey user routes */}
             <Route path='survey/:moveId' component={Survey} />
-            <Route path='userProfile/:user_id' component={UserProfile}/>
 
+            {/* user routes */}
+            <Route path='userProfile/:user_id' component={UserProfile} />
 
         </Route>
 
@@ -79,6 +82,10 @@ ReactDOM.render(
     </Router>,
     document.getElementById('app')
 );
+
+if(module.hot) {
+    module.hot.accept();
+}
 
 // Auto close sidebar on route changes
 // appHistory.listen(function(ev) {

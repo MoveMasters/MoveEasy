@@ -1,6 +1,6 @@
 import React from 'react';
 import util from './../../../util/util';
-import AppointmentPopup from './../AppointmentPopup/AppointmentPopup.js';
+import AppointmentPopup from './../AppointmentPopup/AppointmentPopup';
 import styles from './styles';
 import moment from 'moment';
 import BigCalendar, {events} from 'react-big-calendar';

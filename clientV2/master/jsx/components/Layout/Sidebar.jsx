@@ -88,35 +88,35 @@ class Sidebar extends React.Component {
                             </li>
 
                             <li className={ this.routeActive('dashboard') ? 'active' : '' }>
-                                <Link to="dashboard" title="Dashboard">
+                                <Link to="/dashboard" title="Dashboard">
                                 <em className="icon-speedometer"></em>
                                 <span data-localize="sidebar.nav.DASHBOARD">Dashboard</span>
                                 </Link>
                             </li>
 
                             <li className={ this.routeActive('clients') ? 'active' : '' }>
-                                <Link to="clients" title="Clients">
+                                <Link to="/clients" title="Clients">
                                 <em className="icon-people"></em>
                                 <span data-localize="sidebar.nav.CLIENTS">Clients</span>
                                 </Link>
                             </li>
 
                             <li className={ this.routeActive('calendar') ? 'active' : '' }>
-                                <Link to="calendar" title="Calendar">
+                                <Link to="/calendar" title="Calendar">
                                 <em className="icon-calendar"></em>
                                 <span data-localize="sidebar.nav.CALENDAR">Calendar</span>
                                 </Link>
                             </li>
 
                             <li className={ this.routeActive('messages') ? 'active' : '' }>
-                                <Link to="messages" title="Messages">
+                                <Link to="/messages" title="Messages">
                                 <em className="icon-bubbles"></em>
                                 <span data-localize="sidebar.nav.MESSAGES">Messages</span>
                                 </Link>
                             </li>
 
                             <li className={ this.routeActive('invoices') ? 'active' : '' }>
-                                <Link to="invoices" title="Invoices">
+                                <Link to="/invoices" title="Invoices">
                                 <em className="icon-credit-card"></em>
                                 <span data-localize="sidebar.nav.INVOICES">Invoices</span>
                                 </Link>
