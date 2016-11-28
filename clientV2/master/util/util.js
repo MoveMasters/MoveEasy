@@ -21,6 +21,7 @@ const postImageToClarifaiURL = 'https://api.clarifai.com/v2/models/aaa03c23b3724
 const getClarifaiInfoURL = `${serverURL}/api/auth/clarifaiInfo`;
 const postItemToServerURL = `${serverURL}/api/item/newItem`;
 const getAllMovesURL = `${serverURL}/api/move/allMoves`;
+const getPendingMovesURL = `${serverURL}/api/move/pendingMoves`;
 const getExistingMoveURL = `${serverURL}/api/move/existingMove`;
 const getMoveItemsURL = `${serverURL}/api/item/moveItems`;
 
@@ -135,6 +136,12 @@ const getAllMoves = () => {
   });
 }
 
+const getPendingMoves = () => {
+  return axios.get(getPendingMovesURL).then( response => {
+    return response.data.moves;
+  });
+}
+
 
 const getInitialInventory = () => {
   return axios.get(getMoveItemsURL)
@@ -187,7 +194,8 @@ export default
   postItemToServer, 
   getInitialInventory,
   getAllMoves,
-  getExistingMove
+  getExistingMove,
+  getPendingMoves
 }
 
 //const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;
