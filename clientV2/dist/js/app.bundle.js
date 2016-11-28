@@ -63,7 +63,11 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
+<<<<<<< fe6c6e54535599552db14ed4b8a0631086129ea3
 /******/ 	var hotCurrentHash = "fc2cb5626e909f23fa04"; // eslint-disable-line no-unused-vars
+=======
+/******/ 	var hotCurrentHash = "bc2afde172d120de4eee"; // eslint-disable-line no-unused-vars
+>>>>>>> Debug socket connection with demo server
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -97084,7 +97088,7 @@
 					value: function componentDidMount() {
 							var _this2 = this;
 
-							socket = (0, _socket2.default)('https://iiiiii.herokuapp.com', { transports: ['websocket'] });
+							socket = (0, _socket2.default)('https://react-native-webrtc.herokuapp.com', { transports: ['websocket'] });
 
 							socket.on('connect', function (data) {
 									console.log('connect');

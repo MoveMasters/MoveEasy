@@ -41,7 +41,7 @@ class VideoFeed extends Component {
   }
   
   componentDidMount() {
-    socket = io('https://iiiiii.herokuapp.com', {transports: ['websocket']});
+    socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
 
     socket.on('connect', (data) => {
       console.log('connect');
