@@ -21,49 +21,50 @@ const aspect = 1.3;
 const room = 'MoveKick';
 
 class VideoFeed extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			localStreamURL: null,
-			remoteStreamURL: null,
-			width: window.innerWidth,
-			height: window.innerHeight
-		}
+  constructor(props) {
+    super(props);
+    this.state = {
+      localStreamURL: null,
+      remoteStreamURL: null,
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
 
-		this._handleWindowResize = this._handleWindowResize.bind(this);
-	}
+    this._handleWindowResize = this._handleWindowResize.bind(this);
+  }
 
-	componentWillMount() {
-		container = this;
-		// establish socket connection
-		// socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
-		socket = io('https://iiiiii.herokuapp.com', {transports: ['websocket']});
-	}
+  componentWillMount() {
+    container = this;
+    // establish socket connection
+    // socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
+    // socket = io('https://iiiiii.herokuapp.com', {transports: ['websocket']}); }
+  }
+  
+  componentDidMount() {
+    socket = io('https://iiiiii.herokuapp.com', {transports: ['websocket']});
 
-	componentDidMount() {
-		// 
-		socket.on('connect', (data) => {
-		  console.log('connect');
-		  this.getLocalStream();
-		});
+    socket.on('connect', (data) => {
+      console.log('connect');
+      this.getLocalStream();
+    });
 
-		socket.on('exchange', function(data){
-		  console.log('exchange')
-		  container.exchange(data);
-		});
+    socket.on('exchange', function(data){
+      console.log('exchange')
+      container.exchange(data);
+    });
 
-		socket.on('leave', function(socketId){
-		  container.leave(socketId);
-		});
+    socket.on('leave', function(socketId){
+      container.leave(socketId);
+    });
 
-  	window.addEventListener('resize', this._handleWindowResize);
+    window.addEventListener('resize', this._handleWindowResize);
 
-		// auto join room
-		console.log("CHANGE BACK TO: this.props.moveId")
-		this.join(this.props.moveId);
-		// this.join(room);
-
-	}
+    // auto join room
+    // console.log("CHANGE BACK TO: this.props.moveId")
+    console.log('this is the moveId', this.props.moveId);
+    this.join(this.props.moveId);
+    // this.join(room);
+  }
 
 	componentWillUnmount() {
 	    window.removeEventListener('resize', this._handleWindowResize);
