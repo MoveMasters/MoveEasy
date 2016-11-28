@@ -21,11 +21,11 @@ if (process.env.LOCAL) {
 } else {
   server = http.createServer(app);
 }
-var io = require('socket.io')(server);
 
 const roomList = {};
 
 server.listen(port, () => console.log('server up and running at %s port', port));
+var io = require('socket.io')(server);
 
 const socketIdsInRoom = (name) => {
   var socketIds = io.nsps['/'].adapter.rooms[name];
