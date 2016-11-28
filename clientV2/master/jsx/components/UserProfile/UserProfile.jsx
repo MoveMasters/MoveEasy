@@ -1,9 +1,14 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
-import { Tab, Row } from 'react-bootstrap';
+import { Tab, Row, Col } from 'react-bootstrap';
 import util from './../../../util/util';
-import Profile from './Profile';
 import Selector from './Selector';
+
+// Pane views
+import ProfilePane from './ProfilePane';
+import InventoryPane from './InventoryPane';
+import MessagesPane from './MessagesPane';
+import TimelinePane from './TimelinePane';
 
 class UserProfile extends React.Component {
 	constructor(props) {
@@ -15,7 +20,7 @@ class UserProfile extends React.Component {
 	}
 
 	componentWillMount() {
-		this.getUserInfo();
+		// this.getUserInfo();
 	}
 
 	getUserInfo() {
@@ -29,14 +34,23 @@ class UserProfile extends React.Component {
 	}
 
 	render() {
-		console.log(this.state.userInfo, 'userInfo');
 		const { name } = this.state.userInfo;
 		return (
 			<ContentWrapper>
-				<Tab.Container className="container-md" id="settings-tab" defaultActiveKey="tabpanel1">
+				<Tab.Container className="container-md" id="settings-tab" defaultActiveKey="profilePane">
 					<Row>
-						<Selector />
-					  <Profile />
+						<Col md={3}>
+							<Selector />
+						</Col>
+
+					  <Col md={9}>
+					    <Tab.Content animation className="p0 b0">
+				        <ProfilePane />
+				        <InventoryPane />
+				        <MessagesPane />
+				        <TimelinePane />
+					    </Tab.Content>
+					  </Col>
 					</Row>
 				</Tab.Container>
 			</ContentWrapper>

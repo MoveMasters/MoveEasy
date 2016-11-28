@@ -9,8 +9,8 @@ class Dashboard extends React.Component {
             <ContentWrapper>
                 <div className="content-heading">
                     { /* END Language list */ } 
-                    Dashboard
-                    <small data-localize="dashboard.WELCOME">Welcome to MoveKick!!</small>
+                    Dashboardss
+                    <small data-localize="dashboard.WELCOME">Welcome tooo MoveKick!!</small>
                 </div>
 
                 <Row>                 
