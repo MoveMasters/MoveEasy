@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "e69e1ddfd407924ec562"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "dd4c0da219840910a7ae"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -14337,7 +14337,7 @@
 	// const ip = '10.6.27.137';
 	var ip = 'localhost';
 	var port = process.env.PORT || '9000';
-	// const serverURL = `http://${ip}:${port}`
+	// const serverURL = `http://${ip}:${port}`;
 	var serverURL = 'https://iiiiii.herokuapp.com';
 
 	/************************************ interceptors ************************************/
@@ -96851,7 +96851,7 @@
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+			value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -96904,263 +96904,265 @@
 	var room = 'MoveKick';
 
 	var VideoFeed = function (_Component) {
-		_inherits(VideoFeed, _Component);
+			_inherits(VideoFeed, _Component);
 
-		function VideoFeed(props) {
-			_classCallCheck(this, VideoFeed);
+			function VideoFeed(props) {
+					_classCallCheck(this, VideoFeed);
 
-			var _this = _possibleConstructorReturn(this, (VideoFeed.__proto__ || Object.getPrototypeOf(VideoFeed)).call(this, props));
+					var _this = _possibleConstructorReturn(this, (VideoFeed.__proto__ || Object.getPrototypeOf(VideoFeed)).call(this, props));
 
-			_this.state = {
-				localStreamURL: null,
-				remoteStreamURL: null,
-				width: window.innerWidth,
-				height: window.innerHeight
-			};
-
-			_this._handleWindowResize = _this._handleWindowResize.bind(_this);
-			return _this;
-		}
-
-		_createClass(VideoFeed, [{
-			key: 'componentWillMount',
-			value: function componentWillMount() {
-				container = this;
-				// establish socket connection
-				// socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
-				socket = (0, _socket2.default)('https://iiiiii.herokuapp.com', { transports: ['websocket'] });
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				var _this2 = this;
-
-				// 
-				socket.on('connect', function (data) {
-					console.log('connect');
-					_this2.getLocalStream();
-				});
-
-				socket.on('exchange', function (data) {
-					console.log('exchange');
-					container.exchange(data);
-				});
-
-				socket.on('leave', function (socketId) {
-					container.leave(socketId);
-				});
-
-				window.addEventListener('resize', this._handleWindowResize);
-
-				// auto join room
-				console.log("CHANGE BACK TO: this.props.moveId");
-				this.join(this.props.moveId);
-				// this.join(room);
-			}
-		}, {
-			key: 'componentWillUnmount',
-			value: function componentWillUnmount() {
-				window.removeEventListener('resize', this._handleWindowResize);
-			}
-		}, {
-			key: '_handleWindowResize',
-			value: function _handleWindowResize() {
-				this.setState({ width: window.innerWidth, height: window.innerHeight });
-			}
-		}, {
-			key: 'logError',
-			value: function logError(error, message) {
-				console.log(message + ': ', error);
-			}
-
-			// get local video stam from user and createObjectURL then attach that as the video source
-
-		}, {
-			key: 'getLocalStream',
-			value: function getLocalStream() {
-				var _this3 = this;
-
-				navigator.getUserMedia({ "audio": true, "video": true }, function (stream) {
-					localStream = stream;
-					_this3.setState({ localStreamURL: URL.createObjectURL(stream) });
-				}, this.logError);
-			}
-
-			// 
-
-		}, {
-			key: 'join',
-			value: function join(roomID) {
-				var _this4 = this;
-
-				socket.emit('join', roomID, function (socketIds) {
-					console.log('join', socketIds);
-					for (var i in socketIds) {
-						var socketId = socketIds[i];
-						_this4.createPC(socketId, true);
-					}
-				});
-			}
-		}, {
-			key: 'createPC',
-			value: function createPC(socketId, isOffer) {
-				var pc = new RTCPeerConnection(configuration);
-				pcPeers[socketId] = pc;
-
-				pc.onicecandidate = function (event) {
-					console.log('onicecandidate', event);
-					if (event.candidate) {
-						socket.emit('exchange', { 'to': socketId, 'candidate': event.candidate });
-					}
-				};
-
-				function createOffer() {
-					pc.createOffer(function (desc) {
-						console.log('createOffer', desc);
-						pc.setLocalDescription(desc, function () {
-							console.log('setLocalDescription', pc.localDescription);
-							socket.emit('exchange', { 'to': socketId, 'sdp': pc.localDescription });
-						}, container.logError);
-					}, container.logError);
-				}
-
-				pc.onnegotiationneeded = function () {
-					console.log('onnegotiationneeded');
-					if (isOffer) {
-						createOffer();
-					}
-				};
-
-				pc.oniceconnectionstatechange = function (event) {
-					console.log('oniceconnectionstatechange', event);
-					if (event.target.iceConnectionState === 'connected') {
-						createDataChannel();
-					}
-				};
-				pc.onsignalingstatechange = function (event) {
-					console.log('onsignalingstatechange', event);
-				};
-
-				pc.onaddstream = function (event) {
-					console.log('onaddstream', event);
-					var remoteStreamURL = URL.createObjectURL(event.stream);
-					container.setState({ remoteStreamURL: remoteStreamURL });
-				};
-
-				pc.addStream(localStream);
-
-				function createDataChannel() {
-					if (pc.textDataChannel) {
-						return;
-					}
-					var dataChannel = pc.createDataChannel("text");
-
-					dataChannel.onerror = function (error) {
-						console.log("dataChannel.onerror", error);
+					_this.state = {
+							localStreamURL: null,
+							remoteStreamURL: null,
+							width: window.innerWidth,
+							height: window.innerHeight
 					};
 
-					dataChannel.onmessage = function (event) {
-						console.log("dataChannel.onmessage:", event.data);
-						if (event.data === 'capture') {
-							container.grabScreenshot();
-						}
-					};
-
-					dataChannel.onopen = function () {
-						console.log('dataChannel.onopen');
-					};
-
-					dataChannel.onclose = function () {
-						console.log("dataChannel.onclose");
-					};
-
-					pc.textDataChannel = dataChannel;
-				}
-
-				return pc;
+					_this._handleWindowResize = _this._handleWindowResize.bind(_this);
+					return _this;
 			}
 
-			// handle data exchange
+			_createClass(VideoFeed, [{
+					key: 'componentWillMount',
+					value: function componentWillMount() {
+							container = this;
+							// establish socket connection
+							// socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
+							// socket = io('https://iiiiii.herokuapp.com', {transports: ['websocket']}); }
+					}
+			}, {
+					key: 'componentDidMount',
+					value: function componentDidMount() {
+							var _this2 = this;
 
-		}, {
-			key: 'exchange',
-			value: function exchange(data) {
-				var fromId = data.from;
-				var pc;
-				if (fromId in pcPeers) {
-					pc = pcPeers[fromId];
-				} else {
-					pc = this.createPC(fromId, false);
-				}
+							socket = (0, _socket2.default)('https://iiiiii.herokuapp.com', { transports: ['websocket'] });
 
-				if (data.sdp) {
-					console.log('exchange sdp', data);
-					pc.setRemoteDescription(new RTCSessionDescription(data.sdp), function () {
-						if (pc.remoteDescription.type == "offer") pc.createAnswer(function (desc) {
-							console.log('createAnswer', desc);
-							pc.setLocalDescription(desc, function () {
-								console.log('setLocalDescription', pc.localDescription);
-								socket.emit('exchange', { 'to': fromId, 'sdp': pc.localDescription });
-							}, container.logError);
-						}, container.logError);
-					}, container.logError);
-				} else {
-					console.log('exchange candidate', data);
-					pc.addIceCandidate(new RTCIceCandidate(data.candidate));
-				}
-			}
-		}, {
-			key: 'leave',
-			value: function leave(socketId) {
-				console.log('leave', socketId);
-				var pc = pcPeers[socketId];
-				pc.close();
-				delete pcPeers[socketId];
-			}
-		}, {
-			key: 'grabScreenshot',
-			value: function grabScreenshot() {
-				var remoteStream = container.refs.remoteVideo;
-				var video = remoteStream.player.player;
-				var canvas = container.refs.canvas;
-				canvas.width = this.state.width * scale;
-				canvas.height = this.state.width * aspect * scale;
-				canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+							socket.on('connect', function (data) {
+									console.log('connect');
+									_this2.getLocalStream();
+							});
 
-				// create screenshot data object
-				var screenshot = canvas.toDataURL("image/png");
-				var id = Date.now();
-				localStorage.setItem(id, screenshot);
+							socket.on('exchange', function (data) {
+									console.log('exchange');
+									container.exchange(data);
+							});
 
-				// set that as state in Survey Component
-				container.props.handleScreenshot(id);
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				console.log(this.state.width);
-				var width = this.state.width;
+							socket.on('leave', function (socketId) {
+									container.leave(socketId);
+							});
 
-				return _react2.default.createElement(
-					'div',
-					{ onClick: this.grabScreenshot.bind(this), className: 'videoWrapper' },
-					_react2.default.createElement(_reactPlayer2.default, { playing: true, volume: 0,
-						url: this.state.localStreamURL,
-						width: width * .15,
-						height: 3 / 4 * width * .15,
-						style: { position: 'absolute', width: '30%', marginRight: '70%' } }),
-					_react2.default.createElement(_reactPlayer2.default, { playing: true, volume: 0,
-						ref: 'remoteVideo',
-						url: this.state.remoteStreamURL,
-						width: width * .4,
-						height: 4 / 3 * (width * .4),
-						style: { maxHeight: '80vh' } }),
-					_react2.default.createElement('canvas', { ref: 'canvas', style: { display: 'none' } })
-				);
-			}
-		}]);
+							window.addEventListener('resize', this._handleWindowResize);
 
-		return VideoFeed;
+							// auto join room
+							// console.log("CHANGE BACK TO: this.props.moveId")
+							console.log('this is the moveId', this.props.moveId);
+							this.join(this.props.moveId);
+							// this.join(room);
+					}
+			}, {
+					key: 'componentWillUnmount',
+					value: function componentWillUnmount() {
+							window.removeEventListener('resize', this._handleWindowResize);
+					}
+			}, {
+					key: '_handleWindowResize',
+					value: function _handleWindowResize() {
+							this.setState({ width: window.innerWidth, height: window.innerHeight });
+					}
+			}, {
+					key: 'logError',
+					value: function logError(error, message) {
+							console.log(message + ': ', error);
+					}
+
+					// get local video stam from user and createObjectURL then attach that as the video source
+
+			}, {
+					key: 'getLocalStream',
+					value: function getLocalStream() {
+							var _this3 = this;
+
+							navigator.getUserMedia({ "audio": true, "video": true }, function (stream) {
+									localStream = stream;
+									_this3.setState({ localStreamURL: URL.createObjectURL(stream) });
+							}, this.logError);
+					}
+
+					// 
+
+			}, {
+					key: 'join',
+					value: function join(roomID) {
+							var _this4 = this;
+
+							socket.emit('join', roomID, function (socketIds) {
+									console.log('join', socketIds);
+									for (var i in socketIds) {
+											var socketId = socketIds[i];
+											_this4.createPC(socketId, true);
+									}
+							});
+					}
+			}, {
+					key: 'createPC',
+					value: function createPC(socketId, isOffer) {
+							var pc = new RTCPeerConnection(configuration);
+							pcPeers[socketId] = pc;
+
+							pc.onicecandidate = function (event) {
+									console.log('onicecandidate', event);
+									if (event.candidate) {
+											socket.emit('exchange', { 'to': socketId, 'candidate': event.candidate });
+									}
+							};
+
+							function createOffer() {
+									pc.createOffer(function (desc) {
+											console.log('createOffer', desc);
+											pc.setLocalDescription(desc, function () {
+													console.log('setLocalDescription', pc.localDescription);
+													socket.emit('exchange', { 'to': socketId, 'sdp': pc.localDescription });
+											}, container.logError);
+									}, container.logError);
+							}
+
+							pc.onnegotiationneeded = function () {
+									console.log('onnegotiationneeded');
+									if (isOffer) {
+											createOffer();
+									}
+							};
+
+							pc.oniceconnectionstatechange = function (event) {
+									console.log('oniceconnectionstatechange', event);
+									if (event.target.iceConnectionState === 'connected') {
+											createDataChannel();
+									}
+							};
+							pc.onsignalingstatechange = function (event) {
+									console.log('onsignalingstatechange', event);
+							};
+
+							pc.onaddstream = function (event) {
+									console.log('onaddstream', event);
+									var remoteStreamURL = URL.createObjectURL(event.stream);
+									container.setState({ remoteStreamURL: remoteStreamURL });
+							};
+
+							pc.addStream(localStream);
+
+							function createDataChannel() {
+									if (pc.textDataChannel) {
+											return;
+									}
+									var dataChannel = pc.createDataChannel("text");
+
+									dataChannel.onerror = function (error) {
+											console.log("dataChannel.onerror", error);
+									};
+
+									dataChannel.onmessage = function (event) {
+											console.log("dataChannel.onmessage:", event.data);
+											if (event.data === 'capture') {
+													container.grabScreenshot();
+											}
+									};
+
+									dataChannel.onopen = function () {
+											console.log('dataChannel.onopen');
+									};
+
+									dataChannel.onclose = function () {
+											console.log("dataChannel.onclose");
+									};
+
+									pc.textDataChannel = dataChannel;
+							}
+
+							return pc;
+					}
+
+					// handle data exchange
+
+			}, {
+					key: 'exchange',
+					value: function exchange(data) {
+							var fromId = data.from;
+							var pc;
+							if (fromId in pcPeers) {
+									pc = pcPeers[fromId];
+							} else {
+									pc = this.createPC(fromId, false);
+							}
+
+							if (data.sdp) {
+									console.log('exchange sdp', data);
+									pc.setRemoteDescription(new RTCSessionDescription(data.sdp), function () {
+											if (pc.remoteDescription.type == "offer") pc.createAnswer(function (desc) {
+													console.log('createAnswer', desc);
+													pc.setLocalDescription(desc, function () {
+															console.log('setLocalDescription', pc.localDescription);
+															socket.emit('exchange', { 'to': fromId, 'sdp': pc.localDescription });
+													}, container.logError);
+											}, container.logError);
+									}, container.logError);
+							} else {
+									console.log('exchange candidate', data);
+									pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+							}
+					}
+			}, {
+					key: 'leave',
+					value: function leave(socketId) {
+							console.log('leave', socketId);
+							var pc = pcPeers[socketId];
+							pc.close();
+							delete pcPeers[socketId];
+					}
+			}, {
+					key: 'grabScreenshot',
+					value: function grabScreenshot() {
+							var remoteStream = container.refs.remoteVideo;
+							var video = remoteStream.player.player;
+							var canvas = container.refs.canvas;
+							canvas.width = this.state.width * scale;
+							canvas.height = this.state.width * aspect * scale;
+							canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+							// create screenshot data object
+							var screenshot = canvas.toDataURL("image/png");
+							var id = Date.now();
+							localStorage.setItem(id, screenshot);
+
+							// set that as state in Survey Component
+							container.props.handleScreenshot(id);
+					}
+			}, {
+					key: 'render',
+					value: function render() {
+							console.log(this.state.width);
+							var width = this.state.width;
+
+							return _react2.default.createElement(
+									'div',
+									{ onClick: this.grabScreenshot.bind(this), className: 'videoWrapper' },
+									_react2.default.createElement(_reactPlayer2.default, { playing: true, volume: 0,
+											url: this.state.localStreamURL,
+											width: width * .15,
+											height: 3 / 4 * width * .15,
+											style: { position: 'absolute', width: '30%', marginRight: '70%' } }),
+									_react2.default.createElement(_reactPlayer2.default, { playing: true, volume: 0,
+											ref: 'remoteVideo',
+											url: this.state.remoteStreamURL,
+											width: width * .4,
+											height: 4 / 3 * (width * .4),
+											style: { maxHeight: '80vh' } }),
+									_react2.default.createElement('canvas', { ref: 'canvas', style: { display: 'none' } })
+							);
+					}
+			}]);
+
+			return VideoFeed;
 	}(_react.Component);
 
 	exports.default = VideoFeed;
