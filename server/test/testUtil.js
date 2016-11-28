@@ -13,23 +13,36 @@ const dbUtil = require('./../db/dbUtil');
 const username1 = 'username1';
 const password1 = 'password1';
 const name1 = 'Stephen Cefali';
-const email1 = 'test_email@gmail.com'
 const phone1 = '909-454-3432';
 const currentAddress1 = '944 Market St, San Francisco, CA, 91402';
 const futureAddress1 = '916 Kearny St, San Francisco, CA, 94133';
+const surveyTime1 = new Date();
 
-
-const surveyTime = new Date();
-
-//item
-const itemName1 = 'Chair - Office';
 
 const userObj1 = { 
   username: username1,
-  password: password1,
-  name: name1,
-  email: email1
+  password: password1
 };
+
+
+
+const username2 = 'username2';
+const password2 = 'password2';
+const name2 = 'Joe Sang';
+const phone2 = '343-444-3222';
+const currentAddress2 = '1 Market St, San Francisco, CA, 91402';
+const futureAddress2 = '123 First St, Los Angeles, CA, 93234';
+const surveyTime2 = new Date('Mon Nov 28 2016 11:44:19 GMT-0800 (PST)');
+
+const userObj2 = { 
+  username: username2,
+  password: password2
+};
+
+
+
+//item
+const itemName1 = 'Chair - Office';
 
 //exports for checking
 exports.userObj1 = userObj1;
@@ -54,10 +67,11 @@ const getUserFromToken = (token) => {
   });
 };
 
-const getUser1FromRoute = (request, route) => {
+
+const getUserFromRoute = (userObj, request, route) => {
   return new Promise( (resolve, reject) => {
     request.post(route)
-    .send(userObj1).end( (err, res) => {
+    .send(userObj).end( (err, res) => {
       if(err) {
         reject(err);
       } else {
@@ -69,6 +83,14 @@ const getUser1FromRoute = (request, route) => {
   });
 }
 
+
+const getUser1FromRoute = (request, route) => {
+  return getUserFromRoute(userObj1, request, route);
+}
+
+const getUser2FromRoute = (request, route) => {
+  return getUserFromRoute(userObj2, request, route);
+}
 
 ///export
 
@@ -95,13 +117,19 @@ exports.signupUser1 = (request) => {
 };
 
 
+exports.signupUser2 = (request) => {
+  return getUser2FromRoute(request, '/api/user/signup');
+};
+
+
+
 exports.signupUser1CreateMove1 = (request) => {
   return new Promise( (resolve, reject) => {
     exports.signupUser1(request).then( user => {
       request.post('/api/move/newMove')
       .send({
         user_id:user.id,
-        surveyTime: surveyTime,
+        surveyTime: surveyTime1,
         name:name1,
         phone:phone1,
         currentAddress: currentAddress1,
@@ -121,6 +149,37 @@ exports.signupUser1CreateMove1 = (request) => {
     });
   });
 };
+
+
+exports.signupUser2CreateMove2 = (request) => {
+  return new Promise( (resolve, reject) => {
+    exports.signupUser2(request).then( user => {
+      request.post('/api/move/newMove')
+      .send({
+        user_id:user.id,
+        surveyTime: surveyTime2,
+        name:name2,
+        phone:phone2,
+        currentAddress: currentAddress2,
+        futureAddress: futureAddress2
+      })
+      .set('x-access-token', user.token)
+      .end( (err, res) => {
+        if(err) {
+          reject(err);
+        } else {
+          res.body.user_id = mongoose.Types.ObjectId(res.body.user_id);
+          resolve([user, res.body]);
+        }  
+      });
+    }).catch( err => {
+      throw err;
+    });
+  });
+};
+
+
+
 
 exports.clearToMove1 = (request) => {
   return exports.clearDatabase().then( () => {

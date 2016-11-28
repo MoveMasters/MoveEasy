@@ -7,8 +7,8 @@ const s3 = require('./../s3config');
 const Promise = require('bluebird');
 
 
-const shippingListFile = '../shippingData/shippingList.txt';
-const clarifaiTagFile = '../shippingData/clarifaiTags.txt';
+const shippingListFile = __dirname + '/../../shippingData/shippingList.txt';
+const clarifaiTagFile = __dirname + '/../../shippingData/clarifaiTags.txt';
 console.log(process.env.CLARIFAI_CLIENT_ID, process.env.CLARIFAI_CLIENT_SECRET);
 const clarApp = new Clarifai.App(
   process.env.CLARIFAI_CLIENT_ID,

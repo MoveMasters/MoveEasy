@@ -12,7 +12,7 @@ const dbUtil = require('./../dbUtil.js');
 exports.handleNewItem = (req, res, next) => {
   var photoData = req.body.image;
   photoData = photoData.replace(/^data:image\/(jpeg|png|jpg);base64,/, "");
-  const filePath = 'images/logo.png';
+  const filePath = __dirname + '/../../images/logo.png';
   const move_id = req.body.moveId;
   imageUtil.saveAndUpload(filePath, photoData)
   .then((imageUrl) =>{

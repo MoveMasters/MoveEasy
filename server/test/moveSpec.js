@@ -18,7 +18,6 @@ describe('Move Server APIs', () => {
 
   before((done) => {
     testUtil.clearDatabase().then(done);
-    //testUtil.clearDatabase(done)
   });
 
   it('Should create a new move', (done) => {
@@ -51,6 +50,28 @@ describe('Move Server APIs', () => {
       done();
     });
   });
+
+    it('Should create a second user and move', (done) => {
+    testUtil.signupUser2CreateMove2(request).then( items => {
+      const user = items[0];
+      const move = items[1];
+      user_id = String(user._id);
+      move_id = String(move._id);
+      expect(user_id).to.equal(String(move.user_id));
+      done();
+    });
+  });
+
+
+  it('Should get all pending moves', (done) => {
+    request.get('/api/move/pendingMoves')
+    .end(function(err, res) {
+      expect(res.status).to.equal(200);
+      expect(res.body.moves.length).to.equal(2);
+      done();
+    });
+  });
+
 });
 
 
