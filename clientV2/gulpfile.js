@@ -271,6 +271,7 @@ gulp.task('browsersync', function() {
     log('Starting BrowserSync..');
 
     var middlewares = [historyApiFallback()];
+    console.log(!isProduction, '!isProduction')
 
     if (!isProduction) {
         middlewares = middlewares.concat([
