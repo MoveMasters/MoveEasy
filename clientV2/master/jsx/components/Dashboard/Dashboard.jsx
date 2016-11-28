@@ -1,7 +1,6 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Dropdown, MenuItem } from 'react-bootstrap';
-import Calendar from './../Calendar/Calendar';
 
 class Dashboard extends React.Component {
 
@@ -10,12 +9,11 @@ class Dashboard extends React.Component {
             <ContentWrapper>
                 <div className="content-heading">
                     { /* END Language list */ } 
-                    Main Dashboard
-                    <small data-localize="dashboard.WELCOME">Move Stats</small>
+                    Dashboard
+                    <small data-localize="dashboard.WELCOME">Welcome to MoveKick!!</small>
                 </div>
 
                 <Row>                 
-                    <div>Dashboard Goes here!!!</div>
                 </Row>
             </ContentWrapper>
         );

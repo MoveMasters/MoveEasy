@@ -28,11 +28,12 @@ import Calendar from './components/Calendar/Calendar';
 import Messages from './components/Messages/Messages';
 import Invoices from './components/Invoices/Invoices';
 
-// Private Video Survey Routes
+// Sub Routes
 import Survey from './components/Survey/Survey';
+import UserProfile from './components/UserProfile/UserProfile';
 
-import { browserHistory } from 'react-router'
 
+import { browserHistory } from 'react-router';
 
 // Init translation system
 initTranslation();
@@ -45,9 +46,11 @@ $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
 });
 
 // specify basename below if running in a subdirectory or set as "/" if app runs in root
-const appHistory = useRouterHistory(createHistory)({
-  basename: '/'
-})
+// const appHistory = useRouterHistory(createHistory)({
+//   basename: '/'
+// })
+
+const appHistory = useRouterHistory(createHistory)({ queryKey: false, basename: '/' });
 
 ReactDOM.render(
     <Router history={browserHistory}>
@@ -63,8 +66,10 @@ ReactDOM.render(
             <Route path='messages' component={Messages}/>
             <Route path='invoices' component={Invoices}/>
 
-            {/* Private video survey route */}
+            {/* Subroutes */}
             <Route path='survey/:moveId' component={Survey} />
+            <Route path='userProfile/:user_id' component={UserProfile}/>
+
 
         </Route>
 
@@ -76,6 +81,6 @@ ReactDOM.render(
 );
 
 // Auto close sidebar on route changes
-appHistory.listen(function(ev) {
-    $('body').removeClass('aside-toggled');
-});
+// appHistory.listen(function(ev) {
+//     $('body').removeClass('aside-toggled');
+// });
