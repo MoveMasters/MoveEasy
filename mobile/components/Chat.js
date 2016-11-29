@@ -14,6 +14,9 @@ import {
   Title,
 } from 'native-base';
 import { GiftedChat } from 'react-native-gifted-chat';
+import helper from '../utils/helper';
+
+let retrieveMessages;
 
 export default class Inventory extends React.Component {
   constructor(props) {
@@ -23,40 +26,26 @@ export default class Inventory extends React.Component {
     };
     this.onSend = this.onSend.bind(this);
   }
+
   componentWillMount() {
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: 'Hello developer',
-          createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://facebook.github.io/react/img/logo_og.png',
-          },
-        },
-        {
-          _id: 2,
-          text: 'Hello app',
-          createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
-          user: {
-            _id: 1,
-            name: 'Joe',
-          },
-        },
-      ],
-    });
+    const self = this;
+    helper.retrieveMessages(self);
+    retrieveMessages = setInterval(() => helper.retrieveMessages(self), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(retrieveMessages);
   }
 
   onSend(messages = []) {
+    const text = messages[0].text;
+    helper.postNewMessage(text);
+
     this.setState((previousState) => {
       return {
         messages: GiftedChat.append(previousState.messages, messages),
       };
     });
-
-    console.log(this.state.messages);
   }
 
   render() {
