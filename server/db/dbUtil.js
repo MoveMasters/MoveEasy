@@ -39,6 +39,8 @@ const decodeUserFromHeader = (req) => {
   return decode(token);
 };
 
+exports.decodeUserFromHeader = decodeUserFromHeader;
+
 
 
 const fixMovePopulate = (move) => {
@@ -77,6 +79,11 @@ exports.getUserIdFromReq = (req) => {
 }
 
 
+
+exports.getCompanyFromReq = (req) => {
+  const mover = decodeUserFromHeader(req);
+  return mover.company;
+}
 
 /**
   * This function is used to get the username from the request object.

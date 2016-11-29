@@ -14,9 +14,12 @@ const messageSchema = new Schema ({
     ref: 'User',
     required: true
   },
+  mover_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'Mover'
+  },
   company: {
     type: String,
-    default: 'MoveKick',
     required: true
   },
   text: {
