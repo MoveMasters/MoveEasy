@@ -5,10 +5,11 @@
 /** @module Authentication Utility Server-Side Functions */
 
 const jwt = require('jwt-simple');
-const GeneralUser = require('./generalUsers/generalUserModel.js');
-const User = require('./users/userModel.js');
-const Item = require('./items/itemModel.js');
-const Move = require('./moves/moveModel.js');
+const GeneralUser = require('./generalUsers/generalUserModel');
+const User = require('./users/userModel');
+const Item = require('./items/itemModel');
+const Move = require('./moves/moveModel');
+const Message = require('./messages/messageModel');
 const mongoose = require('mongoose');
 const Promimse = require('bluebird');
 
@@ -30,6 +31,14 @@ const decode = (user) => {
 exports.decode = decode;
 
 
+const decodeUserFromHeader = (req) => {
+  const token = req.headers['x-access-token'];
+  if (!token) {
+    throw new Error('No token');
+  }
+  return decode(token);
+};
+
 
 exports.encodeSendUser = (user, res) => {
   const token = encode(user);
@@ -39,17 +48,13 @@ exports.encodeSendUser = (user, res) => {
 };
 
 
-/**
-  * This function is used to find the userId from database given a username.
-  * @method getUserIDFromUsername
-  * @param {string} username username
-  * @param {object} callback callback function
-  */
-exports.getUserIDFromUsername = (username, callback) => {
-  User.findOne({ username }, (err, result) => {
-    callback(result._id);
-  });
-};
+
+exports.getUserIdFromReq = (req) => {
+  const user = decodeUserFromHeader(req);
+  return user._id;
+}
+
+
 
 /**
   * This function is used to get the username from the request object.
@@ -57,16 +62,9 @@ exports.getUserIDFromUsername = (username, callback) => {
   * @param {object} req req object
   * @param {object} next callback function to execute next
   */
-exports.getUsernameFromReq = (req, next) => {
-
-  /** Recover username */
-  const token = req.headers['x-access-token'];
-  if (!token) {
-    next(new Error('No token'));
-    return null;
-  }
-  const username = decode(token).username;
-  return username;
+exports.getUsernameFromReq = (req) => {
+  const user = decodeUserFromHeader(req);
+  return user.username;
 };
 
 /**
@@ -76,8 +74,8 @@ exports.getUsernameFromReq = (req, next) => {
   * @param {object} next callback function to execute next
   * @returns {object} returns user object
   */
-exports.getUserFromReq = (req, next) => {
-  const username = exports.getUsernameFromReq(req, next);
+exports.getUserFromReq = (req) => {
+  const username = exports.getUsernameFromReq(req);
   return User.findOne({ username });
 };
 
@@ -103,25 +101,6 @@ exports.checkAuth = (req, res, next) => {
     next(new Error('Invalid Token!'));
     return null;
   }
-};
-
-/**
-  * This function is used to check if a user is real user in the database.
-  * @method checkIsRealUser
-  * @param {string} username username
-  * @param {object} callback callback function to execute
-  * @returns {boolean}
-  */
-exports.checkIsRealUser = (username, callback) => {
-  User.find({}, (err, result) => {
-    const allUsers = result.map(userEntry => (userEntry.username));
-
-    if (allUsers.indexOf(username) < 0) {
-      callback(err, false);
-    } else {
-      callback(err, true);
-    }
-  });
 };
 
 

@@ -6,6 +6,7 @@ const userRouter = require('./routers/userRouter');
 const authRouter = require('./routers/authRouter');
 const moveRouter = require('./routers/moveRouter');
 const moverRouter = require('./routers/moverRouter');
+const messageRouter = require('./routers/messageRouter');
 
 
 module.exports = (app, express, server) => {
@@ -19,6 +20,7 @@ module.exports = (app, express, server) => {
   app.use('/api/auth', authRouter);
   app.use('/api/move', moveRouter);
   app.use('/api/mover', moverRouter);
+  app.use('/api/message', messageRouter);
 
   app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, '/../clientV2/dist/index.html'));

@@ -4,8 +4,8 @@
 
 /** @module Item Controller */
 const Item = require('./itemModel.js');
-const imageUtil = require('./../imageUtil.js');
-const dbUtil = require('./../dbUtil.js');
+const imageUtil = require('./../imageUtil');
+const dbUtil = require('./../dbUtil');
 
 
 
@@ -13,7 +13,7 @@ exports.handleNewItem = (req, res, next) => {
   var photoData = req.body.image;
   photoData = photoData.replace(/^data:image\/(jpeg|png|jpg);base64,/, "");
   const filePath = __dirname + '/../../images/logo.png';
-  const move_id = req.body.moveId;
+  const move_id = req.cookies.moveId || req.body.moveId;
   imageUtil.saveAndUpload(filePath, photoData)
   .then((imageUrl) =>{
     const itemObj = {
@@ -44,7 +44,7 @@ exports.handleNewItem = (req, res, next) => {
 };
 
 exports.handleMoveItems = (req, res, next) => {
-  const move_id = req.cookies.moveId;
+  const move_id = req.cookies.moveId || req.body.moveId;
   dbUtil.getMoveItems(move_id).then( moveItems => {
     res.send({moveItems});
   }).catch( err => {

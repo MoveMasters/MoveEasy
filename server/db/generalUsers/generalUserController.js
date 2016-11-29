@@ -52,8 +52,6 @@ module.exports = {
 
     const username = req.body.username;
     const password = req.body.password;
-    const email = req.body.email;
-    const name = req.body.name;
     const company = req.body.company;
 
 
@@ -70,8 +68,6 @@ module.exports = {
         return model.create({
           username,
           password,
-          email,
-          name,
           company
         });
       })

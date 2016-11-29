@@ -4,9 +4,9 @@
 
 /** @module User Controller */
 
-const User = require('./userModel.js');
-const gUController = require('./../generalUsers/generalUserController.js');
-const dbUtil = require('./../dbUtil.js');
+const User = require('./userModel');
+const gUController = require('./../generalUsers/generalUserController');
+const dbUtil = require('./../dbUtil');
 
 
 

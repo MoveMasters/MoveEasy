@@ -6,6 +6,7 @@ const path = require('path');
 const User = require('./../db/users/userModel');
 const Move = require('./../db/moves/moveModel');
 const Item = require('./../db/items/itemModel');
+const Message = require('./../db/messages/messageModel');
 const dbUtil = require('./../db/dbUtil');
 
 
@@ -40,12 +41,30 @@ const userObj2 = {
 };
 
 
+const username3 = 'steve';
+const password3 = 'adfasdfs';
+const name3 = 'Erik Sudds';
+const phone3 = '999-999-9999';
+const currentAddress3 = 'Home';
+const futureAddress3 = 'Work';
+const surveyTime3 = new Date('Tue Nov 29 2016 11:44:19 GMT-0800 (PST)');
+
+const userObj3 = { 
+  username: username3,
+  password: password3
+};
+
+
 
 //item
 const itemName1 = 'Chair - Office';
 
+
+
 //exports for checking
 exports.userObj1 = userObj1;
+exports.userObj2 = userObj2;
+exports.userObj3 = userObj3;
 exports.itemName1 = itemName1;
 
 
@@ -64,6 +83,10 @@ const getUserFromToken = (token) => {
   return dbUtil.getUserFromReq(fakeRequest).then( user => {
     user.token = token;
     return user;
+  })
+  .catch( err => {
+    console.log('getUserFromToken err', err);
+    throw err;
   });
 };
 
@@ -73,6 +96,7 @@ const getUserFromRoute = (userObj, request, route) => {
     request.post(route)
     .send(userObj).end( (err, res) => {
       if(err) {
+        console.log('getUserFromRoute err', err);
         reject(err);
       } else {
         getUserFromToken(res.body.token).then( user => {
@@ -92,13 +116,18 @@ const getUser2FromRoute = (request, route) => {
   return getUserFromRoute(userObj2, request, route);
 }
 
+const getUser3FromRoute = (request, route) => {
+  return getUserFromRoute(userObj3, request, route);
+}
+
 ///export
 
 exports.clearDatabase = () => {
   const userPromise = User.remove().exec();
   const movePromise = Move.remove().exec();
   const itemPromise = Item.remove().exec();
-  return Promise.all([userPromise, movePromise, itemPromise]).then( result => {
+  const messagePromise = Message.remove().exec();
+  return Promise.all([userPromise, movePromise, itemPromise, messagePromise]).then( result => {
     return null;
   }).catch( err => {
     console.log('clearDatabase err', err);
@@ -121,6 +150,41 @@ exports.signupUser2 = (request) => {
   return getUser2FromRoute(request, '/api/user/signup');
 };
 
+exports.signupUser3 = (request) => {
+  return getUser3FromRoute(request, '/api/user/signup');
+};
+
+exports.clearAndSignupUsers123 = (request) => {
+  return exports.clearDatabase().then( () => {
+    const promise1 = exports.signupUser1(request);
+    const promise2 = exports.signupUser2(request);
+    const promise3 = exports.signupUser3(request);
+    return Promise.all([promise1, promise2, promise3]).then( result => {
+      return result;
+    })
+    .catch( err => {
+      console.log('clearAndSignupUsers123 err', err);
+      throw err;
+    });
+  });
+
+  //   return exports.clearDatabase().then( () => {
+  //   const promise1 = exports.signupUser1(request);
+  //   const promise2 = exports.signupUser2(request);
+  //   return Promise.all([promise1, promise2]).then( result => {
+  //     console.log('hit');
+  //     return exports.signupUser3(request).then( user3 => {
+  //       result.push(user3);
+  //       return resut;
+  //     });
+  //   })
+  //   .catch( err => {
+  //     console.log('clearAndSignupUsers123 err', err);
+  //     throw err;
+  //   });
+  // });
+    
+}
 
 
 exports.signupUser1CreateMove1 = (request) => {

@@ -5,8 +5,8 @@
 /** @module Mover Controller */
 
 const Mover = require('./moverModel.js');
-const gUController = require('./../generalUsers/generalUserController.js');
-const dbUtil = require('./../dbUtil.js');
+const gUController = require('./../generalUsers/generalUserController');
+const dbUtil = require('./../dbUtil');
 
 
 

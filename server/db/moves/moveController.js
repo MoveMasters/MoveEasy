@@ -4,8 +4,8 @@
 
 /** @module Move Controller */
 
-const Move = require('./moveModel.js');
-const dbUtil = require('./../dbUtil.js');
+const Move = require('./moveModel');
+const dbUtil = require('./../dbUtil');
 
 
 
@@ -36,7 +36,8 @@ exports.getAllMoves = (req, res, next) => {
 };
 
 exports.getExistingMove = (req, res, next) => {
-  const move_id = req.cookies.moveId;
+  //mutliple sources for moveId
+  const move_id = req.cookies.moveId || req.body.moveId;
   Move.findOne({_id: move_id})
     .exec().then( move => {
       res.send({move});
