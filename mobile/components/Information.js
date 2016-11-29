@@ -16,7 +16,6 @@ import {
 } from 'native-base';
 import { StyleSheet, AsyncStorage, AlertIOS, DatePickerIOS, View } from 'react-native';
 import helper from '../utils/helper';
-// import Main from './Main';
 import Dashboard from './Dashboard';
 
 const storeItem = async (item, selectedValue) => {
@@ -41,7 +40,7 @@ export default class Information extends React.Component {
     };
   }
 
-  goToMain() {
+  goToDashboard() {
     this.props.navigator.push({
       component: Dashboard,
       passProps: {
@@ -49,10 +48,6 @@ export default class Information extends React.Component {
       },
     });
   }
-
-  // onDateChange(date) {
-  //   this.setState({ date });
-  // }
 
   submitInfo() {
     const moveObj = {
@@ -68,7 +63,7 @@ export default class Information extends React.Component {
       const moveId = response.data._id;
 
       storeItem('moveId', moveId);
-      this.goToMain();
+      this.goToDashboard();
     })
     .catch((error) => {
       console.log(error);

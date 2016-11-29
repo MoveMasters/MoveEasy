@@ -242,7 +242,7 @@ const getItem = async (item, cb) => {
 let container;
 let socket;
 
-export default class Main extends React.Component {
+export default class Survey extends React.Component {
   constructor(props) {
     super(props);
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => true });

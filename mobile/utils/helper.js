@@ -62,3 +62,7 @@ exports.getMoveItems = () => {
 exports.updateItem = (item) => {
   return axios.post(`${url}/api/item/updateItem`, { item });
 };
+
+// exports.getConversation = (id) => {
+//   return axios.get(`${url}/api/message/conversation`);
+// };

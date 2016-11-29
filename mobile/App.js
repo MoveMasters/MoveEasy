@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppRegistry, Navigator } from 'react-native';
 
-import Main from './components/Main';
+import Survey from './components/Survey';
 import Login from './components/Login';
 import Information from './components/Information';
 import Dashboard from './components/Dashboard';

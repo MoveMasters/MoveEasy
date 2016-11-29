@@ -13,8 +13,9 @@ import {
   Icon,
 } from 'native-base';
 import helper from '../utils/helper';
-import Main from './Main';
+import Survey from './Survey';
 import Inventory from './Inventory';
+import Chat from './Chat';
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -25,12 +26,17 @@ export default class Dashboard extends React.Component {
       tab: props.content || 'survey',
       title: 'MoveKick',
       moveItems: [],
+      messages: [],
     };
+
+    this.goToSurvey = this.goToSurvey.bind(this);
   }
 
   componentWillMount() {
     this._getMoveItems();
+    // this._getChatHistory();
   }
+
 
   _getMoveItems() {
     helper.getMoveItems()
@@ -40,9 +46,18 @@ export default class Dashboard extends React.Component {
     .catch(error => console.log('Error getting move items', error));
   }
 
+  // _getChatHistory() {
+  //   helper.getConversation() {
+  //   .then((response) => {
+  //     this.setState({ messages: response.data.meesages });
+  //   })
+  //   .catch(error => console.log('Error getting chat history', error));
+  //   }
+  // }
+
   goToSurvey() {
     this.props.navigator.push({
-      component: Main,
+      component: Survey,
       passProps: {
       },
     });
@@ -51,15 +66,19 @@ export default class Dashboard extends React.Component {
   _renderContent() {
     if (this.state.content === 'inventory') {
       return (
-        <Inventory moveItems={this.state.moveItems} />
+        <Content justifyContent={this.state.moveItems.length ? null : "center"}>
+          <Inventory moveItems={this.state.moveItems} />
+        </Content>
       );
     } else if (this.state.content === 'chat') {
       return (
-        <Icon name="ios-settings-outline" />
+        <Content justifyContent="flex-end">
+          <Chat chatHistory={this.state.messages} />
+        </Content>
       );
     }
 
-    return null;
+    return <Content />;
   }
 
   render() {
@@ -71,11 +90,7 @@ export default class Dashboard extends React.Component {
             <Icon name="ios-settings-outline" style={styles.profile} />
           </Button>
         </Header>
-
-        <Content>
-          {this._renderContent()}
-        </Content>
-
+        {this._renderContent()}
         <Footer>
           <FooterTab
             tabActiveBgColor="#6b6b6b"
