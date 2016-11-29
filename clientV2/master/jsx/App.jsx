@@ -27,6 +27,7 @@ import Clients from './components/Clients/Clients';
 import Calendar from './components/Calendar/Calendar';
 import Messages from './components/Messages/Messages';
 import Invoices from './components/Invoices/Invoices';
+import Login from './components/Login/Login';
 
 // Sub Routes
 import Survey from './components/Survey/Survey';
@@ -56,6 +57,9 @@ const appHistory = useRouterHistory(createHistory)({ queryKey: false, basename: 
 
 ReactDOM.render(
     <Router history={browserHistory}>
+        
+        <Route path='/login' component={Login}/>
+
         <Route path='/' component={Base}>
 
             {/* Default route*/}
@@ -67,6 +71,7 @@ ReactDOM.render(
             <Route path='calendar' component={Calendar}/>
             <Route path='messages' component={Messages}/>
             <Route path='invoices' component={Invoices}/>
+
 
             {/* Survey user routes */}
             <Route path='survey/:moveId' component={Survey} />
