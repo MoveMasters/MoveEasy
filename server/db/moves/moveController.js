@@ -35,6 +35,18 @@ exports.getAllMoves = (req, res, next) => {
   });
 };
 
+
+exports.getLastMoveByUserId = (req, res, next) => {
+  const user_id = req.cookies.userId || req.query.userId;
+  dbUtil.getLastMove(user_id).then( move => {
+    res.send({move});
+  }).catch( err => {
+    console.log('getLastMoveByUserId err', err);
+    throw err;
+  });
+};
+
+
 exports.getExistingMove = (req, res, next) => {
   //mutliple sources for moveId
   const move_id = req.cookies.moveId || req.body.moveId;

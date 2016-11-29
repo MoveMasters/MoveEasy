@@ -2,9 +2,12 @@ var path = require('path');
 
 module.exports = function(config) {
   config.set({
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
     basePath: '',
-    frameworks: ['jasmine'],
+    frameworks: [
+    'jasmine',
+    'sinon'
+    ],
     singleRun: true,
     files: [
       'test/**/*.js'
@@ -47,7 +50,7 @@ module.exports = function(config) {
     plugins: [
       'karma-webpack',
       'karma-jasmine',
-      'karma-chrome-launcher',
+      'karma-sinon',
       'karma-sourcemap-loader',
       'karma-phantomjs-launcher'
     ],

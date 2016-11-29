@@ -8,6 +8,7 @@ router.post('/newMove', moveController.handleNewMove);
 router.get('/allMoves', moveController.getAllMoves);
 router.get('/pendingMoves', moveController.getPendingMoves);
 router.get('/existingMove', moveController.getExistingMove);
+router.get('/lastMoveByUserId', moveController.getLastMoveByUserId);
 
 
 

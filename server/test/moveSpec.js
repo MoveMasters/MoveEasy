@@ -55,9 +55,9 @@ describe('Move Server APIs', () => {
     testUtil.signupUser2CreateMove2(request).then( items => {
       const user = items[0];
       const move = items[1];
-      user_id = String(user._id);
-      move_id = String(move._id);
-      expect(user_id).to.equal(String(move.user_id));
+      const user_id2 = String(user._id);
+      const move_id2 = String(move._id);
+      expect(user_id2).to.equal(String(move.user_id));
       done();
     });
   });
@@ -68,6 +68,20 @@ describe('Move Server APIs', () => {
     .end(function(err, res) {
       expect(res.status).to.equal(200);
       expect(res.body.moves.length).to.equal(2);
+      done();
+    });
+  });
+
+
+  it('Should get last user move', (done) => {
+    request.get('/api/move/lastMoveByUserId')
+    .set('cookies', `userId=${user_id}`)
+    .end(function(err, res) {
+      const move = res.body.move;
+      expect(res.status).to.equal(200);
+      expect(move._id).to.equal(move_id);
+      console.log('username in check', move.username)
+      expect(move.username).to.equal(userObj1.username);
       done();
     });
   });
