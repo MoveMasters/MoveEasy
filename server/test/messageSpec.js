@@ -8,7 +8,7 @@ const dbUtil = require('./../db/dbUtil');
 const request = supertest.agent(server);
 
 
-let userId1, userId2, token1, token2, company1;
+let userId1, userId2, token1, token2, company1, moverId1, moverToken1;
 const messageText1 = 'This is a message';
 const messageText2 = 'Hello world';
 
@@ -32,19 +32,20 @@ describe('Message Server API tests', () => {
         userId1 = result[0]._id;
         userId2 = result[1]._id;
         company1 = result[2].company;
+        moverId1 = result[2]._id;
+        moverToken1 = result[2].token;
         done();
       });
     });
   });
 
 
-  it('Should send a message between a user and a company', (done) => {
+  it('Should send a message from user to company', (done) => {
     const messageObj = {
-      sourceId: userId1,
       company: company1,
       text: messageText1
     };
-    request.post('/api/message/newMessage')
+    request.post('/api/message/newMessageFromUser')
     .set('x-access-token', token1)
     .send(messageObj)
     .end( (err, res) => {
@@ -56,14 +57,13 @@ describe('Message Server API tests', () => {
   });
 
 
-  it('Should send a second between a user and a company', (done) => {
+  it('Should send a message from the mover to the user', (done) => {
     const messageObj = {
-      sourceId: userId1,
-      company: company1,
+      userId: userId1,
       text: messageText2
     };
-    request.post('/api/message/newMessage')
-    .set('x-access-token', token1)
+    request.post('/api/message/newMessageFromMover')
+    .set('x-access-token', moverToken1)
     .send(messageObj)
     .end( (err, res) => {
       expect(res.body.text).to.equal(messageText2);
@@ -72,10 +72,25 @@ describe('Message Server API tests', () => {
   });
 
 
-  it('Should load all messages between a user and a company', (done) => {
-    request.get('/api/message/conversation')
+  it('Should load all user conversations to a company', (done) => {
+    request.get('/api/message/conversationForUser')
     .set('x-access-token', token1)
-    .send({company: company1})
+    .set('cookies', `company=${company1}`)
+    .end( (err, res) => {
+      const messages = res.body.messages;
+      expect(messages.length).to.equal(2);
+      //most recent at the head
+      expect(messages[0].text).to.equal(messageText2);
+      expect(messages[1].text).to.equal(messageText1);
+      done();
+    });
+  });
+
+
+  it('Should load all company conversations for a mover', (done) => {
+    request.get('/api/message/conversationForMover')
+    .set('x-access-token', moverToken1)
+    .set('cookies', `userId=${userId1}`)
     .end( (err, res) => {
       const messages = res.body.messages;
       expect(messages.length).to.equal(2);
@@ -87,9 +102,9 @@ describe('Message Server API tests', () => {
   });
 
   it('Should not get messages for other users', (done) => {
-    request.get('/api/message/conversation')
+    request.get('/api/message/conversationForUser')
     .set('x-access-token', token2)
-    .send({company: company1})
+    .set('cookies', `company=${company1}`)
     .end( (err, res) => {
       const messages = res.body.messages;
       expect(messages.length).to.equal(0);

@@ -16,7 +16,8 @@ describe('Item Server APIs', () => {
   let move;
   let item;
 
-  before((done) => {
+  before( function(done) {
+    this.timeout(3000);
     testUtil.clearToMove1(request).then( data => {
       user = data[0];
       move = data[1];

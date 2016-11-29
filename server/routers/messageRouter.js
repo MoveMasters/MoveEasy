@@ -4,8 +4,10 @@ const messageController = require('./../db/messages/messageController');
 
 const router = new express.Router();
 
-router.post('/newMessage', messageController.handleNewMessage);
-router.get('/conversation', messageController.getConversation);
+router.post('/newMessageFromUser', messageController.handleNewMessageFromUser);
+router.post('/newMessageFromMover', messageController.handleNewMessageFromMover);
+router.get('/conversationForUser', messageController.getConversationForUser);
+router.get('/conversationForMover', messageController.getConversationForMover);
 
 
 
