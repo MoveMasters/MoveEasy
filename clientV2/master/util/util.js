@@ -24,6 +24,8 @@ const getAllMovesURL = `${serverURL}/api/move/allMoves`;
 const getPendingMovesURL = `${serverURL}/api/move/pendingMoves`;
 const getExistingMoveURL = `${serverURL}/api/move/existingMove`;
 const getMoveItemsURL = `${serverURL}/api/item/moveItems`;
+const signupMoverUrl = `${serverURL}/api/mover/signup`;
+const signinMoverURL = `${serverURL}/api/mover/signin`;
 
 
 
@@ -165,6 +167,29 @@ const getExistingMove = () => {
   });
 }
 
+/************************************ LOGIN ************************************/
+const signupMover = (username, password) => {
+  return axios.post(signupMoverUrl {username, password})
+  .then( response => {
+    return response.data;
+  })
+  .catch( err => {
+    console.log('signupMover err', err);
+    throw err;
+  });
+};
+
+const signinMover = (username, password) => {
+  return axios.post(signinMoverUrl {username, password})
+  .then( response => {
+    return response.data;
+  })
+  .catch( err => {
+    console.log('signinMover err', err);
+    throw err;
+  });
+};
+
 
 /************************************ SEARCHBAR ************************************/
 
@@ -195,7 +220,9 @@ export default
   getInitialInventory,
   getAllMoves,
   getExistingMove,
-  getPendingMoves
+  getPendingMoves,
+  signupMover,
+  signinMover
 }
 
 //const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;
