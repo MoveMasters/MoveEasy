@@ -5,7 +5,6 @@ mobile/ios/build/
 public/node_modules/
 node_modules/
 server/secret.js
-images
 build/
 .DS_Store
 client/node_modules/
