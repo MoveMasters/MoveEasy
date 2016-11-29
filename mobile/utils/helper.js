@@ -63,6 +63,37 @@ exports.updateItem = (item) => {
   return axios.post(`${url}/api/item/updateItem`, { item });
 };
 
-// exports.getConversation = (id) => {
-//   return axios.get(`${url}/api/message/conversation`);
-// };
+exports.getConversation = () => {
+  return axios.get(`${url}/api/message/conversationForUser`);
+};
+
+exports.postNewMessage = (text) => {
+  return axios.post(`${url}/api/message/newMessageFromUser`, { text })
+  .then(response => console.log('Message successfully posted!', response.data))
+  .catch(error => console.log('Error posting message: ', error));
+};
+
+/** **********************HELPERS*************************** **/
+exports.retrieveMessages = function(context) {
+  exports.getConversation()
+  .then((response) => {
+
+    const messages = response.data.messages.map((message, i) => {
+      return {
+        _id: i,
+        text: message.text,
+        createdAt: message.createdAt,
+        user: {
+          _id: message.mover_id ? 2 : 1,
+          name: message.mover_id ? message.company : 'Me Too',
+          avatar: 'https://facebook.github.io/react/img/logo_og.png',
+        },
+        // additional custom parameters
+      };
+    });
+
+    context.setState({ messages });
+  })
+  .catch(error => console.log('Error getting conversation: ', error));
+};
+
