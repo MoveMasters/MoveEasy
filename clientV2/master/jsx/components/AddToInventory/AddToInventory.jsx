@@ -122,7 +122,7 @@ class AddToInventory extends Component {
 		const { getCurrentItem } = this.props;
 		let { name } = getCurrentItem()
 		return (
-			<div style={styles.container}>
+			<div style={styles.container} id='topLevel'>
 				<div style={styles.titleContainer}>
 					<div>{ name }</div>
 				</div>
