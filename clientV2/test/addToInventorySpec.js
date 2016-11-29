@@ -10,6 +10,8 @@ require('es6-promise').polyfill();
 
 
 const moveId = 12345;
+const getCurrentItem = () => {
+};
 
 
 
@@ -26,13 +28,14 @@ describe('FILL IN', () => {
   it('Should shallow render AddToInventory', done => {
     shallow(<AddToInventory
       moveId={moveId}
+      getCurrentItem={getCurrentItem}
     />);
     //expect(Survey.prototype.componentDidMount.calledOnce).to.equal(true);
     done();
   });
 
   it('Should mount AddToInventory', done => {
-    mount(<AddToInventory/>);
+    //mount(<AddToInventory/>);
     done();
   });
 
