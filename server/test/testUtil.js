@@ -4,6 +4,7 @@ const _ = require('underscore');
 const fs = require('fs');
 const path = require('path');
 const User = require('./../db/users/userModel');
+const Mover = require('./../db/movers/moverModel');
 const Move = require('./../db/moves/moveModel');
 const Item = require('./../db/items/itemModel');
 const Message = require('./../db/messages/messageModel');
@@ -56,6 +57,20 @@ const userObj3 = {
 
 
 
+
+const movername1 = 'Jim Mahon'
+const moveruser1 = 'jmahon@movekick.com';
+const moverpass1 = '12113';
+const company1 = 'FakeCompany';
+
+const moverObj1 = {
+  username: moveruser1,
+  password: moverpass1,
+  company: company1,
+  name: movername1
+}
+
+
 //item
 const itemName1 = 'Chair - Office';
 
@@ -65,6 +80,7 @@ const itemName1 = 'Chair - Office';
 exports.userObj1 = userObj1;
 exports.userObj2 = userObj2;
 exports.userObj3 = userObj3;
+exports.moverObj1 = moverObj1;
 exports.itemName1 = itemName1;
 
 
@@ -81,6 +97,9 @@ const getUserFromToken = (token) => {
     headers: {'x-access-token': token}
   };
   return dbUtil.getUserFromReq(fakeRequest).then( user => {
+    if(!user) {
+      throw new Error('Could not find from token');
+    }
     user.token = token;
     return user;
   })
@@ -154,6 +173,12 @@ exports.signupUser3 = (request) => {
   return getUser3FromRoute(request, '/api/user/signup');
 };
 
+exports.signupMover1 = (request) => {
+  return getUserFromRoute(moverObj1, request, '/api/mover/signup');
+}
+
+
+
 exports.clearAndSignupUsers123 = (request) => {
   return exports.clearDatabase().then( () => {
     const promise1 = exports.signupUser1(request);
@@ -167,24 +192,10 @@ exports.clearAndSignupUsers123 = (request) => {
       throw err;
     });
   });
-
-  //   return exports.clearDatabase().then( () => {
-  //   const promise1 = exports.signupUser1(request);
-  //   const promise2 = exports.signupUser2(request);
-  //   return Promise.all([promise1, promise2]).then( result => {
-  //     console.log('hit');
-  //     return exports.signupUser3(request).then( user3 => {
-  //       result.push(user3);
-  //       return resut;
-  //     });
-  //   })
-  //   .catch( err => {
-  //     console.log('clearAndSignupUsers123 err', err);
-  //     throw err;
-  //   });
-  // });
-    
 }
+
+
+
 
 
 exports.signupUser1CreateMove1 = (request) => {

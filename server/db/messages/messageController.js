@@ -10,10 +10,10 @@ const dbUtil = require('./../dbUtil');
 
 
 exports.handleNewMessage = (req, res, next) => {
-  const source_id = dbUtil.getUserIdFromReq(req);
+  const user_id = dbUtil.getUserIdFromReq(req);
   const messageObj = {
-    source_id,
-    destination_id: req.body.destinationId,
+    user_id,
+    company: req.body.company,
     text: req.body.text
   };
 
@@ -26,22 +26,12 @@ exports.handleNewMessage = (req, res, next) => {
 };
 
 exports.getConversation = (req, res, next) => {
-  const source_id = dbUtil.getUserIdFromReq(req);
-  const destination_id = req.body.destinationId;
+  const user_id = dbUtil.getUserIdFromReq(req);
+  const company = req.body.company;
 
-  //look it up both ways
-  const sourcePromise = Message.find({destination_id: destination_id, source_id: source_id});
-  const destinationPromise = Message.find({source_id: destination_id, destination_id: source_id});
-
-  Promise.all([sourcePromise, destinationPromise]).then( result => {
-
-    const messages1 = result[0] || [];
-    const messages2 = result[1] || [];
-    const messages = messages1.concat(messages2);
-
-    messages.sort( (a, b) => {
-      return Date(a.createdAt) - Date(b.createdAt);
-    });
+  Message.find({user_id, company})
+  .sort({createdAt:-1})
+  .exec().then( messages => {
     res.send({messages});
   });
 }

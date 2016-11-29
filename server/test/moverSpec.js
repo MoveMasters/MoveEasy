@@ -1,7 +1,6 @@
 const expect = require('chai').expect;
 const supertest = require('supertest');
 const server = require('./../server.js');
-const Mover = require('./../db/movers/moverModel.js');
 const jwt = require('jwt-simple');
 const testUtil = require('./testUtil');
 const dbUtil = require('./../db/dbUtil');
@@ -24,8 +23,7 @@ describe('Mover Server API tests', () => {
     company,
     username,
     password,
-    name,
-    email
+    name
   }
 
   before((done) => {
