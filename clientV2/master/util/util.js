@@ -26,6 +26,8 @@ const getExistingMoveURL = `${serverURL}/api/move/existingMove`;
 const getMoveItemsURL = `${serverURL}/api/item/moveItems`;
 const signupMoverUrl = `${serverURL}/api/mover/signup`;
 const signinMoverURL = `${serverURL}/api/mover/signin`;
+const sendMessageURL = `${serverURL}/api/message/newMessage`;
+const getConversationURL = `${serverURL}/api/message/conversation`;
 
 
 
@@ -191,6 +193,31 @@ const signinMover = (username, password) => {
 };
 
 
+/************************************ MESSAGING ************************************/
+
+const sendNewMessage = (destinationId, text) => {
+  return axios.post(sendMessageURL, {destinationId, text})
+  .then( response => {
+    return response.data;
+  })
+  .catch( err => {
+    console.log('sendNewMessage err', err);
+    throw err;
+  });
+};
+
+
+const getConversation = (destinationId) => {
+  return axios.post(sendMessageURL, {destinationId})
+  .then( response => {
+    return response.data.messages;
+  })
+  .catch( err => {
+    console.log('getConversation err', err);
+    throw err;
+  });
+};
+
 /************************************ SEARCHBAR ************************************/
 
 const filterSearch = (searchTerm) => {
@@ -222,7 +249,9 @@ export default
   getExistingMove,
   getPendingMoves,
   signupMover,
-  signinMover
+  signinMover,
+  sendNewMessage,
+  getConversation
 }
 
 //const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;
