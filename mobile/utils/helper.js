@@ -4,7 +4,7 @@ import axios from 'axios';
 // const url = 'http://192.168.0.105:9000';
 // const url = 'http://10.6.27.137:9000';
 // const url = 'http://10.6.26.231:9000';
-const url = 'https://iiiiii.herokuapp.com';
+const url = 'https://movekickinc.herokuapp.com';
 let moveId;
 let token;
 

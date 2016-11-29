@@ -3,9 +3,7 @@ import axios from 'axios';
 const ip = 'localhost';
 const port = process.env.PORT || '9000';
 // const serverURL = `http://${ip}:${port}`;
-// const serverURL = 'https://iiiiii.herokuapp.com';
-const serverURL = `http://${ip}:${port}`
-// const serverURL = 'https://iiiiii.herokuapp.com';
+const serverURL = 'https://movekickinc.herokuapp.com';
 
 
 /************************************ interceptors ************************************/
