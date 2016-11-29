@@ -9,14 +9,14 @@ const Schema = mongoose.Schema;
 
 
 const messageSchema = new Schema ({
-  source_id: {
+  user_id: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
-  destination_id: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+  company: {
+    type: String,
+    default: 'MoveKick',
     required: true
   },
   text: {

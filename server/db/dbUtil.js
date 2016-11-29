@@ -98,8 +98,10 @@ exports.getUsernameFromReq = (req) => {
   */
 exports.getUserFromReq = (req) => {
   const username = exports.getUsernameFromReq(req);
-  return User.findOne({ username });
+  return GeneralUser.findOne({ username });
 };
+
+
 
 /**
   * This function is a middleware function to check authentication.
