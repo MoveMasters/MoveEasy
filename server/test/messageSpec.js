@@ -34,8 +34,8 @@ describe('Message Server API tests', () => {
 
   it('Should send a message between users', (done) => {
     const messageObj = {
-      source_id: userId1,
-      destination_id: userId2,
+      sourceId: userId1,
+      destinationId: userId2,
       text: messageText1
     };
     request.post('/api/message/newMessage')
@@ -52,8 +52,8 @@ describe('Message Server API tests', () => {
 
   it('Should send a second between users', (done) => {
     const messageObj = {
-      source_id: userId2,
-      destination_id: userId1,
+      sourceId: userId2,
+      destinationId: userId1,
       text: messageText2
     };
     request.post('/api/message/newMessage')
@@ -71,7 +71,7 @@ describe('Message Server API tests', () => {
   it('Should load all messages between users', (done) => {
     request.get('/api/message/conversation')
     .set('x-access-token', token1)
-    .send({destination_id: userId2})
+    .send({destinationId: userId2})
     .end( (err, res) => {
       const messages = res.body.messages;
       expect(messages.length).to.equal(2);
@@ -84,7 +84,7 @@ describe('Message Server API tests', () => {
   it('Should not get messages for other users', (done) => {
     request.get('/api/message/conversation')
     .set('x-access-token', token3)
-    .send({destination_id: userId2})
+    .send({destinationId: userId2})
     .end( (err, res) => {
       const messages = res.body.messages;
       expect(messages.length).to.equal(0);

@@ -13,7 +13,7 @@ exports.handleNewMessage = (req, res, next) => {
   const source_id = dbUtil.getUserIdFromReq(req);
   const messageObj = {
     source_id,
-    destination_id: req.body.destination_id,
+    destination_id: req.body.destinationId,
     text: req.body.text
   };
 
@@ -27,7 +27,7 @@ exports.handleNewMessage = (req, res, next) => {
 
 exports.getConversation = (req, res, next) => {
   const source_id = dbUtil.getUserIdFromReq(req);
-  const destination_id = req.body.destination_id;
+  const destination_id = req.body.destinationId;
 
   //look it up both ways
   const sourcePromise = Message.find({destination_id: destination_id, source_id: source_id});
