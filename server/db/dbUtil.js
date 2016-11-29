@@ -40,6 +40,28 @@ const decodeUserFromHeader = (req) => {
 };
 
 
+
+const fixMovePopulate = (move) => {
+  // move.username = move.user_id.username;
+  // move.user_id = move.user_id._id;
+  // return move
+
+  // Can't get the normal way to work
+  // Using this instead
+  return  {
+    _id: move._id,
+    createdAt: move.createdAt,
+    user_id: move.user_id._id,
+    username: move.user_id.username,
+    name: move.name,
+    phone: move.phone,
+    currentAddress: move.currentAddress,
+    futureAddress: move.futureAddress,
+    surveyTime: move.surveyTime
+  }
+}
+
+
 exports.encodeSendUser = (user, res) => {
   const token = encode(user);
   exports.getLastMove(user._id).then( lastMove => {
@@ -121,8 +143,10 @@ exports.getUserMoves = (user_id) => {
   return new Promimse( (resolve, reject) => {
     Move.find({user_id})
     .sort({createdAt:-1})
+    .populate('user_id')
     .exec().then(
       moves => {
+        moves = moves.map(fixMovePopulate);
         resolve(moves);
       },
       err => {
@@ -136,7 +160,7 @@ exports.getUserMoves = (user_id) => {
 exports.getLastMove = (user_id) => {
   return exports.getUserMoves(user_id).then( moves => {
     if (moves.length === 0) {
-      return null;
+      return {};
     }
     return moves[moves.length - 1];
   });
@@ -157,9 +181,5 @@ exports.findItemAndUpdate = (item) => {
 }
 
 
-// exports.fixMovePopulate = (move) => {
-//   move.username = move.user_id.username;
-//   move.user_id = move.user_id._id;
-//   return move;
-// }
+
 

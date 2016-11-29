@@ -44,6 +44,7 @@ const getClarifaiInfo = () => {
     nameMappings = data.nameMappings;
     itemPrototypes = data.itemPrototypes;
 
+
     clarApp = new Clarifai.App(
       data.ClarifaiClientId,
       data.ClarifaiClientSecret
@@ -171,7 +172,7 @@ const getExistingMove = () => {
 
 /************************************ LOGIN ************************************/
 const signupMover = (username, password) => {
-  return axios.post(signupMoverUrl {username, password})
+  return axios.post(signupMoverUrl, {username, password})
   .then( response => {
     return response.data;
   })
@@ -182,7 +183,7 @@ const signupMover = (username, password) => {
 };
 
 const signinMover = (username, password) => {
-  return axios.post(signinMoverUrl {username, password})
+  return axios.post(signinMoverUrl, {username, password})
   .then( response => {
     return response.data;
   })
@@ -251,7 +252,8 @@ export default
   signupMover,
   signinMover,
   sendNewMessage,
-  getConversation
+  getConversation,
+  serverURL
 }
 
 //const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;

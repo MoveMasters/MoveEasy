@@ -4,33 +4,58 @@ import { mount, shallow } from 'enzyme';
 import AddToInventory from './../master/jsx/components/AddToInventory/AddToInventory'
 import axios from 'axios';
 import moxios from 'moxios';
+import util from './../master/util/util';
+
 require('es6-promise').polyfill();
 
 
 
 
+const name = 'Steve';
 const moveId = 12345;
+const itemPrototypes = ['Chair - Office', 'Bookcase - Sections'];
+
 const getCurrentItem = () => {
+  return {
+    name: name
+  }
 };
 
 
+describe('AddToInventory Spec', () => {
+  beforeEach(function (done) {
+    sinon.spy(AddToInventory.prototype, 'componentDidMount');
 
-describe('FILL IN', () => {
-  beforeEach(function () {
-    moxios.install()
+    moxios.install();
+    moxios.stubRequest(util.serverURL + '/api/auth/clarifaiInfo', {
+      status: 200,
+      response: {
+        itemPrototypes
+      }
+    });
+
+    //should error out b/c of clarifai
+    util.getClarifaiInfo().then( () => {
+      done();
+    })
+    .catch( () => {
+      done();
+    });
+
   });
 
   afterEach(function () {
-    moxios.uninstall()
+    moxios.uninstall();
+    AddToInventory.prototype.componentDidMount.restore();
   });
 
-  //FIXME: Add a check to see if it works
+
   it('Should shallow render AddToInventory', done => {
     shallow(<AddToInventory
       moveId={moveId}
       getCurrentItem={getCurrentItem}
     />);
-    //expect(Survey.prototype.componentDidMount.calledOnce).to.equal(true);
+    expect(AddToInventory.prototype.componentDidMount.calledOnce).to.equal(true);
     done();
   });
 

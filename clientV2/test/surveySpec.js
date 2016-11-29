@@ -8,15 +8,8 @@ require('es6-promise').polyfill();
 
 
 
-describe('Meta Testing', () => {
-  it('Should be a functioning test', () => {
-    expect(true).to.equal(true);
-  });
-});
 
-
-
-describe('FILL IN', () => {
+xdescribe('FILL IN', () => {
   beforeEach(function () {
     moxios.install()
   });
