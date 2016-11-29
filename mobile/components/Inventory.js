@@ -42,8 +42,8 @@ export default class Inventory extends React.Component {
   render() {
     if (!this.state.moveItems.length) {
       return (
-        <View>
-          <Title>No inventory to show. Come back after your survey!</Title>
+        <View alignSelf="center">
+          <Text style={styles.empty}>No inventory to show. Come back after your survey!</Text>
         </View>
       );
     }
@@ -104,10 +104,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     paddingBottom: 5,
     borderBottomWidth: 1,
-    borderColor: '#e6e6e6',
+    borderColor: '#8c8c8c',
 
   },
   info: {
     marginLeft: 10,
-  }
+  },
+  empty: {
+    color: '#737373',
+  },
 });
