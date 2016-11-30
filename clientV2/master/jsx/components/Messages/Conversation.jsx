@@ -111,7 +111,8 @@ class Conversation extends React.Component {
                   <div className="input-group">
                       <input type="text" placeholder="Send Message" className="form-control input-sm" />
                       <span className="input-group-btn">
-                        <button type="submit" className="btn btn-default btn-sm"><i className="fa fa-search"></i>
+                        <button type="submit" className="btn btn-default btn-sm"
+                          onClick={this.props.onMessageSend} ><i className="fa fa-search"></i>
                         </button>
                       </span>
                   </div>

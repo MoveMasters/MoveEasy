@@ -44,17 +44,32 @@ class Messages extends React.Component {
     });
   }
 
+  onContactType(event) {
+
+  }
+
+  onSearch(event) {
+
+  }
+
+  onMessageSend(event) {
+
+  }
+
   render() {
       return (
           <ContentWrapper>
             <Row>                 
-                <Contacts 
+                <Contacts
+                  onContactType={this.onContactType.bind(this)}
+                  onSearch={this.onSearch.bind(this)}
                   contacts={this.state.contacts} 
                   onProfileClick={this.onProfileClick.bind(this)}
                 />
                 <Conversation
                   userSelected={this.state.userSelected}
                   displayedConvo={this.state.displayedConvo}
+                  onMessageSend={this.onMessageSend.bind(this)}
                 />
             </Row>
           </ContentWrapper>

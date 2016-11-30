@@ -17,9 +17,12 @@ class Contacts extends React.Component {
                   <Row>
                       <Col lg={ 12 }>
                           <div className="input-group">
-                              <input type="text" placeholder="Search" className="input-sm form-control" />
+                              <input type="text" placeholder="Search"
+                              onChange={this.props.onContactType}
+                              className="input-sm form-control" />
                               <span className="input-group-btn">
-                                <button type="button" className="btn btn-sm btn-default">Search</button>
+                                <button type="button" className="btn btn-sm btn-default"
+                                onClick={this.props.onSearch} >Search</button>
                               </span>
                           </div>
                       </Col>
@@ -36,11 +39,6 @@ class Contacts extends React.Component {
                       <tr>
                           <td>
                              <div className="media">
-                                <div className="media-left media-middle">
-                                   <a href="#">
-                                      <img src="img/user/04.jpg" alt="Contact" className="media-object img-circle img-thumbnail thumb48" />
-                                   </a>
-                                </div>
                                 <div className="media-body pt-sm">
                                    <div className="text-bold">Floyd Ortiz
                                       <div className="text-sm text-muted">12m ago</div>
