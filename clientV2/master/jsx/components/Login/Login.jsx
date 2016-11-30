@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col, Panel, Button } from 'react-bootstrap';
 import { browserHistory } from 'react-router';
+import util from './../../../util/util';
 
 class Login extends Component {
     constructor(props) {
@@ -17,18 +18,24 @@ class Login extends Component {
     }
 
     handleSubmitLogin(e) {
-        e.preventDefault()
-        console.log('SUBMIT LOGIN TO SERVER FOR AUTHENTICATION')
-        console.log(this.state);
-        console.log('SAVE COOKIE OR IDENTIFIER TO LOCAL STORAGE')
+        e.preventDefault();
+        const { email, password } = this.state;
+        const { setAuthorization } = this.props;
+
+        util.signinMover(email, password).then(res => {
+            // this.redirectToDashboard();
+            setAuthorization(true);
+        }).catch( err => {
+            console.log('error NEED TO DISPLAY MESSAGE TO USER', err);
+        })
+
         this.setState({ email: '', password: ''})
-        this.redirectToDashboard();
     }
 
     redirectToDashboard() {
       // redirect to dashboard
       console.log('rerouting to dashboard');
-      const path = `/`;
+      const path = `/dashboard`;
       browserHistory.push(path);
     }
 

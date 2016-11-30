@@ -15,26 +15,62 @@ class UserProfile extends React.Component {
 		super(props);
 
 		this.state = {
-			userInfo: {}
+			name: '',
+			phone: '',
+			email: '',
+			currentAddress: '',
+			futureAddress: '',
+			moveDate: '',
+			_id: '',
+			inventory: []
 		}
 	}
 
 	componentWillMount() {
-		// this.getUserInfo();
+		this.setUserInfoAndInventory();
 	}
 
 	getUserInfo() {
 		const { user_id } = this.props.params;
-
-		console.log('callin get all moves')
-		util.getAllMoves().then( moves => {
+		return util.getAllMoves().then( moves => {
 			let userInfo = moves.filter( move => move.user_id === user_id )[0];
-			this.setState({ userInfo });
+			return userInfo
 		})
 	}
 
+	setUserInfoAndInventory() {
+		this.getUserInfo().then( userInfo => {
+			const { name, phone, currentAddress, futureAddress, _id } = userInfo;
+			this.setState({ name, phone, currentAddress, futureAddress, _id });
+			this.getInventory(_id).then( inventory => {
+				console.log('inventory', inventory)
+				this.setState({ inventory })
+			})
+		})
+	}
+
+	onInputChange(e, state) {
+    this.setState({ [state]: e.target.value })
+  }
+
+  handleUpdateUserProfile() {
+    console.log('SEND UPDATED USER PROFILE INFO TO SERVER');
+    console.log(this.state);
+    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+
+  }
+
+  getInventory() {
+  	const { _id } = this.state;
+    console.log('getting inventory with ', _id);
+    return util.getInitialInventory( _id ).then( inventory => {
+      console.log(inventory, 'inventory')
+      return inventory;
+    })
+  }
+
 	render() {
-		const { name } = this.state.userInfo;
+		const { name, phone, email, currentAddress, futureAddress, moveDate, _id, inventory } = this.state;
 		return (
 			<ContentWrapper>
 				<Tab.Container className="container-md" id="settings-tab" defaultActiveKey="profilePane">
@@ -45,8 +81,16 @@ class UserProfile extends React.Component {
 
 					  <Col md={9}>
 					    <Tab.Content animation className="p0 b0">
-				        <ProfilePane />
-				        <InventoryPane />
+				        <ProfilePane 
+				        	name={name}
+				        	phone={phone}
+				        	email={email}
+				        	currentAddress={currentAddress}
+				        	futureAddress={futureAddress}
+				        	moveDate={moveDate}
+				        	onInputChange={this.onInputChange.bind(this)}
+				        	handleUpdateUserProfile={this.handleUpdateUserProfile.bind(this)}/>
+				        <InventoryPane inventory={ inventory }/>
 				        <MessagesPane />
 				        <TimelinePane />
 					    </Tab.Content>

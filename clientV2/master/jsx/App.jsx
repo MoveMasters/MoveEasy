@@ -9,7 +9,7 @@
  *
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Link, hashHistory, useRouterHistory, IndexRoute } from 'react-router';
 import { createHistory } from 'history';
@@ -28,13 +28,12 @@ import Calendar from './components/Calendar/Calendar';
 import Messages from './components/Messages/Messages';
 import Invoices from './components/Invoices/Invoices';
 import Login from './components/Login/Login';
+import Signup from './components/Signup/Signup';
+
 
 // Sub Routes
 import Survey from './components/Survey/Survey';
 import UserProfile from './components/UserProfile/UserProfile';
-
-// test routes
-
 
 import { browserHistory } from 'react-router';
 
@@ -48,45 +47,79 @@ $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
     options.async = true;
 });
 
-// specify basename below if running in a subdirectory or set as "/" if app runs in root
-// const appHistory = useRouterHistory(createHistory)({
-//   basename: '/'
-// })
+
+const isAuthorized = () => {
+	const authorized = document.cookie.includes('x-access-token');
+	return authorized;
+}
 
 const appHistory = useRouterHistory(createHistory)({ queryKey: false, basename: '/' });
 
-ReactDOM.render(
-    <Router history={browserHistory}>
-        
-        <Route path='/login' component={Login}/>
+class Authorize extends Component {
+	constructor(props) {
+		super(props);
 
-        <Route path='/' component={Base}>
+		this.state = {
+				isAuthorized: false,
+				view: 'login'
+		}
+	}
 
-            {/* Default route*/}
-            <IndexRoute component={Dashboard} />
+	componentWillMount() {
+		if (isAuthorized()) {
+			this.setAuthorization(true);
+		}
+	}
 
-            {/* Main routes*/}
-            <Route path='dashboard' component={Dashboard}/>
-            <Route path='clients' component={Clients}/>
-            <Route path='calendar' component={Calendar}/>
-            <Route path='messages' component={Messages}/>
-            <Route path='invoices' component={Invoices}/>
+	setAuthorization(isAuthorized) {
+		console.log('setting authorization:', isAuthorized)
+		this.setState({ isAuthorized })
+	}
+
+	render() {
+			const { isAuthorized, view } = this.state;
+			
+			if (!isAuthorized) {
+				return (
+					<div>
+						{view === 'login' && <Login setAuthorization={ this.setAuthorization.bind(this) } />}
+						{view === 'signup' && <Signup setAuthorization={ this.setAuthorization.bind(this) } />}
+					</div>
+				)
+			} else {
+				return (
+					<Router history={browserHistory}>
+					    <Route path='/' component={Base}>
+
+					        {/* Default route*/}
+					        <IndexRoute component={Dashboard} />
+
+					        {/* Main routes*/}
+					        <Route path='dashboard' component={Dashboard}/>
+					        <Route path='clients' component={Clients}/>
+					        <Route path='calendar' component={Calendar}/>
+					        <Route path='messages' component={Messages}/>
+					        <Route path='invoices' component={Invoices}/>
 
 
-            {/* Survey user routes */}
-            <Route path='survey/:moveId' component={Survey} />
+					        {/* Survey user routes */}
+					        <Route path='survey/:moveId' component={Survey} />
 
-            {/* user routes */}
-            <Route path='userProfile/:user_id' component={UserProfile} />
+					        {/* user routes */}
+					        <Route path='userProfile/:user_id' component={UserProfile} />
 
-        </Route>
+					    </Route>
 
-        {/* Not found handler */}
-        {/*<Route path="*" component={NotFound}/>*/}
+					    {/* Not found handler */}
+					    {/*<Route path="*" component={NotFound}/>*/}
 
-    </Router>,
-    document.getElementById('app')
-);
+					</Router>
+				)
+			}
+		}
+}
+
+ReactDOM.render(<Authorize />, document.getElementById('app'));
 
 if(module.hot) {
     module.hot.accept();
@@ -96,3 +129,4 @@ if(module.hot) {
 // appHistory.listen(function(ev) {
 //     $('body').removeClass('aside-toggled');
 // });
+

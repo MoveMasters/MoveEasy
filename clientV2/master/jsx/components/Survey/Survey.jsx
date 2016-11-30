@@ -31,7 +31,6 @@ class Survey extends Component {
 			snackbarText: null
 		};
 
-		document.cookie = `moveId=${'5830c86bed792369d6e5e304'}`;
 	}
 
 	componentWillMount() {
