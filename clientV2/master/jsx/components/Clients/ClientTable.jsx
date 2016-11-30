@@ -29,8 +29,9 @@ class ClientTable extends React.Component {
 										className="input-sm form-control" 
 										value={ query }
 										onChange={ e => {
-											this.setState({ query: e.target.value });
-											filterMoves(query);
+											let query = e.target.value;
+											this.setState({ query });
+											filterMoves(query) 
 										}}/>
 									<span className="input-group-btn">
 										<button type="button" className="btn btn-sm btn-default">Search</button>

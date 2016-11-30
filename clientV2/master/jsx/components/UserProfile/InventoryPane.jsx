@@ -5,7 +5,7 @@ import util from './../../../util/util';
 
 class InventoryPane extends Component {
   render() {
-    const { inventory } = this.props;
+    const { inventory, showModal } = this.props;
     return (
       <Tab.Pane eventKey="inventoryPane">
          <div className="panel b">
@@ -13,7 +13,7 @@ class InventoryPane extends Component {
             <div className="panel-body">
               <div>
                   {inventory.map(item => (
-                    <div key={ item.url } className="col-md-3">
+                    <div key={ item.url } className="col-md-3" onClick={ () => showModal(true, item) }>
                         <img src={ item.url } alt="" className="img-thumbnail img-responsive" />
                     </div>
                   ))}
