@@ -8,7 +8,7 @@ const dbUtil = require('./../db/dbUtil');
 const request = supertest.agent(server);
 
 
-let username1, username2, userId1, userId2, token1, token2, company1, moverId1, moverToken1;
+let username1, username2, userId1, userId2, token1, token2, customerName1, customerName2, company1, moverId1, moverToken1, moverName1;
 const messageText1 = 'This is a message';
 const messageText2 = 'Hello world';
 
@@ -22,20 +22,23 @@ describe('Message Server API tests', () => {
 
     testUtil.clearDatabase().then( () => { 
       Promise.all([
-        testUtil.signupUser1CreateMove1(request), 
-        testUtil.signupUser2CreateMove2(request), 
+        testUtil.signupUser1(request), 
+        testUtil.signupUser2(request), 
         testUtil.signupMover1(request)
       ])
       .then( result => {
-        token1 = result[0][0].token;
-        token2 = result[1][0].token;
-        userId1 = result[0][0]._id;
-        userId2 = result[1][0]._id;
-        username1 = result[0][0].username;
-        username2 = result[1][0].username;
+        token1 = result[0].token;
+        token2 = result[1].token;
+        userId1 = result[0]._id;
+        userId2 = result[1]._id;
+        username1 = result[0].username;
+        username2 = result[1].username;
+        customerName1 = result[0].name;
+        customerName2 = result[1].name;
         company1 = result[2].company;
         moverId1 = result[2]._id;
         moverToken1 = result[2].token;
+        moverName1 = result[2].name;
         done();
       });
     });
@@ -83,7 +86,10 @@ describe('Message Server API tests', () => {
       expect(messages.length).to.equal(2);
       //most recent at the head
       expect(messages[0].text).to.equal(messageText2);
+      expect(messages[0].customerName).to.equal(customerName1);
+      expect(messages[0].moverName).to.equal(moverName1);
       expect(messages[1].text).to.equal(messageText1);
+      expect(messages[1].customerName).to.equal(customerName1);
       done();
     });
   });
@@ -122,7 +128,7 @@ describe('Message Server API tests', () => {
       const contacts = res.body.contacts;
       expect(contacts.length).to.equal(1);
       expect(contacts[0].username).to.equal(username1);
-      expect(contacts[0].user_id).to.equal(String(userId1));
+      expect(contacts[0]._id).to.equal(String(userId1));
       done();
     });
   });

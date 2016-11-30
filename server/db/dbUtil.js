@@ -56,7 +56,7 @@ const fixMovePopulate = (move) => {
     createdAt: move.createdAt,
     user_id: move.user_id._id,
     username: move.user_id.username,
-    name: move.name,
+    name: move.user_id.name,
     phone: move.phone,
     currentAddress: move.currentAddress,
     futureAddress: move.futureAddress,
@@ -204,13 +204,25 @@ exports.findCompanyContacts = (company) => {
     messages.forEach( message => {
       userIds.add(String(message.user_id));
     });
-    var movePromises = [];
+
+    // Not sure about adding the move
+
+    var userPromises = [];
     userIds.forEach( userId => {
-      movePromises.push(exports.getLastMove(userId));
+      userPromises.push(User.findOne({_id: userId}).exec());
     });
-    return Promise.all(movePromises).then( moves => {
-      return moves.filter( move => {return !!move});
-    })
+
+    return Promise.all(userPromises);
+
+    // var movePromises = [];
+    // userIds.forEach( userId => {
+    //   movePromises.push(exports.getLastMove(userId));
+    // });
+    // return Promise.all(movePromises).then( moves => {
+    //   console.log('moves', moves);
+    //   return moves.filter( move => {return !!move});
+    // })
+
   });
 }
 

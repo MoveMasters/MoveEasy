@@ -13,7 +13,6 @@ exports.handleNewMove = (req, res, next) => {
   dbUtil.getUserFromReq(req, next).then( user => {
     const moveObj = {
       user_id: user.id,
-      name: req.body.name,
       phone: req.body.phone,
       currentAddress: req.body.currentAddress,
       futureAddress: req.body.futureAddress,

@@ -11,15 +11,25 @@ const dbUtil = require('./../dbUtil');
 
 
 const fixMessagePopulate = (message) => {
+  //replace the mover_id and user_id info
+
+  //if sent by user, no mover_id
+  const mover_id = (!!message.mover_id) ? message.mover_id._id : undefined;
+  const movername = (!!message.mover_id) ? message.mover_id.name : undefined;
+
+
   return {
-    _id: message._id,
+    //from populate user_id
     user_id: message.user_id._id,
-    mover_id: message.mover_id._id,
-    movername: message.mover_id._id,
+    customerName: message.user_id.name,
+    //from populate mover
+    mover_id: mover_id,
+    moverName: movername,
+    //rest
+    _id: message._id,
     createdAt: message.createdAt,
-    company: message.populate,
-    text: message.text,
-    username: message.user_id.username
+    company: message.company,
+    text: message.text
   }
 }
 
@@ -27,10 +37,10 @@ const fixMessagePopulate = (message) => {
 const getConversation = (user_id, company) => {
   return Message.find({user_id, company})
   .sort({createdAt:-1})
-  // .populate('move_id')
-  // .populate('user_id')
+  .populate('mover_id')
+  .populate('user_id')
   .exec().then( messages => {
-    //messages = messages.map(fixMessagePopulate);
+    messages = messages.map(fixMessagePopulate);
     return messages;
   });
 }
