@@ -23,7 +23,7 @@ class Login extends Component {
         const { setAuthorization } = this.props;
 
         util.signinMover(email, password).then(res => {
-            // this.redirectToDashboard();
+            // redirect to dashboard
             setAuthorization(true);
         }).catch( err => {
             console.log('error NEED TO DISPLAY MESSAGE TO USER', err);
@@ -32,15 +32,9 @@ class Login extends Component {
         this.setState({ email: '', password: ''})
     }
 
-    redirectToDashboard() {
-      // redirect to dashboard
-      console.log('rerouting to dashboard');
-      const path = `/dashboard`;
-      browserHistory.push(path);
-    }
-
     render() {
         const { email, password } = this.state;
+        const { changeView } = this.props;
         return (
             <div className="block-center mt-xl wd-xl">
                 { /* START panel */ }
@@ -87,7 +81,8 @@ class Login extends Component {
                                 className="btn btn-block btn-primary mt-lg"
                                 onClick={ (e) => this.handleSubmitLogin(e) }>Login</button>
                         </form>
-                        <p className="pt-lg text-center">Need to Signup?</p><a href="register" className="btn btn-block btn-default">Register Now</a>
+                        <p className="pt-lg text-center">Need to Signup?</p>
+                        <a onClick={ () => changeView('signup') } className="btn btn-block btn-default">Register Now</a>
                     </div>
                 </div>
                 { /* END panel */ }

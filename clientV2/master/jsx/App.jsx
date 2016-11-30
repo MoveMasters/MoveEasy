@@ -76,14 +76,25 @@ class Authorize extends Component {
 		this.setState({ isAuthorized })
 	}
 
+	changeView(view) {
+		this.setState({ view });
+	}
+
 	render() {
 			const { isAuthorized, view } = this.state;
 			
 			if (!isAuthorized) {
 				return (
 					<div>
-						{view === 'login' && <Login setAuthorization={ this.setAuthorization.bind(this) } />}
-						{view === 'signup' && <Signup setAuthorization={ this.setAuthorization.bind(this) } />}
+						{view === 'login' && 
+						<Login 
+							setAuthorization={ this.setAuthorization.bind(this) } 
+							changeView={ this.changeView.bind(this) }/>}
+							
+						{view === 'signup' && 
+						<Signup 
+							setAuthorization={ this.setAuthorization.bind(this) } 
+							changeView={ this.changeView.bind(this) } />}
 					</div>
 				)
 			} else {

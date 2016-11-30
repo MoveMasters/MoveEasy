@@ -21,10 +21,12 @@ class Signup extends Component {
     handleCreateAccount(e) {
         e.preventDefault();
         const { email, password, company } = this.state;
+        const { setAuthorization } = this.props;
         
-        console.log('signing up mover');
         util.signupMover(email, password, company).then(res => {
-            this.redirectToDashboard();
+            // continue to dashboard
+            console.log('successful signup')
+            setAuthorization(true);
         }).catch( err => {
             console.log('error signing up')
         })
@@ -35,15 +37,9 @@ class Signup extends Component {
         
     }
 
-    redirectToDashboard() {
-      // redirect to dashboard
-      console.log('rerouting to dashboard');
-      const path = `/`;
-      browserHistory.push(path);
-    }
-
     render() {
         const { email, password, company } = this.state;
+        const { changeView } = this.props;
         return (
             <div className="block-center mt-xl wd-xl">
                 { /* START panel */ }
@@ -113,7 +109,7 @@ class Signup extends Component {
                                 className="btn btn-block btn-primary mt-lg"
                                 onClick={ e => this.handleCreateAccount(e) }>Create account</button>
                         </form>
-                        <p className="pt-lg text-center">Have an account?</p><a href="/login" className="btn btn-block btn-default">Signup</a>
+                        <p className="pt-lg text-center">Have an account?</p><a onClick={ () => changeView('login') } className="btn btn-block btn-default">Signup</a>
                     </div>
                 </div>
                 { /* END panel */ }

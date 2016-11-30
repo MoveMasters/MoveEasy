@@ -6,37 +6,38 @@ import { Grid, Row, Col, Panel, Button, Table, Pagination } from 'react-bootstra
 class ClientTable extends React.Component {
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			query: ''
+		}
 	}
 
 	render() {
-		const { moves, onTableClick } = this.props;
+		const { moves, onTableClick, filterMoves } = this.props;
+		const { query } = this.state;
 		return (
 				<div className="panel panel-default">
 					{ /* START table-header */ }
 					<div className="panel-heading">
 						<Row>
-							<Col lg={ 2 }>
+							<Col lg={ 2 }></Col>
+							<Col lg={ 8 }>
 								<div className="input-group">
-									<input type="text" placeholder="Search" className="input-sm form-control" />
+									<input 
+										type="text" 
+										placeholder="Search" 
+										className="input-sm form-control" 
+										value={ query }
+										onChange={ e => {
+											this.setState({ query: e.target.value });
+											filterMoves(query);
+										}}/>
 									<span className="input-group-btn">
-											  <button type="button" className="btn btn-sm btn-default">Search</button>
-										   </span>
+										<button type="button" className="btn btn-sm btn-default">Search</button>
+									</span>
 								</div>
 							</Col>
-							<Col lg={ 8 }></Col>
-							<Col lg={ 2 }>
-								<div className="input-group pull-right">
-									<select className="input-sm form-control">
-										<option value="0">Bulk action</option>
-										<option value="1">Delete</option>
-										<option value="2">Clone</option>
-										<option value="3">Export</option>
-									</select>
-									<span className="input-group-btn">
-											  <button className="btn btn-sm btn-default">Apply</button>
-										   </span>
-								</div>
-							</Col>
+							<Col lg={ 2 }></Col>
 						</Row>
 					</div>
 					{ /* START table-responsive */ }
