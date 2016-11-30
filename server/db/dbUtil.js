@@ -70,7 +70,7 @@ exports.encodeSendUser = (user, res) => {
   //only send over the move for non-movers
   res.cookie('x-access-token', token);
   if (user.__t === 'Mover') {
-    res.json({token});
+    res.json({token});g
   } else {
     exports.getLastMove(user._id).then( lastMove => {
       res.json({ token, lastMove});

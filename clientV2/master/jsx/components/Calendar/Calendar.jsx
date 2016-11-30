@@ -6,6 +6,8 @@ import moment from 'moment';
 import BigCalendar, {events} from 'react-big-calendar';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Dropdown, MenuItem } from 'react-bootstrap';
+import { browserHistory } from 'react-router';
+
 
 BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
@@ -15,6 +17,7 @@ const formats = {
 
 
 const moveToEvent = (move) => {
+  console.log(move, 'move to event')
   const surveyTime = new Date(move.surveyTime);
   const endTime = new Date(surveyTime);
   endTime.setDate(surveyTime.getDate() + 30/(24*60));
@@ -23,7 +26,7 @@ const moveToEvent = (move) => {
     start: surveyTime,
     end: endTime,
     allDay: false,
-    moveId: move._id
+    user_id: move.user_id
   };
 }
 
@@ -33,33 +36,27 @@ class Calendar extends React.Component {
 
     this.state = {
       events: [],
-      popupMove: null
     };
-
-    this.actions = [];
-    this.getAllMoves();
   }
 
-  onSelectEvent (event) {
-    const moveId = event.moveId;
-    this.setState({popupMove: this.movesById[moveId]});
-  }
-
-  resetSelection () {
-    this.setState({popupMove: null});
-    const path = `/survey/${moveId}`
-    browserHistory.push(path)
+  componentWillMount() {
+    this.getAllMoves()
   }
 
   getAllMoves() {
     util.getAllMoves().then( moves => {
-      const moveEvents = moves.map(moveToEvent)
-      this.setState({events: moveEvents});
-
-      //store the actual moves by their id
-      this.movesById = {};
-      moves.forEach( move => {this.movesById[move._id] = move });
+      const events = moves.map(moveToEvent)
+      this.setState({ events });
     });
+  }
+  
+  handleEventClick(e) {
+    const user_id = e.user_id;
+
+    console.log('redirecting to:', user_id)
+    // redirect to user profile
+    const path = `/userProfile/${user_id}`;
+    browserHistory.push(path);
   }
 
   render() {
@@ -75,16 +72,8 @@ class Calendar extends React.Component {
           defaultDate={new Date()}
           formats={formats}
           min={moment('6:00am', 'h:mma').toDate()}
-          popup= {true}
-          onSelectEvent= {this.onSelectEvent.bind(this)}
-          />
-        {
-          this.state.popupMove ?
-            <div>
-              <AppointmentPopup move={this.state.popupMove} resetSelection={this.resetSelection.bind(this)}/>
-            </div>
-            : null
-        }
+          onSelectEvent= {(e) => this.handleEventClick(e)}
+          />  
       </Row>
     </ContentWrapper>
     )

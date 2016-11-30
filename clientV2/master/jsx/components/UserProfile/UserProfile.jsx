@@ -1,14 +1,19 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
-import { Tab, Row, Col } from 'react-bootstrap';
+import { Tab, Row, Col, Modal, Button } from 'react-bootstrap';
 import util from './../../../util/util';
 import Selector from './Selector';
+import { browserHistory } from 'react-router';
 
 // Pane views
 import ProfilePane from './ProfilePane';
 import InventoryPane from './InventoryPane';
 import MessagesPane from './MessagesPane';
 import TimelinePane from './TimelinePane';
+import ClientCard from './ClientCard';
+
+// modal
+import InventoryModal from './InventoryModal';
 
 class UserProfile extends React.Component {
 	constructor(props) {
@@ -22,12 +27,18 @@ class UserProfile extends React.Component {
 			futureAddress: '',
 			moveDate: '',
 			_id: '',
-			inventory: []
+			inventory: [],
+			showModal: false,
+			modalItem: null
 		}
 	}
 
 	componentWillMount() {
 		this.setUserInfoAndInventory();
+	}
+
+	handleModal(showModal, modalItem) {
+		this.setState({ showModal, modalItem });
 	}
 
 	getUserInfo() {
@@ -43,7 +54,6 @@ class UserProfile extends React.Component {
 			const { name, phone, currentAddress, futureAddress, _id } = userInfo;
 			this.setState({ name, phone, currentAddress, futureAddress, _id });
 			this.getInventory(_id).then( inventory => {
-				console.log('inventory', inventory)
 				this.setState({ inventory })
 			})
 		})
@@ -62,21 +72,45 @@ class UserProfile extends React.Component {
 
   getInventory() {
   	const { _id } = this.state;
-    console.log('getting inventory with ', _id);
     return util.getInitialInventory( _id ).then( inventory => {
-      console.log(inventory, 'inventory')
       return inventory;
     })
   }
 
+  onClickVideoCall() {
+    const { _id } = this.state;
+    const path = `/survey/${_id}`
+    browserHistory.push(path);
+  }
+
+  getModalItem() {
+  	return Object.assign({}, this.state.modalItem);
+  }
+
 	render() {
-		const { name, phone, email, currentAddress, futureAddress, moveDate, _id, inventory } = this.state;
+		const { 
+			name, 
+			phone, 
+			email, 
+			currentAddress, 
+			futureAddress, 
+			moveDate, 
+			_id, 
+			inventory, 
+			showModal, 
+			modalItem 
+		} = this.state;
 		return (
 			<ContentWrapper>
 				<Tab.Container className="container-md" id="settings-tab" defaultActiveKey="profilePane">
 					<Row>
 						<Col md={3}>
 							<Selector />
+							<ClientCard 
+							name={name}
+							phone={phone}
+							email={email}
+							onClickVideoCall={this.onClickVideoCall.bind(this)}/>
 						</Col>
 
 					  <Col md={9}>
@@ -90,13 +124,20 @@ class UserProfile extends React.Component {
 				        	moveDate={moveDate}
 				        	onInputChange={this.onInputChange.bind(this)}
 				        	handleUpdateUserProfile={this.handleUpdateUserProfile.bind(this)}/>
-				        <InventoryPane inventory={ inventory }/>
+				        <InventoryPane 
+				        	inventory={ inventory }
+				        	showModal={ this.handleModal.bind(this) }/>
 				        <MessagesPane />
 				        <TimelinePane />
 					    </Tab.Content>
 					  </Col>
 					</Row>
 				</Tab.Container>
+				<InventoryModal 
+					show={ showModal } 
+					onHide={ () => this.handleModal(false) }
+					modalItem={ Object.assign({}, modalItem) }
+					handleModal={ this.handleModal.bind(this) }/>
 			</ContentWrapper>
 		);
 	}
