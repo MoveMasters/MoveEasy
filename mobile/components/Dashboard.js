@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import { StyleSheet, AsyncStorage, AlertIOS, View } from 'react-native';
 import {
@@ -11,11 +9,23 @@ import {
   Title,
   Button,
   Icon,
+  Text,
 } from 'native-base';
 import helper from '../utils/helper';
 import Survey from './Survey';
 import Inventory from './Inventory';
 import Chat from './Chat';
+
+const getItem = async (item, cb) => {
+  try {
+    const value = await AsyncStorage.getItem(item);
+    if (value !== null) {
+      cb(value);
+    }
+  } catch (error) {
+    console.log('Error submitting new move info:', error);
+  }
+};
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -23,10 +33,9 @@ export default class Dashboard extends React.Component {
 
     this.state = {
       content: null,
-      tab: props.content || 'survey',
       title: 'MoveKick',
       moveItems: [],
-      messages: [],
+      moveData: null,
     };
 
     this.goToSurvey = this.goToSurvey.bind(this);
@@ -34,7 +43,11 @@ export default class Dashboard extends React.Component {
 
   componentWillMount() {
     this._getMoveItems();
-    // this._getChatHistory();
+
+    getItem('moveData', (moveData) => {
+      this.moveData = JSON.parse(moveData);
+      this.setState({ content: 'surveyInfo' });
+    });
   }
 
 
@@ -46,25 +59,22 @@ export default class Dashboard extends React.Component {
     .catch(error => console.log('Error getting move items', error));
   }
 
-  // _getChatHistory() {
-  //   helper.getConversation() {
-  //   .then((response) => {
-  //     this.setState({ messages: response.data.meesages });
-  //   })
-  //   .catch(error => console.log('Error getting chat history', error));
-  //   }
-  // }
-
   goToSurvey() {
     this.props.navigator.push({
       component: Survey,
-      passProps: {
-      },
     });
   }
 
   _renderContent() {
-    if (this.state.content === 'inventory') {
+    if (this.state.content === 'surveyInfo') {
+      return (
+        <Content>
+          <View>
+            <Text>{this.moveData.name}</Text>
+          </View>
+        </Content>
+      );
+    } else if (this.state.content === 'inventory') {
       return (
         <Content justifyContent={this.state.moveItems.length ? null : "center"}>
           <Inventory moveItems={this.state.moveItems} />
@@ -73,7 +83,7 @@ export default class Dashboard extends React.Component {
     } else if (this.state.content === 'chat') {
       return (
         <Content justifyContent="flex-end">
-          <Chat chatHistory={this.state.messages} />
+          <Chat />
         </Content>
       );
     }

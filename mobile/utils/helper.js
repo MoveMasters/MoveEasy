@@ -92,6 +92,7 @@ exports.retrieveMessages = function(context) {
       };
     });
 
+
     context.setState({ messages });
   })
   .catch(error => console.log('Error getting conversation: ', error));

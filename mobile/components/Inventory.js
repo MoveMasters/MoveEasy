@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import { StyleSheet, AlertIOS, ScrollView, View, Text } from 'react-native';
 import {

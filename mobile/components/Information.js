@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import {
   Button,
@@ -30,7 +28,6 @@ const storeItem = async (item, selectedValue) => {
 export default class Information extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       name: '',
       phone: '',
@@ -43,9 +40,6 @@ export default class Information extends React.Component {
   goToDashboard() {
     this.props.navigator.push({
       component: Dashboard,
-      passProps: {
-
-      },
     });
   }
 
@@ -60,9 +54,12 @@ export default class Information extends React.Component {
 
     helper.newMove(moveObj)
     .then((response) => {
-      const moveId = response.data._id;
+      const moveData = response.data;
+      const moveId = moveData._id;
 
+      storeItem('moveData', JSON.stringify(moveData));
       storeItem('moveId', moveId);
+
       this.goToDashboard();
     })
     .catch((error) => {
