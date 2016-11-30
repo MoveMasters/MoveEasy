@@ -197,31 +197,34 @@ exports.findItemAndUpdate = (item) => {
   });
 }
 
+exports.getCompanyFromLastMove = (user_id) => {
+  return exports.getLastMove(user_id).then( move => {
+    if(!move) {
+      return null;
+    }
+    return move.company;
+  });
+}
+
 
 exports.findCompanyContacts = (company) => {
-  return Message.find({company}).exec().then( messages => {
+  return Move.find({company}).exec().then( moves => {
     userIds = new Set();
-    messages.forEach( message => {
-      userIds.add(String(message.user_id));
+    moves.forEach( move => {
+      userIds.add(String(move.user_id));
     });
 
     // Not sure about adding the move
-
     var userPromises = [];
     userIds.forEach( userId => {
       userPromises.push(User.findOne({_id: userId}).exec());
     });
 
-    return Promise.all(userPromises);
-
-    // var movePromises = [];
-    // userIds.forEach( userId => {
-    //   movePromises.push(exports.getLastMove(userId));
-    // });
-    // return Promise.all(movePromises).then( moves => {
-    //   console.log('moves', moves);
-    //   return moves.filter( move => {return !!move});
-    // })
+    return Promise.all(userPromises).then( users => {
+      //not sure why some are coming out as null, maybe the IDs were for Movers
+      users = users.filter( user => { return !!user; });
+      return users;
+    })
 
   });
 }

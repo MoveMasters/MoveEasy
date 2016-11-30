@@ -12,9 +12,11 @@ class Messages extends React.Component {
   constructor(props) {
     super(props);
 
+    this.contactsById = {};
     this.state = {
       contacts:[],
-      displayedConvo:[]
+      displayedConvo:[],
+      userSelected: null
     };
 
     this.updateContacts();
@@ -27,20 +29,27 @@ class Messages extends React.Component {
       //map by userIid
       this.contactsById = {};
       contacts.forEach( contact => {
-        contactsById[contactsById.user_id] = contact;
+        this.contactsById[contact._id] = contact;
       });
-    })
+    });
+  }
+
+
+  updateConversation(userId) {
+    util.getConversation(userId).then( messages => {
+      this.setState({
+        displayedConvo: messages,
+      });
+    });
   }
 
 
   onProfileClick(event) {
-    //FIXME: get userid from event
-    this.userSelected = this.state.contactsById[user_id];
-    util.getConversation(user_id).then( messages => {
-      this.setState({
-        displayedConvo: messages,
-        userSelected: userSelected
-      });
+    const userId = $(event.target).closest('tr')[0].id;
+    const userSelected = this.contactsById[userId];
+    this.updateConversation(userId);
+    this.setState({
+      userSelected: userSelected
     });
   }
 
@@ -53,7 +62,13 @@ class Messages extends React.Component {
   }
 
   onMessageSend(event) {
+    const text = $('#message-input').val();
+    if (!text) { return; }
 
+    const userId = this.state.userSelected._id;
+    util.sendNewMessage(userId, text).then( newMessage => {
+      this.updateConversation(userId);
+    });
   }
 
   render() {

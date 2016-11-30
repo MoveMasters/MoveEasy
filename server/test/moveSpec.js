@@ -13,11 +13,23 @@ const userObj1 = testUtil.userObj1;
 
 
 describe('Move Server APIs', () => {
-  var user_id;
-  var move_id;
+  let user_id;
+  let move_id;
+  let company;
+  let mover_id1;
+  let moverToken1;
+  let moverName1;
 
   before((done) => {
-    testUtil.clearDatabase().then(done);
+    testUtil.clearDatabase().then( () => {
+      testUtil.signupMover1(request).then( mover => {
+        company = mover.company;
+        mover_id1 = mover._id;
+        moverToken1 = mover.token;
+        moverName1 = mover.name;
+        done();
+      })
+    });
   });
 
   it('Should create a new move', (done) => {
@@ -82,6 +94,19 @@ describe('Move Server APIs', () => {
       expect(move._id).to.equal(move_id);
       console.log('username in check', move.username)
       expect(move.username).to.equal(userObj1.username);
+      done();
+    });
+  });
+
+
+  //maybe move to the mover spec but it requires more setup
+  it('Should load contacts for the mover', (done) => {
+    request.get('/api/mover/contacts')
+    .set('x-access-token', moverToken1)
+    .end( (err, res) => {
+      const contacts = res.body.contacts;
+      expect(contacts.length).to.equal(1);
+      expect(contacts[0].username).to.equal(userObj1.username);
       done();
     });
   });

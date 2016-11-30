@@ -10,10 +10,12 @@ const dbUtil = require('./../dbUtil');
 
 
 exports.handleNewMove = (req, res, next) => {
+  company = req.body.company || 'MoveKick';
   dbUtil.getUserFromReq(req, next).then( user => {
     const moveObj = {
       user_id: user.id,
       phone: req.body.phone,
+      company: company,
       currentAddress: req.body.currentAddress,
       futureAddress: req.body.futureAddress,
       surveyTime: req.body.surveyTime

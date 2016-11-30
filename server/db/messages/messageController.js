@@ -13,10 +13,14 @@ const dbUtil = require('./../dbUtil');
 const fixMessagePopulate = (message) => {
   //replace the mover_id and user_id info
 
-  //if sent by user, no mover_id
-  const mover_id = (!!message.mover_id) ? message.mover_id._id : undefined;
-  const movername = (!!message.mover_id) ? message.mover_id.name : undefined;
 
+  //if sent by user, no mover_id
+  var mover_id;
+  var moverName;
+  if(!!message.mover_id) {
+    mover_id = message.mover_id._id;
+    moverName = message.mover_id.name;
+  }
 
   return {
     //from populate user_id
@@ -24,7 +28,7 @@ const fixMessagePopulate = (message) => {
     customerName: message.user_id.name,
     //from populate mover
     mover_id: mover_id,
-    moverName: movername,
+    moverName: moverName,
     //rest
     _id: message._id,
     createdAt: message.createdAt,
@@ -79,6 +83,8 @@ exports.handleNewMessageFromMover = (req, res, next) => {
   };
 
   Message.create(messageObj).then( newMessage => {
+    //add value
+    newMessage.moverName = mover.name;
     res.send(newMessage);
   }).catch( err => {
     console.log('handleNewMessageFromMover err', err);
@@ -99,6 +105,8 @@ exports.getConversationForUser = (req, res, next) => {
 };
 
 exports.getConversationForMover = (req, res, next) => {
+
+
   const user_id = req.query.userId || req.cookies.userId ;
   const mover = dbUtil.decodeUserFromHeader(req);
   const company = mover.company;
@@ -108,14 +116,4 @@ exports.getConversationForMover = (req, res, next) => {
   });
 };
 
-
-
-exports.getContacts = (req, res, next) => {
-  const mover = dbUtil.decodeUserFromHeader(req);
-  const company = mover.company;
-  dbUtil.findCompanyContacts(company)
-  .then( contacts => {
-    res.send({contacts});
-  });
-}
 

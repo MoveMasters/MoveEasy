@@ -16,6 +16,7 @@ const username1 = 'username1';
 const password1 = 'password1';
 const name1 = 'Stephen Cefali';
 const phone1 = '909-454-3432';
+const company1 = 'FakeCompany';
 const currentAddress1 = '944 Market St, San Francisco, CA, 91402';
 const futureAddress1 = '916 Kearny St, San Francisco, CA, 94133';
 const surveyTime1 = new Date();
@@ -33,6 +34,7 @@ const username2 = 'username2';
 const password2 = 'password2';
 const name2 = 'Joe Sang';
 const phone2 = '343-444-3222';
+const company2 = 'MoveFast';
 const currentAddress2 = '1 Market St, San Francisco, CA, 91402';
 const futureAddress2 = '123 First St, Los Angeles, CA, 93234';
 const surveyTime2 = new Date('Mon Nov 28 2016 11:44:19 GMT-0800 (PST)');
@@ -64,7 +66,6 @@ const userObj3 = {
 const movername1 = 'Jim Mahon'
 const moveruser1 = 'jmahon@movekick.com';
 const moverpass1 = '12113';
-const company1 = 'FakeCompany';
 
 const moverObj1 = {
   username: moveruser1,
@@ -214,7 +215,8 @@ exports.signupUser1CreateMove1 = (request) => {
         surveyTime: surveyTime1,
         phone:phone1,
         currentAddress: currentAddress1,
-        futureAddress: futureAddress1
+        futureAddress: futureAddress1,
+        company: company1
       })
       .set('x-access-token', user.token)
       .end( (err, res) => {
@@ -241,7 +243,8 @@ exports.signupUser2CreateMove2 = (request) => {
         surveyTime: surveyTime2,
         phone:phone2,
         currentAddress: currentAddress2,
-        futureAddress: futureAddress2
+        futureAddress: futureAddress2,
+        company: company2
       })
       .set('x-access-token', user.token)
       .end( (err, res) => {

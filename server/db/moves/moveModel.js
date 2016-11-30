@@ -17,6 +17,11 @@ const moveSchema = new Schema ({
   phone: {
     type: String
   },
+  company: {
+    type: String,
+    required: true,
+    default: 'MoveKick'
+  },
   currentAddress: {
     type: String
   },

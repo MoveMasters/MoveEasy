@@ -121,16 +121,4 @@ describe('Message Server API tests', () => {
   });
 
 
-  it('Should load contacts for the mover', (done) => {
-    request.get('/api/message/contacts')
-    .set('x-access-token', moverToken1)
-    .end( (err, res) => {
-      const contacts = res.body.contacts;
-      expect(contacts.length).to.equal(1);
-      expect(contacts[0].username).to.equal(username1);
-      expect(contacts[0]._id).to.equal(String(userId1));
-      done();
-    });
-  });
-
 });

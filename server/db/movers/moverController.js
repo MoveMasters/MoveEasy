@@ -21,5 +21,13 @@ module.exports = {
   },
   checkAuth(req, res, next) {
     return gUController.checkAuth(Mover, req, res, next);
+  },
+  getContacts(req, res, next) {
+    const mover = dbUtil.decodeUserFromHeader(req);
+    const company = mover.company;
+    dbUtil.findCompanyContacts(company)
+    .then( contacts => {
+      res.send({contacts});
+    });
   }
 };
