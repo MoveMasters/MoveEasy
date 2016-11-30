@@ -30,10 +30,8 @@ const generalUserSchema = new Schema({
     required: true,
   },
   name: {
-    type: String
-  },
-  email: {
-    type: String
+    type: String,
+    required: true
   },
   salt: {
     type: String

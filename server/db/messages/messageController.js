@@ -9,6 +9,34 @@ const dbUtil = require('./../dbUtil');
 
 
 
+
+const fixMessagePopulate = (message) => {
+  return {
+    _id: message._id,
+    user_id: message.user_id._id,
+    mover_id: message.mover_id._id,
+    movername: message.mover_id._id,
+    createdAt: message.createdAt,
+    company: message.populate,
+    text: message.text,
+    username: message.user_id.username
+  }
+}
+
+
+const getConversation = (user_id, company) => {
+  return Message.find({user_id, company})
+  .sort({createdAt:-1})
+  // .populate('move_id')
+  // .populate('user_id')
+  .exec().then( messages => {
+    //messages = messages.map(fixMessagePopulate);
+    return messages;
+  });
+}
+
+
+
 exports.handleNewMessageFromUser = (req, res, next) => {
   const user_id = dbUtil.getUserIdFromReq(req);
   const company = req.body.company || 'MoveKick';
@@ -55,9 +83,7 @@ exports.getConversationForUser = (req, res, next) => {
   //default for now
   const company = req.query.company || req.cookies.company || 'MoveKick';
 
-  Message.find({user_id, company})
-  .sort({createdAt:-1})
-  .exec().then( messages => {
+  getConversation(user_id, company).then( messages => {
     res.send({messages});
   });
 };
@@ -67,9 +93,7 @@ exports.getConversationForMover = (req, res, next) => {
   const mover = dbUtil.decodeUserFromHeader(req);
   const company = mover.company;
 
-  Message.find({user_id, company})
-  .sort({createdAt:-1})
-  .exec().then( messages => {
+  getConversation(user_id, company).then( messages => {
     res.send({messages});
   });
 };
@@ -77,11 +101,11 @@ exports.getConversationForMover = (req, res, next) => {
 
 
 exports.getContacts = (req, res, next) => {
-    const mover = dbUtil.decodeUserFromHeader(req);
-    const company = mover.company;
-    dbUtil.findCompanyContacts(company)
-    .then( contacts => {
-      res.send({contacts});
-    });
-  }
+  const mover = dbUtil.decodeUserFromHeader(req);
+  const company = mover.company;
+  dbUtil.findCompanyContacts(company)
+  .then( contacts => {
+    res.send({contacts});
+  });
+}
 

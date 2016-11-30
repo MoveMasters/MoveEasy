@@ -32,8 +32,9 @@ exports.decode = decode;
 
 
 const decodeUserFromHeader = (req) => {
-  const token = req.headers['x-access-token'];
+  const token = req.headers['x-access-token'] || req.cookies['x-access-token'];
   if (!token) {
+    console.log('req', req);
     throw new Error('No token');
   }
   return decode(token);
@@ -146,7 +147,6 @@ exports.getMoveItems = (move_id) => {
   console.log('calling get move items')
   return new Promimse( (resolve, reject) => {
     Item.find({move_id:move_id}).sort({createdAt:-1}).exec().then( moveItems => {
-      console.log(move_id, moveItems, 'from getMoveItems')
       resolve(moveItems);
     },
     err => {

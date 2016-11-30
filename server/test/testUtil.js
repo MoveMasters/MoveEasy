@@ -23,7 +23,8 @@ const surveyTime1 = new Date();
 
 const userObj1 = { 
   username: username1,
-  password: password1
+  password: password1,
+  name: name1
 };
 
 
@@ -38,7 +39,8 @@ const surveyTime2 = new Date('Mon Nov 28 2016 11:44:19 GMT-0800 (PST)');
 
 const userObj2 = { 
   username: username2,
-  password: password2
+  password: password2,
+  name: name2
 };
 
 
@@ -52,7 +54,8 @@ const surveyTime3 = new Date('Tue Nov 29 2016 11:44:19 GMT-0800 (PST)');
 
 const userObj3 = { 
   username: username3,
-  password: password3
+  password: password3,
+  name: name3
 };
 
 
@@ -159,6 +162,10 @@ exports.signinUser1 = (request) => {
   return getUser1FromRoute(request, '/api/user/signin');
 };
 
+exports.signinUser2 = (request) => {
+  return getUser2FromRoute(request, '/api/user/signin');
+};
+
 
 exports.signupUser1 = (request) => {
   return getUser1FromRoute(request, '/api/user/signup');
@@ -205,7 +212,6 @@ exports.signupUser1CreateMove1 = (request) => {
       .send({
         user_id:user.id,
         surveyTime: surveyTime1,
-        name:name1,
         phone:phone1,
         currentAddress: currentAddress1,
         futureAddress: futureAddress1
@@ -233,7 +239,6 @@ exports.signupUser2CreateMove2 = (request) => {
       .send({
         user_id:user.id,
         surveyTime: surveyTime2,
-        name:name2,
         phone:phone2,
         currentAddress: currentAddress2,
         futureAddress: futureAddress2
