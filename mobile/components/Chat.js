@@ -21,9 +21,11 @@ let retrieveMessages;
 export default class Inventory extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       messages: [],
     };
+
     this.onSend = this.onSend.bind(this);
   }
 

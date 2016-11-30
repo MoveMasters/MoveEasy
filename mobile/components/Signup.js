@@ -10,15 +10,17 @@ import {
 } from 'react-native';
 import t from 'tcomb-form-native';
 
-import Signup from './Signup';
 import Dashboard from './Dashboard';
 import Information from './Information';
 import helper from '../utils/helper';
+import Login from './Login';
 
 const Form = t.form.Form;
 const Person = t.struct({
+  name: t.String,
   email: t.String,
   password: t.String,
+  'Confirm password': t.String,
 });
 
 const options = {
@@ -27,6 +29,9 @@ const options = {
       autoCapitalize: 'none',
     },
     password: {
+      secureTextEntry: true,
+    },
+    redoPassword: {
       secureTextEntry: true,
     },
   },
@@ -41,7 +46,7 @@ const onValueChange = async (item, selectedValue) => {
   }
 };
 
-export default class Login extends React.Component {
+export default class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.userInfo = null;
@@ -50,20 +55,23 @@ export default class Login extends React.Component {
   goToNext(type) {
     if (type === 'signup') {
       this.props.navigator.push({
-        component: Signup,
+        component: Information,
       });
     } else if (type === 'signin') {
       this.props.navigator.push({
-        component: Dashboard,
+        component: Login,
       });
     }
   }
 
   userAuth(type) {
     const value = this.refs.form.getValue();
-
+    if (value.password !== value.redoPassword) {
+      AlertIOS.alert('Passwords do not match! Please try again.');
+    }
     if (value) {
       const user = {
+        name: value.name,
         username: value.email,
         password: value.password,
       };
@@ -89,7 +97,7 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View style={styles.main} flexDirection="column">
+      <View style={styles.main}>
         <View style={styles.row}>
           <Text style={styles.title}>MoveKick</Text>
         </View>
@@ -97,7 +105,7 @@ export default class Login extends React.Component {
           <View style={styles.row}>
             <Form
               ref="form"
-              style={{borderColor: 'red'}}
+              style={{ borderColor: 'red' }}
               type={Person}
               options={options}
             />
@@ -105,15 +113,15 @@ export default class Login extends React.Component {
           <View style={styles.row}>
             <TouchableHighlight
               style={styles.button}
-              onPress={() => this.userAuth('signin')}
+              onPress={() => this.userAuth('signup')}
               underlayColor="limegreen"
             >
-              <Text style={styles.buttonText}>Login</Text>
+              <Text style={styles.buttonText}>Signup</Text>
             </TouchableHighlight>
           </View>
         </View>
-        <View style={styles.signup}>
-          <Text onPress={() => this.goToNext('signup')}>Don't have an account? Sign up here!</Text>
+        <View style={styles.login}>
+          <Text onPress={() => this.goToNext('signin')}>Don't have an account? Sign up here!</Text>
         </View>
       </View>
     );
@@ -126,13 +134,12 @@ const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    flexDirection: 'column',
+    // backgroundColor: 'black',
   },
   container: {
     justifyContent: 'center',
     // alignItems: 'center',
     alignSelf: 'center',
-    marginTop: 50,
     width: width * 0.9,
     borderRadius: 5,
     flexDirection: 'column',
@@ -163,13 +170,12 @@ const styles = StyleSheet.create({
     borderColor: '#1E90FF',
     borderWidth: 1,
     borderRadius: 5,
-    marginBottom: 10,
-    top: 50,
+    top: 30,
     alignSelf: 'stretch',
     justifyContent: 'center',
   },
-  signup: {
-    top: 150,
+  login: {
+    top: 80,
     alignSelf: 'center',
   },
 });
