@@ -11,20 +11,23 @@ require('es6-promise').polyfill();
 
 
 
-const name = 'Steve';
+const itemName = 'Chair - Office';
+const itemId = 4343;
 const moveId = 12345;
 const itemPrototypes = ['Chair - Office', 'Bookcase - Sections'];
+const tags = ['Chair'];
 
 const getCurrentItem = () => {
   return {
-    name: name
+    name: itemName,
+    id: itemId,
+    tags: tags
   }
 };
 
 
 describe('AddToInventory Spec', () => {
   beforeEach(function (done) {
-    sinon.spy(AddToInventory.prototype, 'componentDidMount');
 
     moxios.install();
     moxios.stubRequest(util.serverURL + '/api/auth/clarifaiInfo', {
@@ -46,31 +49,16 @@ describe('AddToInventory Spec', () => {
 
   afterEach(function () {
     moxios.uninstall();
-    AddToInventory.prototype.componentDidMount.restore();
   });
 
 
   it('Should shallow render AddToInventory', done => {
-    shallow(<AddToInventory
+    const wrapper = shallow(<AddToInventory
       moveId={moveId}
       getCurrentItem={getCurrentItem}
     />);
-    expect(AddToInventory.prototype.componentDidMount.calledOnce).to.equal(true);
-    done();
-  });
-
-  it('Should mount AddToInventory', done => {
-    //mount(<AddToInventory/>);
+    expect(wrapper.find('#topLevel')).to.have.length(1);
     done();
   });
 
 });
-    
-    
-// getCurrentItem={ getCurrentItem } 
-// stepIndex={ stepIndex }
-// handleNext={this.handleNext.bind(this)}
-// dequeueItem={ dequeueItem }
-// updateInventory={ updateInventory }
-// moveId={ moveId }
-// openSnackbar={ openSnackbar }/>

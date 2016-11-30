@@ -2,8 +2,8 @@ import axios from 'axios';
 // const ip = '10.6.27.137';
 const ip = 'localhost';
 const port = process.env.PORT || '9000';
-// const serverURL = `http://${ip}:${port}`;
-const serverURL = 'https://movekickinc.herokuapp.com';
+const serverURL = `http://${ip}:${port}`;
+//const serverURL = 'https://movekickinc.herokuapp.com';
 
 
 /************************************ interceptors ************************************/
@@ -26,8 +26,9 @@ const getExistingMoveURL = `${serverURL}/api/move/existingMove`;
 const getMoveItemsURL = `${serverURL}/api/item/moveItems`;
 const signupMoverUrl = `${serverURL}/api/mover/signup`;
 const signinMoverURL = `${serverURL}/api/mover/signin`;
-const sendMessageURL = `${serverURL}/api/message/newMessage`;
-const getConversationURL = `${serverURL}/api/message/conversation`;
+const sendMessageURL = `${serverURL}/api/message/newMessageFromMover`;
+const getConversationURL = `${serverURL}/api/message/conversationForMover`;
+const getContactsURL = `${serverURL}/api/messages/contacts`;
 
 
 
@@ -208,8 +209,10 @@ const sendNewMessage = (destinationId, text) => {
 };
 
 
-const getConversation = (destinationId) => {
-  return axios.post(sendMessageURL, {destinationId})
+const getConversation = (userId) => {
+  return axios.get(getConversationURL, {
+    params: {userId}
+  })
   .then( response => {
     return response.data.messages;
   })
@@ -218,6 +221,19 @@ const getConversation = (destinationId) => {
     throw err;
   });
 };
+
+/************************************CONTACTS ************************************/
+
+const getContacts = () => {
+  return axios.get(getContactsURL)
+  .then( response => {
+    return response.data.contacts;
+  })
+  .catch( err => {
+    console.log('getContacts err', err);
+    throw err;
+  });
+}
 
 /************************************ SEARCHBAR ************************************/
 
@@ -236,6 +252,9 @@ const filterSearch = (searchTerm) => {
  return [...new Set( results )];
 };
 
+
+
+
 /************************************ EXPORT ************************************/
 
 export default 
@@ -253,7 +272,8 @@ export default
   signinMover,
   sendNewMessage,
   getConversation,
-  serverURL
+  serverURL,
+  getContacts
 }
 
 //const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;

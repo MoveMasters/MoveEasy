@@ -8,7 +8,7 @@ const dbUtil = require('./../db/dbUtil');
 const request = supertest.agent(server);
 
 
-let userId1, userId2, token1, token2, company1, moverId1, moverToken1;
+let username1, username2, userId1, userId2, token1, token2, company1, moverId1, moverToken1;
 const messageText1 = 'This is a message';
 const messageText2 = 'Hello world';
 
@@ -22,15 +22,17 @@ describe('Message Server API tests', () => {
 
     testUtil.clearDatabase().then( () => { 
       Promise.all([
-        testUtil.signupUser1(request), 
-        testUtil.signupUser2(request), 
+        testUtil.signupUser1CreateMove1(request), 
+        testUtil.signupUser2CreateMove2(request), 
         testUtil.signupMover1(request)
       ])
       .then( result => {
-        token1 = result[0].token;
-        token2 = result[1].token;
-        userId1 = result[0]._id;
-        userId2 = result[1]._id;
+        token1 = result[0][0].token;
+        token2 = result[1][0].token;
+        userId1 = result[0][0]._id;
+        userId2 = result[1][0]._id;
+        username1 = result[0][0].username;
+        username2 = result[1][0].username;
         company1 = result[2].company;
         moverId1 = result[2]._id;
         moverToken1 = result[2].token;
@@ -108,6 +110,19 @@ describe('Message Server API tests', () => {
     .end( (err, res) => {
       const messages = res.body.messages;
       expect(messages.length).to.equal(0);
+      done();
+    });
+  });
+
+
+  it('Should load contacts for the mover', (done) => {
+    request.get('/api/message/contacts')
+    .set('x-access-token', moverToken1)
+    .end( (err, res) => {
+      const contacts = res.body.contacts;
+      expect(contacts.length).to.equal(1);
+      expect(contacts[0].username).to.equal(username1);
+      expect(contacts[0].user_id).to.equal(String(userId1));
       done();
     });
   });

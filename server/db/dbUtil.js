@@ -66,9 +66,15 @@ const fixMovePopulate = (move) => {
 
 exports.encodeSendUser = (user, res) => {
   const token = encode(user);
-  exports.getLastMove(user._id).then( lastMove => {
-    res.json({ token, lastMove});
-  });
+  //only send over the move for non-movers
+  res.cookie('x-access-token', token);
+  if (user.__t === 'Mover') {
+    res.json({token});
+  } else {
+    exports.getLastMove(user._id).then( lastMove => {
+      res.json({ token, lastMove});
+    });
+  }
 };
 
 
@@ -169,7 +175,7 @@ exports.getUserMoves = (user_id) => {
 exports.getLastMove = (user_id) => {
   return exports.getUserMoves(user_id).then( moves => {
     if (moves.length === 0) {
-      return {};
+      return null;
     }
     return moves[moves.length - 1];
   });
@@ -189,6 +195,22 @@ exports.findItemAndUpdate = (item) => {
   });
 }
 
+
+exports.findCompanyContacts = (company) => {
+  return Message.find({company}).exec().then( messages => {
+    userIds = new Set();
+    messages.forEach( message => {
+      userIds.add(String(message.user_id));
+    });
+    var movePromises = [];
+    userIds.forEach( userId => {
+      movePromises.push(exports.getLastMove(userId));
+    });
+    return Promise.all(movePromises).then( moves => {
+      return moves.filter( move => {return !!move});
+    })
+  });
+}
 
 
 
