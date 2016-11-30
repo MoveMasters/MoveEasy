@@ -13,28 +13,15 @@ const dbUtil = require('./../dbUtil');
 const fixMessagePopulate = (message) => {
   //replace the mover_id and user_id info
 
+  message.customerName = message.user_id.name;
 
   //if sent by user, no mover_id
-  var mover_id;
-  var moverName;
   if(!!message.mover_id) {
-    mover_id = message.mover_id._id;
-    moverName = message.mover_id.name;
+    const mover_id = message.mover_id._id;
+    message.moverName = message.mover_id.name;
+    message.mover_id = mover_id;
   }
-
-  return {
-    //from populate user_id
-    user_id: message.user_id._id,
-    customerName: message.user_id.name,
-    //from populate mover
-    mover_id: mover_id,
-    moverName: moverName,
-    //rest
-    _id: message._id,
-    createdAt: message.createdAt,
-    company: message.company,
-    text: message.text
-  }
+  return message 
 }
 
 

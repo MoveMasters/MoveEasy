@@ -6,7 +6,7 @@
 
 const jwt = require('jwt-simple');
 const dbUtil = require('./../dbUtil.js');
-
+const generalUser = require('./generalUserModel');
 
 module.exports = {
 
@@ -80,32 +80,5 @@ module.exports = {
       .fail((error) => {
         next(error);
       });
-  },
-
-  checkAuth(model, req, res, next) {
-
-    /** Grab the token in the header, if any */
-    const token = req.headers['x-access-token'];
-    if (!token) {
-      next(new Error('No token'));
-    } else {
-
-      /** Decode the token */
-      const user = jwt.decode(token, 'secret');
-
-      /** Check to see if that user exists in the database and respond with right status code */
-      model.findOne({ username }).exec()
-        .then((foundUser) => {
-          if (foundUser) {
-            res.send(200);
-          } else {
-            res.send(401);
-          }
-        })
-        .fail((error) => {
-          next(error);
-        });
-    }
   }
-
 };

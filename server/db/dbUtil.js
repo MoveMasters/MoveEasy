@@ -34,7 +34,6 @@ exports.decode = decode;
 const decodeUserFromHeader = (req) => {
   const token = req.headers['x-access-token'] || req.cookies['x-access-token'];
   if (!token) {
-    console.log('req', req);
     throw new Error('No token');
   }
   return decode(token);
@@ -45,24 +44,12 @@ exports.decodeUserFromHeader = decodeUserFromHeader;
 
 
 const fixMovePopulate = (move) => {
-  // move.username = move.user_id.username;
-  // move.user_id = move.user_id._id;
-  // return move
-
-  // Can't get the normal way to work
-  // Using this instead
-  return  {
-    _id: move._id,
-    createdAt: move.createdAt,
-    user_id: move.user_id._id,
-    username: move.user_id.username,
-    name: move.user_id.name,
-    phone: move.phone,
-    currentAddress: move.currentAddress,
-    futureAddress: move.futureAddress,
-    surveyTime: move.surveyTime
-  }
+  //fix the join table
+  move.username = move.user_id.username;
+  move.user_id = move.user_id._id;
+  return move
 }
+
 
 
 exports.encodeSendUser = (user, res) => {
@@ -117,30 +104,6 @@ exports.getUserFromReq = (req) => {
 
 
 
-/**
-  * This function is a middleware function to check authentication.
-  * @method checkAuth
-  * @param {object} req request object
-  * @param {object} res response object
-  * @param {object} next callback function to execute next
-  * @returns {boolean}
-  */
-exports.checkAuth = (req, res, next) => {
-  const token = req.headers['x-access-token'];
-  if (!token) {
-    next(new Error('No token in util.checkAuth'));
-    return null;
-  }
-  try {
-    const username = decode(token).username;
-    next();
-    return true;
-  } catch (e) {
-    next(new Error('Invalid Token!'));
-    return null;
-  }
-};
-
 
 
 exports.getMoveItems = (move_id) => {
@@ -181,6 +144,10 @@ exports.getLastMove = (user_id) => {
     }
     return moves[moves.length - 1];
   });
+}
+
+exports.getMoveFromId = (move_id) => {
+  return Move.findOne({_id: move_id}).exec();
 }
 
 exports.findItemAndUpdate = (item) => {
@@ -228,6 +195,37 @@ exports.findCompanyContacts = (company) => {
 
   });
 }
+
+exports.updateUserMoveInfo = (req, res, next) => {
+  const user_id = req.body.user_id || req.body.userId;
+  const move_id = req.body._id;
+
+  const userFind = User.findOne({_id: user_id}).exec();
+  const moveFind = Move.findOne({_id: move_id}).exec();
+  Promise.all([userFind, moveFind]).then( results => {
+    const user = results[0];
+    const move = results[1];
+
+    //only can update name for user
+    var promises = [];
+    if (user.name != req.body.name) {
+      user.name = req.body.name;
+      promises.push(user.save());
+    }
+    //recreate the move obj
+    var moveFromBody = req.body;
+    moveFromBody.user_id = user_id;
+
+    Object.assign(move, moveFromBody);
+    promises.push(move.save());
+
+    Promise.all(promises).then( () => {
+      res.end();
+    });
+  });
+}
+
+
 
 
 

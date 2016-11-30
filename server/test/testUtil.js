@@ -203,70 +203,82 @@ exports.clearAndSignupUsers123 = (request) => {
 }
 
 
-
-
-
-exports.signupUser1CreateMove1 = (request) => {
+const createMove1 = (request, user) => {
   return new Promise( (resolve, reject) => {
-    exports.signupUser1(request).then( user => {
-      request.post('/api/move/newMove')
-      .send({
-        user_id:user.id,
-        surveyTime: surveyTime1,
-        phone:phone1,
-        currentAddress: currentAddress1,
-        futureAddress: futureAddress1,
-        company: company1
-      })
-      .set('x-access-token', user.token)
-      .end( (err, res) => {
-        if(err) {
-          reject(err);
-        } else {
-          res.body.user_id = mongoose.Types.ObjectId(res.body.user_id);
-          resolve([user, res.body]);
-        }  
-      });
-    }).catch( err => {
-      throw err;
+    request.post('/api/move/newMove')
+    .send({
+      user_id:user.id,
+      surveyTime: surveyTime1,
+      phone:phone1,
+      currentAddress: currentAddress1,
+      futureAddress: futureAddress1,
+      company: company1
+    })
+    .set('x-access-token', user.token)
+    .end( (err, res) => {
+      if(err) {
+        reject(err);
+      } else {
+        res.body.user_id = mongoose.Types.ObjectId(res.body.user_id);
+        resolve(res.body);
+      }
     });
   });
-};
+}
+
+const createMove2 = (request, user) => {
+  return new Promise( (resolve, reject) => {
+    request.post('/api/move/newMove')
+    .send({
+      user_id:user.id,
+      surveyTime: surveyTime2,
+      phone:phone2,
+      currentAddress: currentAddress2,
+      futureAddress: futureAddress2,
+      company: company1
+    })
+    .set('x-access-token', user.token)
+    .end( (err, res) => {
+      if(err) {
+        reject(err);
+      } else {
+        res.body.user_id = mongoose.Types.ObjectId(res.body.user_id);
+        resolve(res.body);
+      }
+    });
+  });
+}
+
 
 
 exports.signupUser2CreateMove2 = (request) => {
-  return new Promise( (resolve, reject) => {
-    exports.signupUser2(request).then( user => {
-      request.post('/api/move/newMove')
-      .send({
-        user_id:user.id,
-        surveyTime: surveyTime2,
-        phone:phone2,
-        currentAddress: currentAddress2,
-        futureAddress: futureAddress2,
-        company: company2
-      })
-      .set('x-access-token', user.token)
-      .end( (err, res) => {
-        if(err) {
-          reject(err);
-        } else {
-          res.body.user_id = mongoose.Types.ObjectId(res.body.user_id);
-          resolve([user, res.body]);
-        }  
-      });
-    }).catch( err => {
-      throw err;
+  return userMovePromise = exports.signupUser2(request).then( user => {
+    return createMove2(request, user).then( move => {
+      return [user, move];
     });
   });
-};
+}
+
+
+exports.setupMove1 = (request) => {
+  const userMovePromise = exports.signupUser1(request).then( user => {
+    return createMove1(request, user).then( move => {
+      return [user, move];
+    });
+  });
+
+  const moverPromise = exports.signupMover1(request);
+  return Promise.all([userMovePromise, moverPromise]).then( result => {
+    const output = [result[0][0], result[1], result[0][1]];
+    return output;
+  });
+}
 
 
 
-
-exports.clearToMove1 = (request) => {
+exports.clearSetupMove1 = (request) => {
   return exports.clearDatabase().then( () => {
-    return exports.signupUser1CreateMove1(request);
+    return exports.setupMove1(request);
   });
 }
 

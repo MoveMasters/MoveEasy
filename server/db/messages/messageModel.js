@@ -25,12 +25,26 @@ const messageSchema = new Schema ({
   text: {
     type: String,
     required: true
+  },
+  //only used as placeholders for the join table
+  customerName: {
+    type: String
+  },
+  moverName: {
+    type: String
   }
 },
 {
   timestamps: true
 });
 
+//remove entries from the join table
+messageSchema.pre('save', function (next) {
+  const message = this;
+  delete message.customerName;
+  delete message.moverName;
+  next();
+});
 
 const Message = mongoose.model('Message', messageSchema);
 module.exports = Message;
