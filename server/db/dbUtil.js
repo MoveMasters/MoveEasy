@@ -143,8 +143,10 @@ exports.checkAuth = (req, res, next) => {
 
 
 exports.getMoveItems = (move_id) => {
+  console.log('calling get move items')
   return new Promimse( (resolve, reject) => {
     Item.find({move_id:move_id}).sort({createdAt:-1}).exec().then( moveItems => {
+      console.log(move_id, moveItems, 'from getMoveItems')
       resolve(moveItems);
     },
     err => {

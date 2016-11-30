@@ -44,8 +44,9 @@ exports.handleNewItem = (req, res, next) => {
 };
 
 exports.handleMoveItems = (req, res, next) => {
-  const move_id = req.cookies.moveId || req.body.moveId;
+  const move_id = req.cookies.moveId || req.query.moveId;
   dbUtil.getMoveItems(move_id).then( moveItems => {
+    console.log(moveItems)
     res.send({moveItems});
   }).catch( err => {
     console.log('handleMoveItems err', err);

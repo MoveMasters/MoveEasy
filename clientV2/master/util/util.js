@@ -149,8 +149,10 @@ const getPendingMoves = () => {
 }
 
 
-const getInitialInventory = () => {
-  return axios.get(getMoveItemsURL)
+const getInitialInventory = (moveId) => {
+  return axios.get(getMoveItemsURL, {
+    params: { moveId }
+  })
   .then( response => {
     return response.data.moveItems;
   })
@@ -172,8 +174,10 @@ const getExistingMove = () => {
 }
 
 /************************************ LOGIN ************************************/
-const signupMover = (username, password) => {
-  return axios.post(signupMoverUrl, {username, password})
+
+const signupMover = (username, password, company) => {
+  console.log('calling signup mover')
+  return axios.post(signupMoverUrl, {username, password, company})
   .then( response => {
     return response.data;
   })
@@ -184,7 +188,7 @@ const signupMover = (username, password) => {
 };
 
 const signinMover = (username, password) => {
-  return axios.post(signinMoverUrl, {username, password})
+  return axios.post(signinMoverURL, {username, password})
   .then( response => {
     return response.data;
   })
@@ -251,8 +255,6 @@ const filterSearch = (searchTerm) => {
  });
  return [...new Set( results )];
 };
-
-
 
 
 /************************************ EXPORT ************************************/
