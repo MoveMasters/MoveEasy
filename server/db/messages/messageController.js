@@ -74,3 +74,14 @@ exports.getConversationForMover = (req, res, next) => {
   });
 };
 
+
+
+exports.getContacts = (req, res, next) => {
+    const mover = dbUtil.decodeUserFromHeader(req);
+    const company = mover.company;
+    dbUtil.findCompanyContacts(company)
+    .then( contacts => {
+      res.send({contacts});
+    });
+  }
+
