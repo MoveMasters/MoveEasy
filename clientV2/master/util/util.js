@@ -28,7 +28,7 @@ const signupMoverUrl = `${serverURL}/api/mover/signup`;
 const signinMoverURL = `${serverURL}/api/mover/signin`;
 const sendMessageURL = `${serverURL}/api/message/newMessageFromMover`;
 const getConversationURL = `${serverURL}/api/message/conversationForMover`;
-const getContactsURL = `${serverURL}/api/messages/contacts`;
+const getContactsURL = `${serverURL}/api/mover/contacts`;
 
 
 
@@ -201,8 +201,8 @@ const signinMover = (username, password) => {
 
 /************************************ MESSAGING ************************************/
 
-const sendNewMessage = (destinationId, text) => {
-  return axios.post(sendMessageURL, {destinationId, text})
+const sendNewMessage = (userId, text) => {
+  return axios.post(sendMessageURL, {userId, text})
   .then( response => {
     return response.data;
   })
@@ -218,6 +218,7 @@ const getConversation = (userId) => {
     params: {userId}
   })
   .then( response => {
+    console.log('getConversation', response.data.messages);
     return response.data.messages;
   })
   .catch( err => {

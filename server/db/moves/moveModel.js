@@ -14,11 +14,13 @@ const moveSchema = new Schema ({
     ref: 'User',
     required: true
   },
-  name: {
-    type: String
-  },
   phone: {
     type: String
+  },
+  company: {
+    type: String,
+    required: true,
+    default: 'MoveKick'
   },
   currentAddress: {
     type: String

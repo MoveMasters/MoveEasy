@@ -53,6 +53,7 @@ module.exports = {
     const username = req.body.username;
     const password = req.body.password;
     const company = req.body.company;
+    const name = req.body.name;
 
 
     //Check to see if username exists already 
@@ -68,6 +69,7 @@ module.exports = {
         return model.create({
           username,
           password,
+          name,
           company
         });
       })

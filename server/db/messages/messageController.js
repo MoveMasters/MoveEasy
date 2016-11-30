@@ -9,6 +9,48 @@ const dbUtil = require('./../dbUtil');
 
 
 
+
+const fixMessagePopulate = (message) => {
+  //replace the mover_id and user_id info
+
+
+  //if sent by user, no mover_id
+  var mover_id;
+  var moverName;
+  if(!!message.mover_id) {
+    mover_id = message.mover_id._id;
+    moverName = message.mover_id.name;
+  }
+
+  return {
+    //from populate user_id
+    user_id: message.user_id._id,
+    customerName: message.user_id.name,
+    //from populate mover
+    mover_id: mover_id,
+    moverName: moverName,
+    //rest
+    _id: message._id,
+    createdAt: message.createdAt,
+    company: message.company,
+    text: message.text
+  }
+}
+
+
+const getConversation = (user_id, company) => {
+  return Message.find({user_id, company})
+  .sort({createdAt:-1})
+  .populate('mover_id')
+  .populate('user_id')
+  .exec().then( messages => {
+    messages = messages.map(fixMessagePopulate);
+    return messages;
+  });
+}
+
+
+
 exports.handleNewMessageFromUser = (req, res, next) => {
   const user_id = dbUtil.getUserIdFromReq(req);
   const company = req.body.company || 'MoveKick';
@@ -41,6 +83,8 @@ exports.handleNewMessageFromMover = (req, res, next) => {
   };
 
   Message.create(messageObj).then( newMessage => {
+    //add value
+    newMessage.moverName = mover.name;
     res.send(newMessage);
   }).catch( err => {
     console.log('handleNewMessageFromMover err', err);
@@ -55,33 +99,21 @@ exports.getConversationForUser = (req, res, next) => {
   //default for now
   const company = req.query.company || req.cookies.company || 'MoveKick';
 
-  Message.find({user_id, company})
-  .sort({createdAt:-1})
-  .exec().then( messages => {
+  getConversation(user_id, company).then( messages => {
     res.send({messages});
   });
 };
 
 exports.getConversationForMover = (req, res, next) => {
+
+
   const user_id = req.query.userId || req.cookies.userId ;
   const mover = dbUtil.decodeUserFromHeader(req);
   const company = mover.company;
 
-  Message.find({user_id, company})
-  .sort({createdAt:-1})
-  .exec().then( messages => {
+  getConversation(user_id, company).then( messages => {
     res.send({messages});
   });
 };
 
-
-
-exports.getContacts = (req, res, next) => {
-    const mover = dbUtil.decodeUserFromHeader(req);
-    const company = mover.company;
-    dbUtil.findCompanyContacts(company)
-    .then( contacts => {
-      res.send({contacts});
-    });
-  }
 

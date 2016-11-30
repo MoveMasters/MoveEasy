@@ -32,8 +32,9 @@ exports.decode = decode;
 
 
 const decodeUserFromHeader = (req) => {
-  const token = req.headers['x-access-token'];
+  const token = req.headers['x-access-token'] || req.cookies['x-access-token'];
   if (!token) {
+    console.log('req', req);
     throw new Error('No token');
   }
   return decode(token);
@@ -55,7 +56,7 @@ const fixMovePopulate = (move) => {
     createdAt: move.createdAt,
     user_id: move.user_id._id,
     username: move.user_id.username,
-    name: move.name,
+    name: move.user_id.name,
     phone: move.phone,
     currentAddress: move.currentAddress,
     futureAddress: move.futureAddress,
@@ -146,7 +147,6 @@ exports.getMoveItems = (move_id) => {
   console.log('calling get move items')
   return new Promimse( (resolve, reject) => {
     Item.find({move_id:move_id}).sort({createdAt:-1}).exec().then( moveItems => {
-      console.log(move_id, moveItems, 'from getMoveItems')
       resolve(moveItems);
     },
     err => {
@@ -197,20 +197,35 @@ exports.findItemAndUpdate = (item) => {
   });
 }
 
+exports.getCompanyFromLastMove = (user_id) => {
+  return exports.getLastMove(user_id).then( move => {
+    if(!move) {
+      return null;
+    }
+    return move.company;
+  });
+}
+
 
 exports.findCompanyContacts = (company) => {
-  return Message.find({company}).exec().then( messages => {
+  return Move.find({company}).exec().then( moves => {
     userIds = new Set();
-    messages.forEach( message => {
-      userIds.add(String(message.user_id));
+    moves.forEach( move => {
+      userIds.add(String(move.user_id));
     });
-    var movePromises = [];
+
+    // Not sure about adding the move
+    var userPromises = [];
     userIds.forEach( userId => {
-      movePromises.push(exports.getLastMove(userId));
+      userPromises.push(User.findOne({_id: userId}).exec());
     });
-    return Promise.all(movePromises).then( moves => {
-      return moves.filter( move => {return !!move});
+
+    return Promise.all(userPromises).then( users => {
+      //not sure why some are coming out as null, maybe the IDs were for Movers
+      users = users.filter( user => { return !!user; });
+      return users;
     })
+
   });
 }
 
