@@ -19,9 +19,6 @@ module.exports = {
   signup(req, res, next) {
     return gUController.signup(Mover, req, res, next);
   },
-  checkAuth(req, res, next) {
-    return gUController.checkAuth(Mover, req, res, next);
-  },
   getContacts(req, res, next) {
     const mover = dbUtil.decodeUserFromHeader(req);
     const company = mover.company;

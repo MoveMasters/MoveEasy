@@ -5,6 +5,7 @@ const jwt = require('jwt-simple');
 const DataUri = require('datauri').promise;
 const moveController = require('./../db/moves/moveController');
 const testUtil = require('./testUtil');
+const dbUtil = require('./../db/dbUtil');
 
 const request = supertest.agent(server);
 
@@ -19,23 +20,25 @@ describe('Move Server APIs', () => {
   let mover_id1;
   let moverToken1;
   let moverName1;
+  let moveObj;
 
   before((done) => {
-    testUtil.clearDatabase().then( () => {
-      testUtil.signupMover1(request).then( mover => {
-        company = mover.company;
-        mover_id1 = mover._id;
-        moverToken1 = mover.token;
-        moverName1 = mover.name;
-        done();
-      })
-    });
+    testUtil.clearDatabase().then(done);
   });
 
+
   it('Should create a new move', (done) => {
-    testUtil.signupUser1CreateMove1(request).then( items => {
+    testUtil.setupMove1(request).then( items => {
       const user = items[0];
-      const move = items[1];
+      const mover = items[1];
+      const move = items[2];
+
+      //latch variables
+      company = mover.company;
+      mover_id1 = mover._id;
+      moverToken1 = mover.token;
+      moverName1 = mover.name;
+
       user_id = String(user._id);
       move_id = String(move._id);
       expect(user_id).to.equal(String(move.user_id));
@@ -53,9 +56,10 @@ describe('Move Server APIs', () => {
     });
   });
 
-  it('Should grab the move with the move id', (done) => {
+  it('Should grab the move with the move id for mover', (done) => {
     request.get('/api/move/existingMove')
     .set('cookies', `moveId=${move_id}`)
+    .set('x-access-token', moverToken1)
     .end(function(err, res) {
       expect(res.status).to.equal(200);
       expect(res.body.move._id).to.equal(move_id);
@@ -77,6 +81,7 @@ describe('Move Server APIs', () => {
 
   it('Should get all pending moves', (done) => {
     request.get('/api/move/pendingMoves')
+    .set('x-access-token', moverToken1)
     .end(function(err, res) {
       expect(res.status).to.equal(200);
       expect(res.body.moves.length).to.equal(2);
@@ -88,15 +93,40 @@ describe('Move Server APIs', () => {
   it('Should get last user move', (done) => {
     request.get('/api/move/lastMoveByUserId')
     .set('cookies', `userId=${user_id}`)
+    .set('x-access-token', moverToken1)
     .end(function(err, res) {
-      const move = res.body.move;
+      moveObj = res.body.move;
       expect(res.status).to.equal(200);
-      expect(move._id).to.equal(move_id);
-      console.log('username in check', move.username)
-      expect(move.username).to.equal(userObj1.username);
+      expect(moveObj._id).to.equal(moveObj._id);
+      console.log('username in check', moveObj.username)
+      expect(moveObj.username).to.equal(userObj1.username);
       done();
     });
   });
+
+
+ it('Should update the user and move info', (done) => {
+    //modify the move obj we grabbed before
+    const newName = 'New Name';
+    const newAddress = 'New Address';
+
+    moveObj.name = newName;
+    moveObj.futureAddress = newAddress;
+
+    //send it back and see if it got updated from the DB
+    request.post('/api/move/updateUserMoveInfo')
+    .set('x-access-token', moverToken1)
+    .send(moveObj)
+    .end( (err, res) => {
+      //load from DB check if OK
+      dbUtil.getMoveFromId(moveObj._id).then( retrievedMove => {
+        expect(retrievedMove.name).to.equal(newName);
+        expect(retrievedMove.futureAddress).to.equal(newAddress);
+        done();
+      });
+    });
+ }).timeout(3000);
+
 
 
   //maybe move to the mover spec but it requires more setup
@@ -105,7 +135,7 @@ describe('Move Server APIs', () => {
     .set('x-access-token', moverToken1)
     .end( (err, res) => {
       const contacts = res.body.contacts;
-      expect(contacts.length).to.equal(1);
+      expect(contacts.length).to.equal(2);
       expect(contacts[0].username).to.equal(userObj1.username);
       done();
     });

@@ -9,14 +9,23 @@ const request = supertest.agent(server);
 
 
 describe('Auth Server APIs', () => {
+
+  let moverToken;
   
-  before((done) => {
-    testUtil.clearDatabase().then(done);
+  before( function(done) {
+    this.timeout(3000);
+    testUtil.clearDatabase().then( () => {
+      testUtil.signupMover1(request).then( mover => {
+        moverToken = mover.token;
+        done();
+      })
+    });
   });
 
   it('Should send auth token and other info for Clarifai', (done) => {
     request.get('/api/auth/clarifaiInfo')
-    .send().end( (err, res) => {
+    .set('x-access-token', moverToken)
+    .end( (err, res) => {
       expect(res.body.clarifaiToken).to.not.be.null;
       expect(res.status).to.equal(200);
       done();

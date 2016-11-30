@@ -14,6 +14,7 @@ exports.handleNewItem = (req, res, next) => {
   photoData = photoData.replace(/^data:image\/(jpeg|png|jpg);base64,/, "");
   const filePath = __dirname + '/../../images/logo.png';
   const move_id = req.cookies.moveId || req.body.moveId;
+
   imageUtil.saveAndUpload(filePath, photoData)
   .then((imageUrl) =>{
     const itemObj = {

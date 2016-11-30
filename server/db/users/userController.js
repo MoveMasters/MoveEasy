@@ -17,8 +17,5 @@ module.exports = {
   },
   signup(req, res, next) {
     return gUController.signup(User, req, res, next);
-  },
-  checkAuth(req, res, next) {
-    return gUController.checkAuth(User, req, res, next);
   }
 };

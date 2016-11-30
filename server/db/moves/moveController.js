@@ -70,3 +70,8 @@ exports.getPendingMoves = (req, res, next) => {
     throw err;
   });
 };
+
+
+exports.updateUserMoveInfo = (req, res, next) => {
+  return dbUtil.updateUserMoveInfo(req, res, next);
+}

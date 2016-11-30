@@ -14,6 +14,14 @@ const moveSchema = new Schema ({
     ref: 'User',
     required: true
   },
+  //username and name are not saved
+  //only as placeholders when the join in peformed
+  username: {
+    type: String
+  },
+  name: {
+    type: String
+  },
   phone: {
     type: String
   },
@@ -48,6 +56,15 @@ const moveSchema = new Schema ({
 },
 {
   timestamps: true
+});
+
+//remove entries from the join table
+moveSchema.pre('save', function (next) {
+  const move = this;
+  //delete the username and name so we don't have a potential conflict with the user table
+  delete move.name;
+  delete move.username;
+  next();
 });
 
 const Move = mongoose.model('Move', moveSchema);
