@@ -42,10 +42,6 @@ class Contacts extends React.Component {
                             <input type="text" placeholder="Search"
                             onChange={this.props.onContactType}
                             className="input-sm form-control" />
-                            <span className="input-group-btn">
-                              <button type="button" className="btn btn-sm btn-default"
-                              onClick={this.props.onSearch} >Search</button>
-                            </span>
                         </div>
                     </Col>
                 </Row>
