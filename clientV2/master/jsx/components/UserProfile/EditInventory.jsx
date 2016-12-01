@@ -11,7 +11,8 @@ class EditInventory extends Component {
       cft: 0,
       going: true,
       pbo: false,
-      comment: ''
+      comment: '',
+      room: ''
     };
   }
 
@@ -71,6 +72,20 @@ class EditInventory extends Component {
     )
   }
 
+  renderTextEdit(title, boundState) {
+    return (
+      <div style={styles.parent}>
+        {title}
+        <div style={styles.counter}>
+          <input 
+            type="text" 
+            onChange={(event) => this.setState({[boundState]: event.target.checked})} 
+            checked={this.state[boundState]}/>
+        </div>
+      </div>
+    )
+  }
+
   render() {
     const { name } = this.props.modalItem;
     return (
@@ -85,6 +100,7 @@ class EditInventory extends Component {
         {this.renderCounter('Cubic Feet', 'cft')}
         {this.renderCheckbox('Is Going', 'going')}
         {this.renderCheckbox('Packed by Owner', 'pbo')}
+        {this.renderTextEdit('Room', 'room')}
 
         <div style={styles.parent}>
           <textarea rows='4' 

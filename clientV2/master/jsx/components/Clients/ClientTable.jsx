@@ -25,7 +25,7 @@ class ClientTable extends React.Component {
 								<div className="input-group input-group-lg">
 									<input 
 										type="text" 
-										placeholder="Search" 
+										placeholder="Search by name" 
 										className="form-control" 
 										value={ query }
 										onChange={ e => {

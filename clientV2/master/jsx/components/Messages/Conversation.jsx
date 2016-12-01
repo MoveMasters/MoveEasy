@@ -36,7 +36,7 @@ class Conversation extends React.Component {
       <a href="#" className="list-group-item" key={message._id}>
           <div className="media-box">
               <div className="pull-left">
-                  <img src="img/user/02.jpg" alt="Image" className="media-box-object img-circle thumb32" />
+                  <img src="https://t3.ftcdn.net/jpg/01/06/07/16/240_F_106071621_UwCztl7yyMbVNSMijfuYyZrzbtmoxJPH.jpg" alt="Image" className="media-box-object img-circle thumb32" />
               </div>
               <div className="media-box-body clearfix">
                   <small className="pull-right">{timeStr}</small>
@@ -55,7 +55,7 @@ class Conversation extends React.Component {
     var ddTitle = (<em className="fa fa-ellipsis-v fa-lg text-muted"></em>);
     const name = (!!this.props.userSelected) ? this.props.userSelected.name : '';
     return (
-      <Col md={ 8 }>
+      <Col md={ this.props.colNum }>
       {/******** Conversation *******/}
           <div className="panel panel-default">
               <div className="panel-heading">

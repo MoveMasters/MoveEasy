@@ -6,7 +6,10 @@
   "scripts": {
     "test": "karma start ./karma.config.js",
     "test:watch": "./node_modules/karma/bin/karma start",
-    "prestart": ["bower install", "npm install"],
+    "prestart": [
+      "bower install",
+      "npm install"
+    ],
     "start": "gulp  watch"
   },
   "dependencies": {
@@ -20,6 +23,7 @@
     "react-addons-css-transition-group": "^15.3.1",
     "react-big-calendar": "^0.11.1",
     "react-bootstrap": "^0.30.3",
+    "react-cookie": "^1.0.3",
     "react-dom": "^15.3.1",
     "react-html5video": "^1.2.12",
     "react-player": "^0.12.1",

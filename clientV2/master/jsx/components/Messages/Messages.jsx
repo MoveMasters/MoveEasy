@@ -88,6 +88,7 @@ class Messages extends React.Component {
                   userSelected={this.state.userSelected}
                   displayedConvo={this.state.displayedConvo}
                   onMessageSend={this.onMessageSend.bind(this)}
+                  colNum={8}
                 />
             </Row>
           </ContentWrapper>

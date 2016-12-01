@@ -38,8 +38,8 @@ class Clients extends React.Component {
       let moves;
       if (query.length > 0) {
         moves = this.moves.filter( move => {
-          let moveString = JSON.stringify(move).toLowerCase();
-          return moveString.includes(query.toLowerCase())
+          let name = move.name.toLowerCase();
+          return name.includes(query.toLowerCase())
         })
       } else {
         moves = this.moves;
