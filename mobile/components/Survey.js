@@ -197,8 +197,7 @@ function leave(socketId) {
   pc.close();
   delete pcPeers[socketId];
 
-  container.setState({ remoteViewSrc: null,  content: 'end' });
-  container.setState({info: 'One peer leave!'});
+  container.endCall();
 }
 
 function logError(error) {
@@ -247,7 +246,6 @@ export default class Survey extends React.Component {
     super(props);
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => true });
     this.state = {
-      info: 'Initializing',
       status: 'init',
       roomID: '',
       isFront: false,
@@ -257,10 +255,11 @@ export default class Survey extends React.Component {
       textRoomData: [],
       textRoomValue: '',
       content: 'begin',
-      moveId: null,
     };
 
     this._textRoomPress = this._textRoomPress.bind(this);
+    this.endCall = this.endCall.bind(this);
+    this.goToDashboard = this.goToDashboard.bind(this);
   }
 
   componentDidMount() {
@@ -286,9 +285,6 @@ export default class Survey extends React.Component {
   goToDashboard() {
     this.props.navigator.push({
       component: Dashboard,
-      passProps: {
-        content: 'inventory',
-      },
     });
   }
 
@@ -301,12 +297,18 @@ export default class Survey extends React.Component {
 
   joinRoom() {
     getItem('moveId', (moveId) => {
+      this.moveId = moveId;
       join(moveId);
-      this.setState({ content: 'loading', moveId });
+      this.setState({ content: 'loading' });
     });
   }
 
   endCall() {
+    for (const key in pcPeers) {
+      const pc = pcPeers[key];
+      pc.close();
+    }
+
     this.setState({
       selfViewSrc: null,
       remoteViewSrc: null,
@@ -315,7 +317,6 @@ export default class Survey extends React.Component {
   }
 
   renderContent() {
-    console.log('this is the state', this.state.content);
     if (this.state.content === 'begin') {
       return (
         <View alignSelf="center">
@@ -339,9 +340,9 @@ export default class Survey extends React.Component {
         <View alignSelf="center">
           <Button
             success
-            onPress={this.endCall}
+            onPress={this.goToDashboard}
           >
-            End Call
+            Go to Dashboard
           </Button>
         </View>
       );
@@ -352,10 +353,12 @@ export default class Survey extends React.Component {
 
 
   render() {
+    const streamStatus = this.state.content === 'survey' ? styles.selfView : styles.hidden;
+
     return (
       <View style={styles.container}>
         {this.renderContent()}
-        <RTCView streamURL={this.state.selfViewSrc} style={this.state.content === 'survey' ? styles.selfView : styles.hidden}>
+        <RTCView streamURL={this.state.selfViewSrc} style={streamStatus}>
           <RTCView streamURL={this.state.remoteViewSrc} style={styles.remoteView} />
           <TouchableHighlight style={styles.switchButton} onPress={this._textRoomPress}>
             <Ionicon name="md-aperture" size={60} style={{ color: 'white' }} />

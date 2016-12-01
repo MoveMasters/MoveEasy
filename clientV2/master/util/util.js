@@ -4,10 +4,8 @@ import reactCookie from 'react-cookie';
 const ip = 'localhost';
 const port = '9000';
 const localURL = `http://${ip}:${port}`;
-const herokuURL = 'https://movekickinc.herokuapp.com';
+const herokuURL = 'https://movekick.herokuapp.com';
 const serverURL = reactCookie.load('MoveKickDev') ? localURL : herokuURL;
-
-
 
 /************************************ interceptors ************************************/
 axios.interceptors.request.use( config => {
