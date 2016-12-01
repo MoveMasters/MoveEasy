@@ -8,7 +8,7 @@ Moving is a painful process. Moving companies depend on site visits to the trans
 ## Team
 
   - __Product Owner__: Erik Suddath
-  - __Scrum Master__: Stephen Cefali
+  - __Scrum Master__: [Stephen Cefali](https://github.com/Sangeli)
   - __Development Team__: Joe Lee
 
 
@@ -25,7 +25,9 @@ Moving is a painful process. Moving companies depend on site visits to the trans
 - Transferee picks an available timeslot from the movers schedule for a survey
 - At the survey time, the transferee connects to the mover through the app to begin the video survey
 - The transferee walks through their home, taking photos of items that need to be moved
-- Utilizing cutting edge image recognition, the app can determine the type and size of the item and add it to the moving itenerary
+- Image recognition determines the type and size of the item
+- Mover confirms or modifies item info and adds it to the moving itenarary
+- Mover can view user profiles, view and edit moving itenrary, and message customers
 
 
 
