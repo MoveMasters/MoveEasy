@@ -14,6 +14,7 @@ import {
 import { StyleSheet, AsyncStorage, AlertIOS, DatePickerIOS, View } from 'react-native';
 import helper from '../utils/helper';
 import Dashboard from './Dashboard';
+import myTheme from '../themes/myTheme';
 
 const storeItem = async (item, selectedValue) => {
   try {

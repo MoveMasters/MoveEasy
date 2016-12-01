@@ -17,6 +17,7 @@ import Survey from './Survey';
 import Inventory from './Inventory';
 import Chat from './Chat';
 import Information from './Information';
+import myTheme from '../themes/myTheme';
 
 const getItem = async (item, cb) => {
   try {
@@ -173,18 +174,18 @@ export default class Dashboard extends React.Component {
         {this._renderContent()}
 
         <Footer>
-          <FooterTab>
-            <Button active={this.state.inventoryTab} onPress={this.toggleInventoryTab}>
+          <FooterTab theme={myTheme}>
+            <Button onPress={this.toggleInventoryTab}>
               Inventory
-              <Icon name="ios-list-box" />
+              <Icon name={this.state.inventoryTab ? 'ios-list-box' : 'ios-list-box-outline'} />
             </Button>
-            <Button active={this.state.surveyInfoTab} onPress={this.toggleSurveyInfoTab}>
+            <Button onPress={this.toggleSurveyInfoTab}>
               Survey
-              <Icon name="ios-camera" />
+              <Icon name={this.state.surveyInfoTab ? 'ios-camera' : 'ios-camera-outline'} />
             </Button>
-            <Button active={this.state.chatTab} onPress={this.toggleChatTab}>
+            <Button onPress={this.toggleChatTab}>
               Chat
-              <Icon name="ios-chatboxes" />
+              <Icon name={this.state.chatTab ? 'ios-chatboxes' : 'ios-chatboxes-outline'} />
             </Button>
           </FooterTab>
         </Footer>
