@@ -45,27 +45,26 @@ export default class Information extends React.Component {
       futureAddress: '',
       date: new Date(),
       updating: false,
-      move: null,
+      moveData: null,
     };
   }
 
   componentWillMount() {
-    helper.getExistingMove()
-    .then((response) => {
-      if (!response.data.move) { return; }
-      const move = response.data.move;
-      console.log(move);
+    getItem('moveData', (moveData) => {
+      if (!moveData) { return; }
+
+      moveData = JSON.parse(moveData);
+
       this.setState({
-        name: move.name,
-        phone: move.phone,
-        currentAddress: move.currentAddress,
-        futureAddress: move.futureAddress,
-        date: new Date(move.surveyTime),
+        name: moveData.name,
+        phone: moveData.phone,
+        currentAddress: moveData.currentAddress,
+        futureAddress: moveData.futureAddress,
+        date: new Date(moveData.surveyTime),
         updating: true,
-        move,
+        moveData,
       });
-    })
-    .catch(error => console.log('Error getting current move:', error));
+    });
   }
   goToDashboard() {
     this.props.navigator.push({
@@ -83,9 +82,8 @@ export default class Information extends React.Component {
     };
 
     if (this.state.updating) {
-      moveObj.user_id = this.state.move.user_id;
-      moveObj.move_id = this.state.move._id;
-      console.log(moveObj);
+      moveObj.user_id = this.state.moveData.user_id;
+      moveObj._id = this.state.moveData._id;
 
       helper.updateExistingMove(moveObj)
       .then((response) => {
@@ -98,11 +96,10 @@ export default class Information extends React.Component {
       .catch((error) => {
         console.log(error);
         AlertIOS.alert('There was a problem updating your information. Please try again.');
-      }
+      });
     } else {
       helper.newMove(moveObj)
       .then((response) => {
-        console.log(response);
         const moveData = response.data;
         const moveId = moveData._id;
 
@@ -119,7 +116,11 @@ export default class Information extends React.Component {
   }
 
   render() {
-    console.log(this.state);
+    const namePH = this.state.name.length ? this.state.name : 'Contact Name';
+    const phonePH = this.state.phone.length ? this.state.phone : 'Phone Number';
+    const currentAdrPH = this.state.currentAddress.length ? this.state.currentAddress : 'Current Address';
+    const futureAdrPH = this.state.futureAddress.length ? this.state.futureAddress : 'Future Address';
+
     return (
       <Container>
         <Header>
@@ -132,7 +133,7 @@ export default class Information extends React.Component {
                 <Icon name="ios-person" />
                 <Input
                   inlineLabel label="NAME"
-                  placeholder={this.state.name.length ? this.state.name : 'Contact Name'}
+                  placeholder={namePH}
                   onChangeText={name => this.setState({ name })}
                 />
               </InputGroup>
@@ -143,7 +144,7 @@ export default class Information extends React.Component {
                 <Input
                   inlineLabel
                   label="PHONE"
-                  placeholder={this.state.phone.length ? this.state.phone : 'Phone Number'}
+                  placeholder={phonePH}
                   onChangeText={phone => this.setState({ phone })}
                 />
               </InputGroup>
@@ -153,7 +154,7 @@ export default class Information extends React.Component {
                 <Input
                   stackedLabel
                   label="Current Address"
-                  placeholder={this.state.currentAddress.length ? this.state.currentAddress : 'Current Address'}
+                  placeholder={currentAdrPH}
                   onChangeText={currentAddress => this.setState({ currentAddress })}    
               />
               </InputGroup>
@@ -163,7 +164,7 @@ export default class Information extends React.Component {
                 <Input
                   stackedLabel
                   label="Future Address"
-                  placeholder={this.state.futureAddress.length ? this.state.futureAddress : 'Future Address'}
+                  placeholder={futureAdrPH}
                   onChangeText={futureAddress => this.setState({ futureAddress })}
                 />
               </InputGroup>
