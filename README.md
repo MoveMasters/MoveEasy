@@ -7,9 +7,9 @@ Moving is a painful process. Moving companies depend on site visits to the trans
 
 ## Team
 
-  - __Product Owner__: Erik Suddath
+  - __Product Owner__: [Erik Suddath](https://github.com/eriksudd)
   - __Scrum Master__: [Stephen Cefali](https://github.com/Sangeli)
-  - __Development Team__: Joe Lee
+  - __Development Team__: [Joe Lee](https://github.com/josephsanglee)
 
 
 ## Product
