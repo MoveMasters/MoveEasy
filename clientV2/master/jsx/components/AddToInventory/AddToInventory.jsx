@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import styles from './styles';
-import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
 import util from './../../../util/util';
+import { Form, Col, FormGroup, InputGroup, Button, FormControl, ControlLabel, Checkbox } from 'react-bootstrap';
 
 class AddToInventory extends Component {
 	constructor(props) {
@@ -13,36 +12,24 @@ class AddToInventory extends Component {
 			cft: 0,
 			going: true,
 			pbo: false,
-			comment: ''
+			comment: '',
+			room: ''
 		};
 	}
 
 	componentWillMount() {
-		console.log('NEED TO PLACE UTILITY FUNCTION TO GRAB AND SET PHOTOTYPE INFO TO STATE');
 		this.getCft()
 	}
 
 	getCft() {
 		const { getCurrentItem } = this.props;
-
 		const name = getCurrentItem().name;
-		console.log('getCft', name)
 		const cft = util.getCft(name);
-		console.log('Setting cft to:', cft)
 		this.setState({ cft })
-	}
-
-	handleIncrement(boundState) {
-		this.setState({[boundState]: this.state[boundState] + 1})
-	}
-
-	handleDecrement(boundState) {
-		this.setState({[boundState]: this.state[boundState] > 0 ? this.state[boundState] - 1 : 0})
 	}
 
 	addToInventory() {
 		let { getCurrentItem, dequeueItem, handleNext, updateInventory, moveId, openSnackbar } = this.props;
-		console.log(getCurrentItem(), 'getCurrentItem')
 		let { id, name } = getCurrentItem();
 
 		// grab item from local storage
@@ -52,102 +39,159 @@ class AddToInventory extends Component {
 			{
 			image: image, 
 			moveId: moveId,
-			name: name,
-			room: 'hey ho'
+			name: name
 		});
 
 		console.log('Posting Item to server:', item);
 
 		util.postItemToServer(item).then( (inventory) => {
-			console.log('updateInventory', inventory)
 			updateInventory(inventory);			
 		})
 
 		dequeueItem();
 		handleNext();
 		openSnackbar(name)
-
-		// this.props.openNote()
-
-	
 	}
 
-	renderItemNotification() {
-		return (
-			<div>
-			  <Snackbar
-			    open={this.state.open}
-			    message="Event added to your calendar"
-			    autoHideDuration={1000}
-			    onRequestClose={this.handleRequestClose}
-			  />
-			</div>
-		)
+	handleIncrement(e, boundState) {
+		// remove focus
+		e.target.blur();
+		this.setState({[boundState]: this.state[boundState] + 1})
 	}
 
-	renderCounter(title, boundState) {
-		return (
-			<div style={styles.parent}>
-				{title}
-				<div style={styles.counter}>
-					<span 
-						onClick={() => this.handleDecrement(boundState)} 
-						className="fa fa-angle-left fa-2x" 
-						aria-hidden="true"></span>
-					<span>{this.state[boundState]}</span>
-					<span 
-						onClick={() => this.handleIncrement(boundState)} 
-						className="fa fa-angle-right fa-2x" 
-						aria-hidden="true"></span>
-				</div>
-			</div>
-		)
-	}
-
-	renderCheckbox(title, boundState) {
-		return (
-			<div style={styles.parent}>
-				{title}
-				<div style={styles.counter}>
-					<input 
-						type="checkbox" 
-						onChange={(event) => this.setState({[boundState]: event.target.checked})} 
-						checked={this.state[boundState]}/>
-				</div>
-			</div>
-		)
+	handleDecrement(e, boundState) {
+		// remove focus
+		e.target.blur();
+		this.setState({[boundState]: this.state[boundState] > 0 ? this.state[boundState] - 1 : 0})
 	}
 
 	render() {
+		const { quantity, cft, going, pbo, room, comment } = this.state;
 		const { getCurrentItem } = this.props;
 		let { name } = getCurrentItem()
 		return (
 			<div style={styles.container} id='topLevel'>
-				<div style={styles.titleContainer}>
-					<div>{ name }</div>
-				</div>
-				
+				<div 
+					className="h4 text-center" 
+					style={{width: '100%'}}>{ name }</div>
+				<hr/>
 				<div style={styles.hr}><hr/></div>
+					<Form horizontal>
+						{/* START QUANTITY NUMBER PICKER*/}
+						<FormGroup style={styles.quantity}>
+							<Col componentClass={ControlLabel} sm={3}>
+								Quanity
+							</Col>
+							<Col sm={9}>
+							   <InputGroup>
+							     <InputGroup.Button>
+							       <Button onClick={ e => this.handleDecrement(e, 'quantity')}>
+							       	<em className="fa fa-minus-square-o"></em>
+							       </Button>
+							     </InputGroup.Button>
+							     <FormControl 
+							     	type="text" 
+							     	onChange={e => this.setState({ quantity: this.target.value })}
+							     	value={ quantity } />
+							     <InputGroup.Button>
+							       <Button onClick={ e => this.handleIncrement(e, 'quantity')}>
+							       	<em className="fa fa-plus-square-o"></em>
+							       </Button>
+							     </InputGroup.Button>
+							   </InputGroup>
+							 </Col>
+						 </FormGroup>
 
-				{this.renderCounter('Item Count', 'quantity')}
-				{this.renderCounter('Cubic Feet', 'cft')}
-				{this.renderCheckbox('Is Going', 'going')}
-				{this.renderCheckbox('Packed by Owner', 'pbo')}
+						 {/* END QUANTITY NUMBER PICKER */}
 
-				<div style={styles.parent}>
-				  <textarea rows='4' 
-				  	onChange={(event) => this.setState({comment: event.target.value})} 
-				  	value={this.state.note}
-				  	style={styles.textarea}
-				  	placeholder={'Add Notes'}></textarea>
-				</div>
+						{/* START CFT NUMBER PICKER*/}
+						<FormGroup style={styles.formGroup}>
+							<Col componentClass={ControlLabel} sm={3}>
+								Cubic Feet
+							</Col>
+							<Col sm={9}>
+							   <InputGroup>
+							     <InputGroup.Button>
+							       <Button onClick={ e => this.handleDecrement(e, 'cft')}>
+							       	<em className="fa fa-minus-square-o"></em>
+							       </Button>
+							     </InputGroup.Button>
+							     <FormControl 
+							     	type="text" 
+							     	onChange={e => this.setState({ cft: this.target.value })}
+							     	value={ cft } />
+							     <InputGroup.Button>
+							       <Button onClick={ e => this.handleIncrement(e, 'cft')}>
+							       	<em className="fa fa-plus-square-o"></em>
+							       </Button>
+							     </InputGroup.Button>
+							   </InputGroup>
+							 </Col>
+						 </FormGroup>
+						 {/* END CFT NUMBER PICKER */}
 
-				<RaisedButton
-				  label={this.props.stepIndex === 1 ? 'Add to Inventory' : 'Next'}
-				  primary={true}
-				  onClick={this.addToInventory.bind(this)}
-				  style={styles.RaisedButton}/>
+						{/* START ROOM PICKER*/}
+						<FormGroup style={styles.formGroup}>
+							<Col componentClass={ControlLabel} sm={3}>
+								Room
+							</Col>
+							<Col sm={9}>
+							   <InputGroup>
+							     <FormControl 
+							     	type="text" 
+							     	placeholder="Room" 
+							     	onChange={(e) => this.setState({room: e.target.value})} 
+							     	value={ room }/>
+							   </InputGroup>
+							 </Col>
+						 </FormGroup>
+						 {/* END ROOM NUMBER PICKER */}
 
+						{/* START CHECKBOX*/}
+
+						<FormGroup style={styles.formGroup}>
+						      <Col smOffset={3} sm={4}>
+						        <Checkbox
+						        	onChange={ e => this.setState({going: e.target.checked}) } 
+											checked={ going }>Going</Checkbox>
+						      </Col>
+						      <Col smOffset={1} sm={4}>
+						        <Checkbox
+						        	onChange={ e => this.setState({pbo: e.target.checked}) } 
+											checked={ pbo }>Pbo</Checkbox>
+						      </Col>
+						</FormGroup>
+
+						{/* END CHECKBOX*/}
+
+						<FormGroup style={styles.formGroup}>
+							<Col componentClass={ControlLabel} sm={3}>
+								Notes
+							</Col>
+
+							<Col sm={9}>
+					      <textarea rows='4' 
+					      	onChange={(e) => this.setState({comment: e.target.value})} 
+					      	value={ comment }
+					      	style={styles.textarea}
+					      	placeholder={'Add Notes'}></textarea>
+				      </Col>
+						</FormGroup>
+
+
+						{/* START ADD TO INVENTORY*/}
+
+						<FormGroup style={styles.formGroup}>
+							<Button 
+								bsSize="large" 
+								bsStyle='danger'
+								onClick={ this.addToInventory.bind(this) }
+								block>Add to Inventory</Button>
+						</FormGroup>
+
+						{/* END ADD TO INVENTORY*/}
+
+						</Form>
 			</div>
 		)
 	}
