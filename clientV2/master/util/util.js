@@ -20,6 +20,7 @@ const getClarifaiTokenURL = `${serverURL}/api/auth/clarifaiToken`;
 const postImageToClarifaiURL = 'https://api.clarifai.com/v2/models/aaa03c23b3724a16a56b629203edc62c/outputs';
 const getClarifaiInfoURL = `${serverURL}/api/auth/clarifaiInfo`;
 const postItemToServerURL = `${serverURL}/api/item/newItem`;
+const updateItemURL = `${serverURL}/api/item/updateItem`;
 const getAllMovesURL = `${serverURL}/api/move/allMoves`;
 const getPendingMovesURL = `${serverURL}/api/move/pendingMoves`;
 const getExistingMoveURL = `${serverURL}/api/move/existingMove`;
@@ -29,6 +30,9 @@ const signinMoverURL = `${serverURL}/api/mover/signin`;
 const sendMessageURL = `${serverURL}/api/message/newMessageFromMover`;
 const getConversationURL = `${serverURL}/api/message/conversationForMover`;
 const getContactsURL = `${serverURL}/api/mover/contacts`;
+const updateUserMoveInfoURL = `${serverURL}/api/move/updateUserMoveInfo`;
+
+
 
 
 
@@ -112,6 +116,21 @@ const postImageToClarifai = (screenshot) => {
 }
 
 
+const updateUserMoveInfo = (userMoveInfo) => {
+  console.log('it');
+  return axios.post(updateUserMoveInfoURL, userMoveInfo).then(
+    (response) => {
+      //no object in response
+      console.log('updateUserMoveInfo success');
+    }
+  ).catch(
+    (err) => {
+      console.log('updateUserMoveInfo err', err);
+      throw err;
+    }
+  );
+}
+
 const postItemToServer = (item) => {
   return axios.post(postItemToServerURL, item).then(
     (response) => {
@@ -121,6 +140,19 @@ const postItemToServer = (item) => {
   ).catch(
     (err) => {
       console.log('postItemToServer err', err);
+      throw err;
+    }
+  );
+}
+
+const updateItem = (item) => {
+  return axios.post(updateItemURL, item).then(
+    (response) => {
+      console.log('updateItem success');
+    }
+  ).catch(
+    (err) => {
+      console.log('updateItem err', err);
       throw err;
     }
   );
@@ -136,17 +168,6 @@ const getCft = (itemName) => {
 }
 
 
-const getAllMoves = () => {
-  return axios.get(getAllMovesURL).then( response => {
-    return response.data.moves;
-  });
-}
-
-const getPendingMoves = () => {
-  return axios.get(getPendingMovesURL).then( response => {
-    return response.data.moves;
-  });
-}
 
 
 const getInitialInventory = (moveId) => {
@@ -159,6 +180,22 @@ const getInitialInventory = (moveId) => {
   .catch( err => {
     console.log('getInitialInventory err', err);
     throw err;
+  });
+}
+
+
+/************************************ MOVES ************************************/
+
+
+const getAllMoves = () => {
+  return axios.get(getAllMovesURL).then( response => {
+    return response.data.moves;
+  });
+}
+
+const getPendingMoves = () => {
+  return axios.get(getPendingMovesURL).then( response => {
+    return response.data.moves;
   });
 }
 
@@ -276,7 +313,9 @@ export default
   sendNewMessage,
   getConversation,
   serverURL,
-  getContacts
+  getContacts,
+  updateUserMoveInfo,
+  updateItem
 }
 
 //const postImageToClarifaiURL = `https://api.clarifai.com/v1/tag/`;

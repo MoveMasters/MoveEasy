@@ -19,6 +19,7 @@ class UserProfile extends React.Component {
 	constructor(props) {
 		super(props);
 
+		this.userInfo;
 		this.state = {
 			name: '',
 			phone: '',
@@ -44,6 +45,7 @@ class UserProfile extends React.Component {
 	getUserInfo() {
 		const { user_id } = this.props.params;
 		return util.getAllMoves().then( moves => {
+      console.log('moves', moves);
 			let userInfo = moves.filter( move => move.user_id === user_id )[0];
 			return userInfo
 		})
@@ -51,6 +53,7 @@ class UserProfile extends React.Component {
 
 	setUserInfoAndInventory() {
 		this.getUserInfo().then( userInfo => {
+			this.userInfo = userInfo;
 			const { name, phone, currentAddress, futureAddress, _id } = userInfo;
 			this.setState({ name, phone, currentAddress, futureAddress, _id });
 			this.getInventory(_id).then( inventory => {
@@ -64,11 +67,22 @@ class UserProfile extends React.Component {
   }
 
   handleUpdateUserProfile() {
-    console.log('SEND UPDATED USER PROFILE INFO TO SERVER');
-    console.log(this.state);
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+  	if(!this.userInfo) {
+  		throw new Error('Error: expected userInfo');
+  	}
+
+  	//manually copy properties
+  	this.userInfo.name = this.state.name;
+  	this.userInfo.phone = this.state.phone;
+  	this.userInfo.currentAddress = this.state.currentAddress;
+  	this.userInfo.futureAddress = this.state.futureAddress;
+  	this.userInfo.moveDate = this.state.moveDate;
+
+
+  	util.updateUserMoveInfo(this.userInfo);
 
   }
+
 
   getInventory() {
   	const { _id } = this.state;

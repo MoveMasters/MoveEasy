@@ -45,10 +45,18 @@ exports.decodeUserFromHeader = decodeUserFromHeader;
 
 const fixMovePopulate = (move) => {
   //fix the join table
+  //if user_id not a valid reference, just quit
+  console.log('move', move);
+  if(!move.user_id) {
+    return move;
+  }
   move.username = move.user_id.username;
+  move.name = move.user_id.name;
   move.user_id = move.user_id._id;
-  return move
+  return move;
 }
+
+exports.fixMovePopulate = fixMovePopulate;
 
 
 
@@ -57,7 +65,7 @@ exports.encodeSendUser = (user, res) => {
   //only send over the move for non-movers
   res.cookie('x-access-token', token);
   if (user.__t === 'Mover') {
-    res.json({token});g
+    res.json({token});
   } else {
     exports.getLastMove(user._id).then( lastMove => {
       res.json({ token, lastMove});
@@ -107,7 +115,6 @@ exports.getUserFromReq = (req) => {
 
 
 exports.getMoveItems = (move_id) => {
-  console.log('calling get move items')
   return new Promimse( (resolve, reject) => {
     Item.find({move_id:move_id}).sort({createdAt:-1}).exec().then( moveItems => {
       resolve(moveItems);
@@ -126,7 +133,7 @@ exports.getUserMoves = (user_id) => {
     .populate('user_id')
     .exec().then(
       moves => {
-        moves = moves.map(fixMovePopulate);
+        moves.forEach(fixMovePopulate);
         resolve(moves);
       },
       err => {
@@ -147,7 +154,11 @@ exports.getLastMove = (user_id) => {
 }
 
 exports.getMoveFromId = (move_id) => {
-  return Move.findOne({_id: move_id}).exec();
+  return Move.findOne({_id: move_id})
+  .populate('user_id')
+  .exec().then( move => {
+    return fixMovePopulate(move);
+  })
 }
 
 exports.findItemAndUpdate = (item) => {
@@ -200,11 +211,22 @@ exports.updateUserMoveInfo = (req, res, next) => {
   const user_id = req.body.user_id || req.body.userId;
   const move_id = req.body._id;
 
+
   const userFind = User.findOne({_id: user_id}).exec();
   const moveFind = Move.findOne({_id: move_id}).exec();
   Promise.all([userFind, moveFind]).then( results => {
     const user = results[0];
     const move = results[1];
+
+    if(!user) {
+      res.status(503).end('Could not get user with id ' + user_id);
+      return;
+    }
+
+    if(!move) {
+      res.status(503).end('Could not get move with id ' + move_id);
+      return;
+    }
 
     //only can update name for user
     var promises = [];
