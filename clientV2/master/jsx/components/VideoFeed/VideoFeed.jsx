@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
 import io from 'socket.io-client';
 import styles from './styles';
-import Videotag from 'react-html5video'
+import Videotag from 'react-html5video';
+import { Button } from 'react-bootstrap';
 
 /************************************* SOCKET IO******************************************/ 
 
@@ -39,6 +40,12 @@ class VideoFeed extends Component {
     // socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
     // socket = io('https://iiiiii.herokuapp.com', {transports: ['websocket']}); }
   }
+
+  endCall() {
+    let videoTrack = localStream.getVideoTracks()[0];
+    videoTrack.stop();
+    console.log('stopping video track');
+  }
   
   componentDidMount() {
     socket = io('https://react-native-webrtc.herokuapp.com', {transports: ['websocket']});
@@ -66,9 +73,10 @@ class VideoFeed extends Component {
     // this.join(room);
   }
 
-	componentWillUnmount() {
-	    window.removeEventListener('resize', this._handleWindowResize);
-	}
+  componentWillUnmount() {
+      window.removeEventListener('resize', this._handleWindowResize);
+      this.endCall();
+  }
 
 	_handleWindowResize() {
 		this.setState({ width: window.innerWidth, height: window.innerHeight })
@@ -231,21 +239,22 @@ class VideoFeed extends Component {
 			console.log(this.state.width)
 			const { width } = this.state;
 	    return (
-			<div onClick={this.grabScreenshot.bind(this)} className='videoWrapper'>
-		        <ReactPlayer playing volume={0}
-		        	url={this.state.localStreamURL}
-		        	width={ width * .15} 
-		        	height={ (3/4) * width * .15 }
-		        	style={{position: 'absolute', width: '30%', marginRight: '70%'}}/>
-		 
-		        <ReactPlayer playing volume={0}
-		        	ref='remoteVideo' 
-		        	url={this.state.remoteStreamURL} 
-		        	width={width * .4} 
-		        	height={(4/3) * (width * .4)}
-		        	style={{ maxHeight: '80vh'}}/>
-	       		<canvas ref='canvas' style={{display: 'none'}}></canvas>
-		     </div>
+  			<div onClick={this.grabScreenshot.bind(this)} className='videoWrapper'>
+	        <ReactPlayer playing volume={0}
+	        	url={this.state.localStreamURL}
+	        	width={ width * .15} 
+	        	height={ (3/4) * width * .15 }
+	        	style={{position: 'absolute', width: '30%', marginRight: '70%'}}/>
+	 
+	        <ReactPlayer playing volume={0}
+	        	ref='remoteVideo' 
+	        	url={this.state.remoteStreamURL} 
+	        	width={width * .4} 
+	        	height={(4/3) * (width * .4)}
+	        	style={{ maxHeight: '80vh'}}/>
+          <Button onClick={this.endCall.bind(this)}>End Call</Button>
+       		<canvas ref='canvas' style={{display: 'none'}}></canvas>
+  		  </div>
 	    );
 	}
 }
