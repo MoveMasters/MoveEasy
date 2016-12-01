@@ -1,6 +1,6 @@
 import axios from 'axios';
-// const url = 'https://movekick.herokuapp.com';
-const url = 'http://localhost:9000';
+const url = 'https://movekick.herokuapp.com';
+// const url = 'http://localhost:9000';
 let moveId;
 let token;
 
