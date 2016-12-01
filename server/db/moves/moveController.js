@@ -35,7 +35,6 @@ exports.getAllMoves = (req, res, next) => {
   .populate('user_id')
   .exec().then(moves => {
     moves = moves.map(dbUtil.fixMovePopulate);
-    console.log('moves', moves);
     res.send({moves});
   });
 };

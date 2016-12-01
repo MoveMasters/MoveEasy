@@ -45,10 +45,9 @@ exports.decodeUserFromHeader = decodeUserFromHeader;
 
 const fixMovePopulate = (move) => {
   //fix the join table
-  //if user_id not a valid reference, just quit
-  console.log('move', move);
+  //if user_id not a valid reference, error out
   if(!move.user_id) {
-    return move;
+    throw new Error('User id undefined for move ' + move._id);
   }
   move.username = move.user_id.username;
   move.name = move.user_id.name;

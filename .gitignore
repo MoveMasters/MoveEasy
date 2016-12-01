@@ -1,6 +1,5 @@
 clientV2/node_modules/
 clientV2/bower_components/
-clientV2/dist/*
 mobile/node_modules/
 mobile/ios/build/
 public/node_modules/
@@ -10,3 +9,4 @@ build/
 .DS_Store
 client/node_modules/
 *.log
+clientV2/

@@ -2,13 +2,12 @@
   "name": "movekick_client",
   "version": "0.0.0",
   "description": "MoveKick client",
-  "author": "@themicon_co",
+  "author": "https://github.com/MoveMasters/MoveKick",
   "scripts": {
     "test": "karma start ./karma.config.js",
     "test:watch": "./node_modules/karma/bin/karma start",
-    "prestart": "bower install",
-    "start": "npm install",
-    "poststart": "gulp"
+    "prestart": ["bower install", "npm install"],
+    "start": "gulp  watch"
   },
   "dependencies": {
     "axios": "^0.15.2",

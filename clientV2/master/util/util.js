@@ -1,9 +1,11 @@
 import axios from 'axios';
 // const ip = '10.6.27.137';
 const ip = 'localhost';
-const port = process.env.PORT || '9000';
-const serverURL = `http://${ip}:${port}`;
-//const serverURL = 'https://movekickinc.herokuapp.com';
+const port = '9000';
+const localURL = `http://${ip}:${port}`;
+const herokuURL = 'https://movekickinc.herokuapp.com';
+const serverURL = window.localStorage.MoveKickDev ? localURL : herokuURL;
+
 
 
 /************************************ interceptors ************************************/
@@ -146,7 +148,7 @@ const postItemToServer = (item) => {
 }
 
 const updateItem = (item) => {
-  return axios.post(updateItemURL, item).then(
+  return axios.post(updateItemURL, {item: item}).then(
     (response) => {
       console.log('updateItem success');
     }
@@ -212,9 +214,9 @@ const getExistingMove = () => {
 
 /************************************ LOGIN ************************************/
 
-const signupMover = (username, password, company) => {
+const signupMover = (moverObj) => {
   console.log('calling signup mover')
-  return axios.post(signupMoverUrl, {username, password, company})
+  return axios.post(signupMoverUrl, moverObj)
   .then( response => {
     return response.data;
   })
