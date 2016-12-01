@@ -1,10 +1,11 @@
 import axios from 'axios';
+import reactCookie from 'react-cookie';
 // const ip = '10.6.27.137';
 const ip = 'localhost';
 const port = '9000';
 const localURL = `http://${ip}:${port}`;
 const herokuURL = 'https://movekickinc.herokuapp.com';
-const serverURL = window.localStorage.MoveKickDev ? localURL : herokuURL;
+const serverURL = reactCookie.load('MoveKickDev') ? localURL : herokuURL;
 
 
 
