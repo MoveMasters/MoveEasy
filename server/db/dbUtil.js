@@ -240,8 +240,8 @@ exports.updateUserMoveInfo = (req, res, next) => {
     Object.assign(move, moveFromBody);
     promises.push(move.save());
 
-    Promise.all(promises).then( () => {
-      res.end();
+    Promise.all(promises).then((response) => {
+      res.send(response[1]);
     });
   });
 }

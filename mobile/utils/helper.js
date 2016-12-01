@@ -1,5 +1,6 @@
 import axios from 'axios';
-const url = 'https://movekick.herokuapp.com';
+// const url = 'https://movekick.herokuapp.com';
+const url = 'http://192.168.0.103:9000';
 let moveId;
 let token;
 
@@ -49,6 +50,10 @@ exports.newMove = (info) => {
 exports.getExistingMove = () => {
   return axios.get(`${url}/api/move/existingMove`);
 };
+
+exports.updateExistingMove = (moveObj) => {
+  return axios.post(`${url}/api/move/updateUserMoveInfo`, moveObj);
+}
 
 exports.getMoveItems = () => {
   return axios.get(`${url}/api/item/moveItems`);
