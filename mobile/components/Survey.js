@@ -257,6 +257,7 @@ export default class Survey extends React.Component {
       textRoomData: [],
       textRoomValue: '',
       content: 'begin',
+      moveId: null,
     };
 
     this._textRoomPress = this._textRoomPress.bind(this);
@@ -301,7 +302,15 @@ export default class Survey extends React.Component {
   joinRoom() {
     getItem('moveId', (moveId) => {
       join(moveId);
-      this.setState({ content: 'loading' });
+      this.setState({ content: 'loading', moveId });
+    });
+  }
+
+  endCall() {
+    this.setState({
+      selfViewSrc: null,
+      remoteViewSrc: null,
+      content: 'end',
     });
   }
 
@@ -330,7 +339,7 @@ export default class Survey extends React.Component {
         <View alignSelf="center">
           <Button
             success
-            onPress={() => this.goToDashboard()}
+            onPress={this.endCall}
           >
             End Call
           </Button>
@@ -351,7 +360,7 @@ export default class Survey extends React.Component {
           <TouchableHighlight style={styles.switchButton} onPress={this._textRoomPress}>
             <Ionicon name="md-aperture" size={60} style={{ color: 'white' }} />
           </TouchableHighlight>
-          <TouchableHighlight style={styles.switchButton} onPress={() => this.setState({ content: 'end' })}>
+          <TouchableHighlight style={styles.switchButton} onPress={this.endCall}>
             <Ionicon name="md-aperture" size={60} style={{ color: 'red' }} />
           </TouchableHighlight>
         </RTCView>

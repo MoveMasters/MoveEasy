@@ -124,7 +124,7 @@ export default class Dashboard extends React.Component {
           <Title style={styles.title}>{this.state.title}</Title>
           {
             this.state.content === 'surveyInfo' ?
-              <Button transparent onPress={() => this.goToNext}>
+              <Button transparent onPress={() => this.goToNext('info')}>
               Edit
               </Button>
               :
