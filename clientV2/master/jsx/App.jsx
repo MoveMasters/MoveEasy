@@ -54,12 +54,14 @@ class Authorize extends Component {
 				isAuthorized: false,
 				view: 'login'
 		}
+		window.localStorage.MoveKickDev  = 1
 	}
 
 	componentWillMount() {
 		if (isAuthorized()) {
 			this.setAuthorization(true);
 		}
+
 	}
 
 	setAuthorization(isAuthorized) {

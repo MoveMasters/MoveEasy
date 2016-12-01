@@ -6,19 +6,24 @@ import styles from './styles'
 
 
 const PhotoInventory = (props) => (
-  <div style={styles.root}>
-    <GridList style={styles.gridList} cols={2.2} cellHeight={125}>
-      {props.inventory.map((item) => (
-        <GridTile
-          key={item._id}
-          title={item.name}
-          titleStyle={styles.titleStyle}
-          titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
-        >
-          <img src={item.url} />
-        </GridTile>
-      ))}
-    </GridList>
+  <div className="panel panel-default" style={{height: '18vh'}}>
+
+    <div style={styles.root}>
+      <GridList style={styles.gridList} cols={2.2}>
+        {props.inventory.map((item) => (
+          <GridTile
+            key={item._id}
+            title={item.name}
+            titleStyle={styles.titleStyle}
+            style={{width: '100%', height: '100%', maxHeight: '100%'}}
+            titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+          >
+            <img src={item.url} style={{maxHeight: '100%'}}/>
+          </GridTile>
+        ))}
+      </GridList>
+    </div>
+
   </div>
 );
 

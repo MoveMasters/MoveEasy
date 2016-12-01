@@ -30,6 +30,7 @@
     "react-router": "^2.8.1",
     "react-router-bootstrap": "^0.23.1",
     "react-tap-event-plugin": "^2.0.1",
+    "semantic-ui-react-numberpicker": "0.0.1-b",
     "webpack": "^1.13.3"
   },
   "devDependencies": {

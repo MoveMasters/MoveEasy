@@ -22,6 +22,13 @@ export default {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  endCall: {
+    position: 'absolute',
+    left: '50%',
+    marginLeft: '-75px',
+    width: '150px',
+    bottom: '75px'
   }
 };
 

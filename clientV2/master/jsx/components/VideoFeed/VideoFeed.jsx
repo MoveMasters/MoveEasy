@@ -239,24 +239,36 @@ class VideoFeed extends Component {
 			console.log(this.state.width)
 			const { width } = this.state;
 	    return (
-  			<div onClick={this.grabScreenshot.bind(this)} className='videoWrapper'>
-	        <ReactPlayer playing volume={0}
-	        	url={this.state.localStreamURL}
-	        	width={ width * .15} 
-	        	height={ (3/4) * width * .15 }
-	        	style={{position: 'absolute', width: '30%', marginRight: '70%'}}/>
-	 
-	        <ReactPlayer playing volume={0}
-	        	ref='remoteVideo' 
-	        	url={this.state.remoteStreamURL} 
-	        	width={width * .4} 
-	        	height={(4/3) * (width * .4)}
-	        	style={{ maxHeight: '80vh'}}/>
-          <Button onClick={this.endCall.bind(this)}>End Call</Button>
-       		<canvas ref='canvas' style={{display: 'none'}}></canvas>
-  		  </div>
+        <div className="panel panel-default">
+
+          <div className="panel-body text-center">
+
+  	        <ReactPlayer playing volume={0}
+  	        	url={this.state.localStreamURL}
+  	        	width={ width * .10} 
+  	        	height={ (3/4) * width * .10 }
+  	        	style={{position: 'absolute', width: '30%', marginRight: '70%'}}/>
+  	 
+  	        <ReactPlayer playing volume={0}
+  	        	ref='remoteVideo' 
+  	        	url={this.state.remoteStreamURL} 
+  	        	width={(width - 180) * .392 } 
+  	        	height={ 1.33 * (width - 180) * .392 } />
+
+            <Button 
+              style={styles.endCall} 
+              bsStyle='danger' 
+              bsSize='lg' 
+              onClick={this.endCall.bind(this)}>End Survey</Button>
+
+          </div>
+
+          <canvas ref='canvas' style={{display: 'none'}}></canvas>
+
+        </div>
 	    );
 	}
 }
 
-export default VideoFeed
+export default VideoFeed;
+
