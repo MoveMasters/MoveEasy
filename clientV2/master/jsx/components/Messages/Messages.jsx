@@ -13,8 +13,9 @@ class Messages extends React.Component {
     super(props);
 
     this.contactsById = {};
+    this.orderedContacts = [];
     this.state = {
-      contacts:[],
+      displayedContacts:[],
       displayedConvo:[],
       userSelected: null
     };
@@ -27,10 +28,12 @@ class Messages extends React.Component {
       contacts = contacts || [];
       //map by userIid
       this.contactsById = {};
+      this.orderedContacts = [];
       contacts.forEach( contact => {
         this.contactsById[contact._id] = contact;
+        this.orderedContacts.push(contact);
       });
-      this.setState({contacts});
+      this.setSearchDisplayContacts('');
 
       //update selection if empty
       if (!this.state.userSelected) {
@@ -56,13 +59,35 @@ class Messages extends React.Component {
     this.updateConversation(userId);
   }
 
+
+
+
+  setSearchDisplayContacts(query) {
+    query = query.toLowerCase();
+    if(!query.length) {
+      this.setState({displayedContacts: this.orderedContacts});
+      return;
+    }
+    var contactsToShow = [];
+    this.orderedContacts.forEach( contact => {
+      const nameSplit = contact.name.toLowerCase().split('');
+      for( var i = 0; i < nameSplit.length; i ++) {
+        const testWord = nameSplit[i];
+        if(query === testWord) {
+          contactsToShow.push(contact);
+          break;
+        }
+      }
+    });
+    this.setState({displayedContacts: contactsToShow});
+  }
+
   onContactType(event) {
-
+    const query = event.target.value;
+    this.setSearchDisplayContacts(query);
   }
 
-  onSearch(event) {
 
-  }
 
   onMessageSend(event) {
     const text = $('#message-input').val();
@@ -80,8 +105,7 @@ class Messages extends React.Component {
             <Row>                 
                 <Contacts
                   onContactType={this.onContactType.bind(this)}
-                  onSearch={this.onSearch.bind(this)}
-                  contacts={this.state.contacts} 
+                  contacts={this.state.displayedContacts} 
                   onProfileClick={this.onProfileClick.bind(this)}
                 />
                 <Conversation
