@@ -14,7 +14,7 @@ class Contacts extends React.Component {
           <td>
             <div className="media-left media-middle">
                <a href="#">
-                  <img src="img/user/04.jpg" alt="Contact" className="media-object img-circle img-thumbnail thumb48" />
+                  <img src="https://t3.ftcdn.net/jpg/01/06/07/16/240_F_106071621_UwCztl7yyMbVNSMijfuYyZrzbtmoxJPH.jpg" alt="Contact" className="media-object img-circle img-thumbnail thumb48" />
                </a>
             </div>
              <div className="media" >

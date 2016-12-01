@@ -16,11 +16,10 @@ class ClientCard extends Component {
                <p>{ `${phone} | ${email}` }</p>
             </div>
             <div className="text-center" style={{color: 'white'}}>
-              <a className="btn btn-primary col-md-5" style={{marginLeft: '6%'}}>Send message</a>
               <a 
                 className="btn btn-primary col-md-5" 
                 style={{marginLeft: '6%'}}
-                onClick={ onClickVideoCall }>Video Call</a>
+                onClick={ onClickVideoCall }>Start Survey</a>
             </div>
          </div>
       </div>

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, Tab, Nav, NavItem, ListGroup, ListGroupItem } from 'react-bootstrap';
 
+import Conversation from './../Messages/Conversation';
+
 class MessagesPane extends Component {
   constructor(props) {
     super(props)
@@ -10,12 +12,12 @@ class MessagesPane extends Component {
   render() {
     return (
       <Tab.Pane eventKey="messagesPane">
-         <div className="panel b">
-            <div className="panel-heading bg-gray-lighter text-bold">Messages</div>
-            <div className="panel-body">
-              Messages go here..
-            </div>
-         </div>
+        <Conversation
+          userSelected={this.props.userSelected}
+          displayedConvo={this.props.displayedConvo}
+          onMessageSend={this.props.onMessageSend}
+          colNum={12}
+        />
       </Tab.Pane>
     )
   }

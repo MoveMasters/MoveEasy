@@ -55,7 +55,9 @@ exports.getExistingMove = (req, res, next) => {
   //mutliple sources for moveId
   const move_id = req.cookies.moveId || req.body.moveId;
   Move.findOne({_id: move_id})
+    .populate('user_id')
     .exec().then( move => {
+      move = dbUtil.fixMovePopulate(move);
       res.send({move});
   }).catch( err => {
     console.log('handleNewMove err', err);

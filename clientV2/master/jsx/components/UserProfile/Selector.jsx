@@ -11,7 +11,6 @@ class Selector extends Component {
 						<NavItem eventKey="profilePane">Profile</NavItem>
 						<NavItem eventKey="inventoryPane">Inventory</NavItem>
 						<NavItem eventKey="messagesPane">Messages</NavItem>
-						<NavItem eventKey="timelinePane">Timeline</NavItem>
 				</Nav>
 			</div>
 		);

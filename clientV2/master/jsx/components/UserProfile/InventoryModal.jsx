@@ -9,7 +9,7 @@ const InventoryModal = (props) => (
     bsSize="large" 
     aria-labelledby="contained-modal-title-lg">
     <Modal.Header closeButton>
-      <Modal.Title id="contained-modal-title-lg">Modal heading</Modal.Title>
+      <Modal.Title id="contained-modal-title-lg">{props.clientName}</Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <Row>

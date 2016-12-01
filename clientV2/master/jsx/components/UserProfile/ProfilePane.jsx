@@ -4,7 +4,14 @@ import { Grid, Row, Col, Panel, Button, Tab, Nav, NavItem, ListGroup, ListGroupI
 
 class ProfilePane extends Component {
   render() {
-    const { name, phone, currentAddress, futureAddress, onInputChange, handleUpdateUserProfile } = this.props;
+    const { name, email, surveyTime, phone, currentAddress, futureAddress, onInputChange, handleUpdateUserProfile } = this.props;
+    
+    const dateOptions = {  month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    const surveyTimeStr = new Date(surveyTime).toLocaleDateString('en-US', dateOptions);
+
+    console.log('ptoprs', this.props)
+
+
     return (
       <Tab.Pane eventKey="profilePane">
          <div className="panel b">
@@ -21,7 +28,7 @@ class ProfilePane extends Component {
                   </div>
                   <div className="form-group">
                      <label>Email</label>
-                     <input value={ 'email' }type="text" className="form-control" onChange={(e) => onInputChange(e, 'email')}/>
+                     <input disabled value={ email }type="text" className="form-control" onChange={(e) => onInputChange(e, 'email')}/>
                   </div>
                   <div className="form-group">
                      <label>Origin</label>
@@ -32,8 +39,8 @@ class ProfilePane extends Component {
                      <input value={ futureAddress }type="text" className="form-control" onChange={(e) => onInputChange(e, 'futureAddress')}/>
                   </div>
                   <div className="form-group">
-                     <label>Move Date</label>
-                     <input value={ 'moveDate' }type="text" className="form-control" onChange={(e) => onInputChange(e, 'moveDate')}/>
+                     <label>Survey Date</label>
+                     <input disabled value={ surveyTimeStr }type="text" className="form-control" onChange={(e) => onInputChange(e, 'surveyTime')}/>
                   </div>
                   <button 
                     type="button" 

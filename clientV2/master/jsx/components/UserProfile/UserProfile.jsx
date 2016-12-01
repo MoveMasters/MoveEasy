@@ -19,7 +19,6 @@ class UserProfile extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.userInfo;
 		this.state = {
 			name: '',
 			phone: '',
@@ -28,9 +27,12 @@ class UserProfile extends React.Component {
 			futureAddress: '',
 			moveDate: '',
 			_id: '',
+      userInfo: null,
 			inventory: [],
 			showModal: false,
-			modalItem: null
+			modalItem: null,
+      surveyTime: '',
+      displayedConvo: []
 		}
 	}
 
@@ -44,8 +46,8 @@ class UserProfile extends React.Component {
 
 	getUserInfo() {
 		const { user_id } = this.props.params;
+    this.updateConversation(user_id);
 		return util.getAllMoves().then( moves => {
-      console.log('moves', moves);
 			let userInfo = moves.filter( move => move.user_id === user_id )[0];
 			return userInfo
 		})
@@ -53,33 +55,50 @@ class UserProfile extends React.Component {
 
 	setUserInfoAndInventory() {
 		this.getUserInfo().then( userInfo => {
-			this.userInfo = userInfo;
-			const { name, phone, currentAddress, futureAddress, _id } = userInfo;
-			this.setState({ name, phone, currentAddress, futureAddress, _id });
+			const { name, phone, currentAddress, futureAddress, _id, surveyTime, username } = userInfo;
+			this.setState({ name, phone, currentAddress, futureAddress, _id, userInfo, surveyTime, email:username });
 			this.getInventory(_id).then( inventory => {
 				this.setState({ inventory })
 			})
 		})
 	}
 
+  updateConversation(user_id) {
+    util.getConversation(user_id).then( messages => {
+      this.setState({
+        displayedConvo: messages
+      });
+    });
+  }
+
+  onMessageSend(event) {
+    const text = $('#message-input').val();
+    if (!text) { return; }
+
+    const user_id = this.state.userInfo.user_id;
+    util.sendNewMessage(user_id, text).then( newMessage => {
+      this.updateConversation(user_id);
+    });
+  }
+
 	onInputChange(e, state) {
     this.setState({ [state]: e.target.value })
   }
 
   handleUpdateUserProfile() {
-  	if(!this.userInfo) {
+    userInfo = this.state.userInfo;
+  	if(userInfo) {
   		throw new Error('Error: expected userInfo');
   	}
 
   	//manually copy properties
-  	this.userInfo.name = this.state.name;
-  	this.userInfo.phone = this.state.phone;
-  	this.userInfo.currentAddress = this.state.currentAddress;
-  	this.userInfo.futureAddress = this.state.futureAddress;
-  	this.userInfo.moveDate = this.state.moveDate;
+  	userInfo.name = this.state.name;
+  	userInfo.phone = this.state.phone;
+  	userInfo.currentAddress = this.state.currentAddress;
+  	userInfo.futureAddress = this.state.futureAddress;
+  	userInfo.surveyTime = this.state.surveyTime;
 
-
-  	util.updateUserMoveInfo(this.userInfo);
+  	util.updateUserMoveInfo(userInfo);
 
   }
 
@@ -112,7 +131,8 @@ class UserProfile extends React.Component {
 			_id, 
 			inventory, 
 			showModal, 
-			modalItem 
+			modalItem,
+      surveyTime
 		} = this.state;
 		return (
 			<ContentWrapper>
@@ -135,14 +155,17 @@ class UserProfile extends React.Component {
 				        	email={email}
 				        	currentAddress={currentAddress}
 				        	futureAddress={futureAddress}
-				        	moveDate={moveDate}
+				        	surveyTime={surveyTime}
 				        	onInputChange={this.onInputChange.bind(this)}
 				        	handleUpdateUserProfile={this.handleUpdateUserProfile.bind(this)}/>
 				        <InventoryPane 
 				        	inventory={ inventory }
 				        	showModal={ this.handleModal.bind(this) }/>
-				        <MessagesPane />
-				        <TimelinePane />
+				        <MessagesPane
+                  userSelected={this.state.userInfo}
+                  displayedConvo={this.state.displayedConvo}
+                  onMessageSend={this.onMessageSend.bind(this)}
+                />
 					    </Tab.Content>
 					  </Col>
 					</Row>
@@ -151,7 +174,9 @@ class UserProfile extends React.Component {
 					show={ showModal } 
 					onHide={ () => this.handleModal(false) }
 					modalItem={ Object.assign({}, modalItem) }
-					handleModal={ this.handleModal.bind(this) }/>
+					handleModal={ this.handleModal.bind(this) }
+          clientName={ this.state.name}
+          />
 			</ContentWrapper>
 		);
 	}
