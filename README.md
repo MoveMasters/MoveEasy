@@ -16,8 +16,8 @@ Moving is a painful process. Moving companies depend on site visits to the trans
 
 - Desktop client for the mover running React
 - Mobile client for the transferee running React Native
-- Server to manage the WebRTC video and chat between clients
-- General purpose server to mange the rest
+- WebRTC socket server to manage video streams between clients
+- General purpose server to interface with the database
 
 
 ## How it Works
