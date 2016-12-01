@@ -42,7 +42,6 @@ export default class Dashboard extends React.Component {
     };
 
     this.goToNext = this.goToNext.bind(this);
-    this.hideModal = this.hideModal.bind(this);
   }
 
   componentWillMount() {

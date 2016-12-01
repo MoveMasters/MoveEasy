@@ -72,7 +72,7 @@ export default class Login extends React.Component {
       .then((response) => {
         const moveData = response.data.lastMove;
 
-        if (moveData._id) {
+        if (moveData) {
           const moveId = moveData._id;
           onValueChange('moveId', moveId);
           onValueChange('moveData', JSON.stringify(moveData));
