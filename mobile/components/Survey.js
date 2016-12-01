@@ -259,11 +259,7 @@ export default class Survey extends React.Component {
       content: 'begin',
     };
 
-    // this._switchVideoType = this._switchVideoType.bind(this);
     this._textRoomPress = this._textRoomPress.bind(this);
-    this._press = this._press.bind(this);
-    this.receiveTextData = this.receiveTextData.bind(this);
-    this._renderTextRoom = this._renderTextRoom.bind(this);
   }
 
   componentDidMount() {
@@ -295,40 +291,6 @@ export default class Survey extends React.Component {
     });
   }
 
-  _press() {
-    // this.refs.roomID.blur();
-    // this.setState({ status: 'connect', info: 'Connecting' });
-    getItem('moveId', moveId => join(moveId));
-  }
-
-  // _switchVideoType() {
-  //   // console.log('this is', this);
-  //   // const isFront = !this.state.isFront;
-  //   // this.setState({ isFront });
-  //   // getLocalStream(isFront, (stream) => {
-  //   //   if (localStream) {
-  //   //     for (const id in pcPeers) {
-  //   //       const pc = pcPeers[id];
-  //   //       pc && pc.removeStream(localStream);
-  //   //     }
-  //   //     localStream.release();
-  //   //   }
-  //   //   localStream = stream;
-  //   //   container.setState({ selfViewSrc: stream.toURL() });
-
-  //   //   // for (const id in pcPeers) {
-  //   //   //   const pc = pcPeers[id];
-  //   //   //   pc && pc.addStream(localStream);
-  //   //   // }
-  //   // });
-  // }
-
-  receiveTextData(data) {
-    const textRoomData = this.state.textRoomData.slice();
-    textRoomData.push(data);
-    this.setState({ textRoomData, textRoomValue: '' });
-  }
-
   _textRoomPress() {
     for (const key in pcPeers) {
       const pc = pcPeers[key];
@@ -336,25 +298,11 @@ export default class Survey extends React.Component {
     }
   }
 
-  _renderTextRoom() {
-    return (
-      <View style={styles.listViewContainer}>
-        <ListView
-          dataSource={this.ds.cloneWithRows(this.state.textRoomData)}
-          renderRow={rowData => <Text>{`${rowData.user}: ${rowData.message}`}</Text>}
-        />
-        <TextInput
-          style={{ width: 200, height: 30, borderColor: 'gray', borderWidth: 1 }}
-          onChangeText={value => this.setState({ textRoomValue: value })}
-          value={this.state.textRoomValue}
-        />
-        <TouchableHighlight
-          onPress={this._textRoomPress}
-        >
-          <Text>Send</Text>
-        </TouchableHighlight>
-      </View>
-    );
+  joinRoom() {
+    getItem('moveId', (moveId) => {
+      join(moveId);
+      this.setState({ content: 'loading' });
+    });
   }
 
   renderContent() {
@@ -393,12 +341,6 @@ export default class Survey extends React.Component {
     return null;
   }
 
-  joinRoom() {
-    getItem('moveId', (moveId) => {
-      join(moveId);
-      this.setState({ content: 'loading' });
-    });
-  }
 
   render() {
     return (
@@ -408,6 +350,9 @@ export default class Survey extends React.Component {
           <RTCView streamURL={this.state.remoteViewSrc} style={styles.remoteView} />
           <TouchableHighlight style={styles.switchButton} onPress={this._textRoomPress}>
             <Ionicon name="md-aperture" size={60} style={{ color: 'white' }} />
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.switchButton} onPress={() => this.setState({ content: 'end' })}>
+            <Ionicon name="md-aperture" size={60} style={{ color: 'red' }} />
           </TouchableHighlight>
         </RTCView>
       </View>
@@ -448,17 +393,3 @@ const styles = StyleSheet.create({
   },
 });
 
-        // { this.state.status === 'ready' ?
-        //   (<View>
-        //     <TextInput
-        //       ref='roomID'
-        //       autoCorrect={false}
-        //       style={{ width: 200, height: 40, borderColor: 'gray', borderWidth: 1 }}
-        //       onChangeText={text => this.setState({ roomID: text })}
-        //       value={this.state.roomID}
-        //     />
-        //     <TouchableHighlight onPress={() => getItem('moveId', moveId => join(moveId))}>
-        //       <Text>Enter room</Text>
-        //     </TouchableHighlight>
-        //   </View>) : null
-        // }

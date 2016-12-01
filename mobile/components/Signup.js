@@ -78,7 +78,7 @@ export default class Signup extends React.Component {
       .then((response) => {
         const moveData = response.data.lastMove;
 
-        if (moveData._id) {
+        if (moveData) {
           const moveId = moveData._id;
           onValueChange('moveId', moveId);
           onValueChange('moveData', JSON.stringify(moveData));
@@ -121,7 +121,7 @@ export default class Signup extends React.Component {
           </View>
         </View>
         <View style={styles.login}>
-          <Text onPress={() => this.goToNext('signin')}>Don't have an account? Sign up here!</Text>
+          <Text onPress={() => this.goToNext('signin')}>Already have an account? Sign in here!</Text>
         </View>
       </View>
     );
