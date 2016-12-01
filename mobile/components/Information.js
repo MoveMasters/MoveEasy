@@ -4,7 +4,6 @@ import {
   Container,
   Header,
   Content,
-  Footer,
   Title,
   List,
   ListItem,
@@ -81,7 +80,7 @@ export default class Information extends React.Component {
                 <Icon name="ios-person" />
                 <Input
                   inlineLabel label="NAME"
-                  placeholder="Name"
+                  placeholder="Contact Name"
                   onChangeText={name => this.setState({ name })}
                 />
               </InputGroup>

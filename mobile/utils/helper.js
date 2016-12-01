@@ -73,7 +73,7 @@ exports.postNewMessage = (text) => {
   .catch(error => console.log('Error posting message: ', error));
 };
 
-/** **********************HELPERS*************************** **/
+/** **********************CHAT HELPERS*************************** **/
 exports.retrieveMessages = function(context) {
   exports.getConversation()
   .then((response) => {

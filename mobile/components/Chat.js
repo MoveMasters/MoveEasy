@@ -8,11 +8,6 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, View, ScrollView, Text } from 'react-native';
-import {
-  Thumbnail,
-  Title,
-} from 'native-base';
 import { GiftedChat } from 'react-native-gifted-chat';
 import helper from '../utils/helper';
 
@@ -32,7 +27,7 @@ export default class Inventory extends React.Component {
   componentWillMount() {
     const self = this;
     helper.retrieveMessages(self);
-    retrieveMessages = setInterval(() => helper.retrieveMessages(self), 5000);
+    retrieveMessages = setInterval(() => helper.retrieveMessages(self), 1000);
   }
 
   componentWillUnmount() {
@@ -62,21 +57,3 @@ export default class Inventory extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  chatbox: {
-    top: 15,
-    bottom: 15,
-  },
-  message: {
-    padding: 5,
-    flexDirection: 'row',
-  },
-  name: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  text: {
-    fontSize: 16,
-  },
-});

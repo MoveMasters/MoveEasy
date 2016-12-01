@@ -31,7 +31,7 @@ const options = {
     password: {
       secureTextEntry: true,
     },
-    redoPassword: {
+    'Confirm password': {
       secureTextEntry: true,
     },
   },
@@ -66,10 +66,8 @@ export default class Signup extends React.Component {
 
   userAuth(type) {
     const value = this.refs.form.getValue();
-    if (value.password !== value.redoPassword) {
-      AlertIOS.alert('Passwords do not match! Please try again.');
-    }
-    if (value) {
+
+    if (value && value.password === value['Confirm password']) {
       const user = {
         name: value.name,
         username: value.email,
@@ -92,6 +90,8 @@ export default class Signup extends React.Component {
         console.log(error);
         AlertIOS.alert('Invalid username or password. Please try again.');
       });
+    } else if (value.password !== value['Confirm password']) {
+      AlertIOS.alert('Passwords do not match! Please try again.');
     }
   }
 
