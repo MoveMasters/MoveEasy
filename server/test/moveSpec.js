@@ -98,7 +98,6 @@ describe('Move Server APIs', () => {
       moveObj = res.body.move;
       expect(res.status).to.equal(200);
       expect(moveObj._id).to.equal(moveObj._id);
-      console.log('username in check', moveObj.username)
       expect(moveObj.username).to.equal(userObj1.username);
       done();
     });

@@ -8,6 +8,7 @@ class Signup extends Component {
         super(props);
 
         this.state = {
+            name: '',
             email: '',
             password: '',
             company: ''
@@ -15,30 +16,38 @@ class Signup extends Component {
     }
 
     onInputChange(e, state) {
+        console.log('e', state);
         this.setState({ [state]: e.target.value })
     }
 
     handleCreateAccount(e) {
         e.preventDefault();
-        const { email, password, company } = this.state;
         const { setAuthorization } = this.props;
+
+        const moverObj = {
+            name: this.state.name,
+            username: this.state.email,
+            password: this.state.password,
+            company: this.state.company
+        };
         
-        util.signupMover(email, password, company).then(res => {
+        util.signupMover(moverObj).then(res => {
             // continue to dashboard
             console.log('successful signup')
+            // reset fields
+            this.setState({ email: '', password: '', company: '', name: ''});
             setAuthorization(true);
         }).catch( err => {
             console.log('error signing up')
         })
 
-        // reset fields
-        this.setState({ email: '', password: '', company: ''});
+        
 
         
     }
 
     render() {
-        const { email, password, company } = this.state;
+        const { email, password, company, name } = this.state;
         const { changeView } = this.props;
         return (
             <div className="block-center mt-xl wd-xl">
@@ -52,6 +61,19 @@ class Signup extends Component {
                     <div className="panel-body">
                         <p className="text-center pv">SIGNUP TO GET INSTANT ACCESS.</p>
                         <form role="form" data-parsley-validate="" noValidate className="mb-lg">
+                            <div className="form-group has-feedback">
+                                <label htmlFor="signupInputName1" className="text-muted">Full Name</label>
+                                <input 
+                                    id="signupInputName1" 
+                                    type="text" 
+                                    placeholder="Enter name" 
+                                    autoComplete="off" 
+                                    required="required" 
+                                    className="form-control" 
+                                    value={ name }
+                                    onChange={ e => this.onInputChange(e, 'name')}/>
+                                <span className="fa form-control-feedback text-muted"></span>
+                            </div>
                             <div className="form-group has-feedback">
                                 <label htmlFor="signupInputEmail1" className="text-muted">Email address</label>
                                 <input 
@@ -75,7 +97,7 @@ class Signup extends Component {
                                     className="form-control" 
                                     value={ company }
                                     onChange={ e => this.onInputChange(e, 'company')}/>
-                                <span className="fa fa-envelope form-control-feedback text-muted"></span>
+                                <span className="fa form-control-feedback text-muted"></span>
                             </div>
                             <div className="form-group has-feedback">
                                 <label htmlFor="signupInputPassword1" className="text-muted">Password</label>
