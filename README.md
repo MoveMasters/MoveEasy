@@ -1,6 +1,8 @@
 # MoveKick
 > An app to enable rapid remote surveying for moving companies.
 
+## Motivation
+
 Moving is a painful process. Moving companies depend on site visits to the transferee's home and create a moving itenarary. MoveKick is here to replace the painful and time consuming in-person surveying process with a streamlined app for remote surveying.
 
 ## Team
