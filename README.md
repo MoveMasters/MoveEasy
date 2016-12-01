@@ -1,28 +1,13 @@
 # MoveKick
 > An app to enable rapid remote surveying for moving companies.
 
-Moving is a painful process. Moving companies depend on sending their employees out to survey the transferee's home and create a moving itenarary. MoveKick is here to replace the painful and time consuming in-person surveying process with a streamlined app for remote surveying.
-
-## Process
-- Transferee downloads the MoveKick app from the iTunes app store
-- Transferee picks an avaialbe timeslot from the movers schedule for a survey
-- At the survey time, the transferee connects to the mover through the app to begin the video survey
-- The transferee walks through their home, taking photos of items that need to be moved
-- Utilizing cutting edge image recognition software, the app can determine the type and size of the item and add it to the moving itenerary
-
-
+Moving is a painful process. Moving companies depend on site visits to the transferee's home and create a moving itenarary. MoveKick is here to replace the painful and time consuming in-person surveying process with a streamlined app for remote surveying.
 
 ## Team
-
 
   - __Product Owner__: Erik Suddath
   - __Scrum Master__: Stephen Cefali
   - __Development Team__: Joe Lee
-
-
-## Table of Contents
-
-FIX ME
 
 
 ## Product
@@ -33,9 +18,25 @@ FIX ME
 - General purpose server to mange the rest
 
 
-## USAGE
+## How it Works
+- Transferee downloads the MoveKick app from the iTunes app store
+- Transferee picks an available timeslot from the movers schedule for a survey
+- At the survey time, the transferee connects to the mover through the app to begin the video survey
+- The transferee walks through their home, taking photos of items that need to be moved
+- Utilizing cutting edge image recognition, the app can determine the type and size of the item and add it to the moving itenerary
 
-# First
+
+
+## REQUIREMENTS
+
+- Node
+- Mongo
+
+
+## Setup
+
+### Server
+- npm install
 - MAKE SURE you set environment variables for:
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_KEY,
@@ -45,7 +46,11 @@ FIX ME
   http://osxdaily.com/2015/07/28/set-enviornment-variables-mac-os-x/
 - For other operating systems, look online
 
-# Mobile
+### Client
+- cd clientV2
+- bower install && npm install
+
+### Mobile
 - cd mobile && npm install
 - npm start (starts the React Native Packager)
 - Manually click through files Finder -> MoveKick -> mobile -> ios -> mkmobile.xcodeproj (opens the project in Xcode)
@@ -64,23 +69,22 @@ FIX ME
 - If a version of the app already exists on your phone, delete it by clicking the app then clicking the '-'
 - Otherwise, click the '+' and choose the correct version of the app you just archived. The app should have a '.ipa' extension (check the time it was created to be sure its the right version)
 
+## Usage
 
+### Server
+- npm start
 
-## REQUIREMENTS
+### Client
+- cd clientV2
+- npm start
+- Open browser to URL
 
-- Node
-- Mongo
-
-
-## Develepmont
-
-### Installing Dependencies
-#### Server
-
-
-
-### Roadmap
+### Mobile
+- Open up app on phone
 
 
 
-## Contributing
+
+
+
+
