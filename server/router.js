@@ -9,6 +9,9 @@ const moverRouter = require('./routers/moverRouter');
 const messageRouter = require('./routers/messageRouter');
 
 
+const isDev = process.env.DEV ? 1 : 0;
+
+
 module.exports = (app, express, server) => {
 
   // app.use('/', ExpressPeerServer(server, {debug: true}));
@@ -23,7 +26,9 @@ module.exports = (app, express, server) => {
   app.use('/api/message', messageRouter);
 
   app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, '/../clientV2/dist/index.html'));
+    res
+    .cookie('MoveKickDev', isDev)
+    .sendFile(path.join(__dirname, '/../clientV2/dist/index.html'));
   });
 
 };
