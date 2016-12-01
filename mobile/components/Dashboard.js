@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, AsyncStorage, AlertIOS, View } from 'react-native';
+import moment from 'moment';
+import { StyleSheet, AsyncStorage, View } from 'react-native';
 import {
   Container,
   Header,
@@ -15,6 +16,7 @@ import helper from '../utils/helper';
 import Survey from './Survey';
 import Inventory from './Inventory';
 import Chat from './Chat';
+import Information from './Information';
 
 const getItem = async (item, cb) => {
   try {
@@ -36,9 +38,11 @@ export default class Dashboard extends React.Component {
       title: 'MoveKick',
       moveItems: [],
       moveData: null,
+      showModal: false,
     };
 
-    this.goToSurvey = this.goToSurvey.bind(this);
+    this.goToNext = this.goToNext.bind(this);
+    this.hideModal = this.hideModal.bind(this);
   }
 
   componentWillMount() {
@@ -59,18 +63,41 @@ export default class Dashboard extends React.Component {
     .catch(error => console.log('Error getting move items', error));
   }
 
-  goToSurvey() {
-    this.props.navigator.push({
-      component: Survey,
-    });
+  goToNext(type) {
+    if (type === 'survey') {
+      this.props.navigator.push({
+        component: Survey,
+      });
+    } else if (type === 'info') {
+      this.props.navigator.push({
+        component: Information,
+      });
+    }
   }
 
   _renderContent() {
     if (this.state.content === 'surveyInfo') {
       return (
         <Content>
-          <View>
-            <Text>{this.moveData.name}</Text>
+          <View style={styles.info}>
+            <Title style={styles.title}>{this.moveData.name}</Title>
+            <Text>{this.moveData.phone}</Text>
+            <Text>{this.moveData.username}</Text>
+          </View>
+          <View style={styles.info}>
+            <Title style={styles.title}>Current Address</Title>
+            <Text>{this.moveData.currentAddress}</Text>
+          </View>
+          <View style={styles.info}>
+            <Title style={styles.title}>Future Address</Title>
+            <Text>{this.moveData.futureAddress}</Text>
+          </View>
+          <View justifyContent="center" alignItems="center">
+            <Title style={styles.title}>Appointment Time</Title>
+            <Text>{moment(this.moveData.surveyTime).calendar()}</Text>
+            <Button alignSelf="center" onPress={() => this.goToNext('survey')}>
+              Begin Survey
+            </Button>
           </View>
         </Content>
       );
@@ -96,28 +123,37 @@ export default class Dashboard extends React.Component {
       <Container>
         <Header flexDirection="row-reverse">
           <Title style={styles.title}>{this.state.title}</Title>
-          <Button backgroundColor="transparent">
-            <Icon name="ios-settings-outline" style={styles.profile} />
-          </Button>
+          {
+            this.state.content === 'surveyInfo' ?
+              <Button transparent onPress={() => this.goToNext}>
+              Edit
+              </Button>
+              :
+              <Button transparent>
+                <Icon name="ios-settings" />
+              </Button>
+          }
         </Header>
+
         {this._renderContent()}
+
         <Footer>
           <FooterTab
-            tabActiveBgColor="#6b6b6b"
-            tabBarActiveTextColor="#6b6b6b"
+            tabActiveBgColor="#4fb5f9"
+            tabBarActiveTextColor="#2d83bc"
             tabBarTextColor="#6b6b6b"
           >
             <Button onPress={() => this.setState({ content: 'inventory', title: 'Inventory' })}>
-              <Icon name="ios-list-box-outline" />
               Inventory
+              <Icon name="ios-list-box" />
             </Button>
-            <Button onPress={() => this.goToSurvey()}>
-              <Icon name="ios-camera-outline" />
+            <Button onPress={() => this.setState({ content: 'surveyInfo', title: 'MoveKick' })}>
               Survey
+              <Icon name="ios-camera" />
             </Button>
             <Button onPress={() => this.setState({ content: 'chat', title: 'Chat' })}>
-              <Icon name="ios-chatboxes-outline" />
               Chat
+              <Icon name="ios-chatboxes" />
             </Button>
           </FooterTab>
         </Footer>
@@ -131,7 +167,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
   },
-  profile: {
-    color: 'black',
+  info: {
+    alignItems: 'flex-start',
+    paddingBottom: 20,
   },
 });
