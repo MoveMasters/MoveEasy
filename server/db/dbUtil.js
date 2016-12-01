@@ -210,7 +210,6 @@ exports.updateUserMoveInfo = (req, res, next) => {
   const user_id = req.body.user_id || req.body.userId;
   const move_id = req.body._id;
 
-
   const userFind = User.findOne({_id: user_id}).exec();
   const moveFind = Move.findOne({_id: move_id}).exec();
   Promise.all([userFind, moveFind]).then( results => {
@@ -241,10 +240,14 @@ exports.updateUserMoveInfo = (req, res, next) => {
     promises.push(move.save());
 
     Promise.all(promises).then((response) => {
-      res.send(response[1]);
+      // changed the route so it sends the move newData
+      // back to the mobile client so it can immediately store
+      // and display it on the dashboard
+      const moveData = response[0];
+      res.send(moveData);
     });
   });
-}
+};
 
 
 
