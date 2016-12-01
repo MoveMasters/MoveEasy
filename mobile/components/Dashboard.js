@@ -39,9 +39,15 @@ export default class Dashboard extends React.Component {
       moveItems: [],
       moveData: null,
       showModal: false,
+      inventoryTab: false,
+      surveyInfoTab: true,
+      chatTab: false,
     };
 
     this.goToNext = this.goToNext.bind(this);
+    this.toggleInventoryTab = this.toggleInventoryTab.bind(this);
+    this.toggleSurveyInfoTab = this.toggleSurveyInfoTab.bind(this);
+    this.toggleChatTab = this.toggleChatTab.bind(this);
   }
 
   componentWillMount() {
@@ -117,6 +123,36 @@ export default class Dashboard extends React.Component {
     return <Content />;
   }
 
+  toggleInventoryTab() {
+    this.setState({
+      content: 'inventory',
+      title: 'Inventory',
+      inventoryTab: true,
+      surveyInfoTab: false,
+      chatTab: false,
+    });
+  }
+
+  toggleSurveyInfoTab() {
+    this.setState({
+      content: 'surveyInfo',
+      title: 'MoveKick',
+      inventoryTab: false,
+      surveyInfoTab: true,
+      chatTab: false,
+    });
+  }
+
+  toggleChatTab() {
+    this.setState({
+      content: 'chat',
+      title: 'Chat',
+      inventoryTab: false,
+      surveyInfoTab: false,
+      chatTab: true,
+    });
+  }
+
   render() {
     return (
       <Container>
@@ -137,20 +173,16 @@ export default class Dashboard extends React.Component {
         {this._renderContent()}
 
         <Footer>
-          <FooterTab
-            tabActiveBgColor="#4fb5f9"
-            tabBarActiveTextColor="#2d83bc"
-            tabBarTextColor="#6b6b6b"
-          >
-            <Button onPress={() => this.setState({ content: 'inventory', title: 'Inventory' })}>
+          <FooterTab>
+            <Button active={this.state.inventoryTab} onPress={this.toggleInventoryTab}>
               Inventory
               <Icon name="ios-list-box" />
             </Button>
-            <Button onPress={() => this.setState({ content: 'surveyInfo', title: 'MoveKick' })}>
+            <Button active={this.state.surveyInfoTab} onPress={this.toggleSurveyInfoTab}>
               Survey
               <Icon name="ios-camera" />
             </Button>
-            <Button onPress={() => this.setState({ content: 'chat', title: 'Chat' })}>
+            <Button active={this.state.chatTab} onPress={this.toggleChatTab}>
               Chat
               <Icon name="ios-chatboxes" />
             </Button>
