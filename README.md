@@ -27,17 +27,16 @@ Moving is a painful process. Moving companies depend on site visits to the trans
 
 
 
-## REQUIREMENTS
+## Development Requirements
 
 - Node
-- Mongo
-
+- Xcode
 
 ## Setup
 
 ### Server
 - npm install
-- MAKE SURE you set environment variables for:
+- Set environment variables for:
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_KEY,
   CLARIFAI_CLIENT_ID,
