@@ -29,14 +29,6 @@ export default class Inventory extends React.Component {
     .catch(error => console.log('Error getting move items', error));
   }
 
-  updateItem(item) {
-    helper.updateItem(item)
-    .then(() => {
-      console.log('item successfully updated');
-    })
-    .catch(error => console.log('updateItem Error:', error));
-  }
-
   render() {
     if (!this.state.moveItems.length) {
       return (
@@ -60,7 +52,7 @@ export default class Inventory extends React.Component {
                   const items = this.state.moveItems;
                   items[i] = item;
                   this.setState({ moveItems: items });
-                  this.updateItem(item);
+                  helper.updateItem(item);
                 },
               },
               {
@@ -72,8 +64,7 @@ export default class Inventory extends React.Component {
                   const items = this.state.moveItems;
                   items[i] = item;
                   this.setState({ moveItems: items });
-                  this.updateItem(item);
-
+                  helper.updateItem(item);
                 },
               },
             ];
