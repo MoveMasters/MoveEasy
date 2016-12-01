@@ -28,13 +28,14 @@ class EditInventory extends Component {
     this.setState({[boundState]: this.state[boundState] > 0 ? this.state[boundState] - 1 : 0})
   }
 
-  updateInventory() {
+  updateItem() {
     const { handleModal, modalItem } = this.props;
-    const inventory = Object.assign({}, modalItem, this.state);
+    const item = Object.assign({}, modalItem, this.state);
     // close modal, reset modalItem to null
     handleModal(false, null);
-    // submit updated inventory to server
-    console.log('SUBMIT EDITED INVENTORY TO SERVER', inventory);
+
+    util.updateItem(item);
+
   }
 
   renderCounter(title, boundState) {
@@ -93,7 +94,7 @@ class EditInventory extends Component {
             placeholder={'Add Notes'}></textarea>
         </div>
         <hr />
-        <Button block bsStyle="primary" onClick={this.updateInventory.bind(this)}>Update Inventory</Button>
+        <Button block bsStyle="primary" onClick={this.updateItem.bind(this)}>Update Inventory</Button>
 
       </div>
     )

@@ -25,20 +25,27 @@ class Messages extends React.Component {
   updateContacts() {
     util.getContacts().then( contacts => {
       contacts = contacts || [];
-      this.setState({contacts});
       //map by userIid
       this.contactsById = {};
       contacts.forEach( contact => {
         this.contactsById[contact._id] = contact;
       });
+      this.setState({contacts});
+
+      //update selection if empty
+      if (!this.state.userSelected) {
+        this.updateConversation(contacts[0]._id);
+      }
     });
   }
 
 
   updateConversation(userId) {
+    const userSelected = this.contactsById[userId];
     util.getConversation(userId).then( messages => {
       this.setState({
         displayedConvo: messages,
+        userSelected: userSelected
       });
     });
   }
@@ -46,11 +53,7 @@ class Messages extends React.Component {
 
   onProfileClick(event) {
     const userId = $(event.target).closest('tr')[0].id;
-    const userSelected = this.contactsById[userId];
     this.updateConversation(userId);
-    this.setState({
-      userSelected: userSelected
-    });
   }
 
   onContactType(event) {

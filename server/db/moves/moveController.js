@@ -31,7 +31,11 @@ exports.handleNewMove = (req, res, next) => {
 
 
 exports.getAllMoves = (req, res, next) => {
-  Move.find().exec().then(moves => {
+  Move.find()
+  .populate('user_id')
+  .exec().then(moves => {
+    moves = moves.map(dbUtil.fixMovePopulate);
+    console.log('moves', moves);
     res.send({moves});
   });
 };
