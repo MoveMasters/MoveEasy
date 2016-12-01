@@ -1,18 +1,8 @@
-/*!
- *
- * Angle - Bootstrap Admin App + ReactJS
- *
- * Version: 3.5.2
- * Author: @themicon_co
- * Website: http://themicon.co
- * License: https://wrapbootstrap.com/help/licenses
- *
- */
-
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Link, hashHistory, useRouterHistory, IndexRoute } from 'react-router';
 import { createHistory } from 'history';
+import cookie from 'react-cookie';
 
 import initTranslation from './components/Common/localize';
 import initLoadCss from './components/Common/load-css';
@@ -53,6 +43,7 @@ const isAuthorized = () => {
 	return authorized;
 }
 
+
 const appHistory = useRouterHistory(createHistory)({ queryKey: false, basename: '/' });
 
 class Authorize extends Component {
@@ -90,7 +81,7 @@ class Authorize extends Component {
 						<Login 
 							setAuthorization={ this.setAuthorization.bind(this) } 
 							changeView={ this.changeView.bind(this) }/>}
-							
+
 						{view === 'signup' && 
 						<Signup 
 							setAuthorization={ this.setAuthorization.bind(this) } 

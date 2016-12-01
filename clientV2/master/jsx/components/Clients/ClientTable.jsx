@@ -1,7 +1,8 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, Table, Pagination } from 'react-bootstrap';
-// import TableExtendedRun from './TableExtended.run';
+import moment from 'moment';
+
 
 class ClientTable extends React.Component {
 	constructor(props) {
@@ -20,25 +21,21 @@ class ClientTable extends React.Component {
 					{ /* START table-header */ }
 					<div className="panel-heading">
 						<Row>
-							<Col lg={ 2 }></Col>
-							<Col lg={ 8 }>
-								<div className="input-group">
+							<Col lg={ 12 }>
+								<div className="input-group input-group-lg">
 									<input 
 										type="text" 
 										placeholder="Search" 
-										className="input-sm form-control" 
+										className="form-control" 
 										value={ query }
 										onChange={ e => {
 											let query = e.target.value;
 											this.setState({ query });
 											filterMoves(query) 
 										}}/>
-									<span className="input-group-btn">
-										<button type="button" className="btn btn-sm btn-default">Search</button>
-									</span>
+
 								</div>
 							</Col>
-							<Col lg={ 2 }></Col>
 						</Row>
 					</div>
 					{ /* START table-responsive */ }
@@ -49,8 +46,7 @@ class ClientTable extends React.Component {
 								<th>Picture</th>
 								<th>Origin</th>
 								<th>Destination</th>
-								<th>Status</th>
-								<th>Buttons</th>
+								<th>Survey Date</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -61,15 +57,16 @@ class ClientTable extends React.Component {
 									<td>{ move.name }</td>
 									<td>
 										<div className="media">
-											<img src="img/user/01.jpg" alt="Image" className="img-responsive img-circle" />
+											<img 
+												src="https://t3.ftcdn.net/jpg/01/06/07/16/240_F_106071621_UwCztl7yyMbVNSMijfuYyZrzbtmoxJPH.jpg" 
+												alt="Image" 
+												className="img-responsive img-circle" 
+												style={{maxHeight: '80px'}}/>
 										</div>
 									</td>
 									<td>{ move.currentAddress }</td>
 									<td>{ move.futureAddress }</td>
-									<td>Survey Complete</td>
-									<td className="text-center">
-										<div data-label="25%" className="radial-bar radial-bar-25 radial-bar-xs"></div>
-									</td>
+									<td>{ move.surveyComplete ? 'Survey Complete' : moment(move.surveyTime).format("ddd, hA") }</td>
 								</tr>    
 							))}
 							
