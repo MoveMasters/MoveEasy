@@ -21,7 +21,14 @@ class Messages extends React.Component {
     };
 
     this.updateContacts();
-    setInterval(this.autoUpdate.bind(this), 1000);
+    this.intervalID = setInterval(this.autoUpdate.bind(this), 1000);
+  }
+
+  componentWillUnmount () {
+    if(this.intervalID) {
+      clearInterval(this.intervalID);
+      delete this.intervalID;
+    }
   }
 
   updateContacts() {
