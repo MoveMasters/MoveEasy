@@ -88,7 +88,6 @@ export default class Dashboard extends React.Component {
           <View style={styles.info}>
             <Title style={styles.title}>{this.moveData.name}</Title>
             <Text>{this.moveData.phone}</Text>
-            <Text>{this.moveData.username}</Text>
           </View>
           <View style={styles.info}>
             <Title style={styles.title}>Current Address</Title>
