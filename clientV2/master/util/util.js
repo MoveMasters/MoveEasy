@@ -260,7 +260,6 @@ const getConversation = (userId) => {
     params: {userId}
   })
   .then( response => {
-    console.log('getConversation', response.data.messages);
     return response.data.messages;
   })
   .catch( err => {
