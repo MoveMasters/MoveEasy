@@ -27,7 +27,7 @@ const fixMessagePopulate = (message) => {
 
 const getConversation = (user_id, company) => {
   return Message.find({user_id, company})
-  .sort({createdAt:-1})
+  .sort({createdAt:1})
   .populate('mover_id')
   .populate('user_id')
   .exec().then( messages => {
