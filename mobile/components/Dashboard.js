@@ -35,13 +35,11 @@ export default class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      content: null,
       title: 'MoveKick',
       moveItems: [],
       moveData: null,
-      showModal: false,
       inventoryTab: false,
-      surveyInfoTab: true,
+      surveyInfoTab: false,
       chatTab: false,
     };
 
@@ -56,7 +54,7 @@ export default class Dashboard extends React.Component {
 
     getItem('moveData', (moveData) => {
       this.moveData = JSON.parse(moveData);
-      this.setState({ content: 'surveyInfo' });
+      this.setState({ surveyInfoTab: true });
     });
   }
 
@@ -82,7 +80,7 @@ export default class Dashboard extends React.Component {
   }
 
   _renderContent() {
-    if (this.state.content === 'surveyInfo') {
+    if (this.state.surveyInfoTab) {
       return (
         <Content justifyContent="flex-start">
           <View style={styles.info}>
@@ -108,13 +106,13 @@ export default class Dashboard extends React.Component {
           </View>
         </Content>
       );
-    } else if (this.state.content === 'inventory') {
+    } else if (this.state.inventoryTab) {
       return (
         <Content justifyContent={this.state.moveItems.length ? null : "center"}>
           <Inventory moveItems={this.state.moveItems} />
         </Content>
       );
-    } else if (this.state.content === 'chat') {
+    } else if (this.state.chatTab) {
       return (
         <Content justifyContent="flex-end">
           <Chat />
@@ -127,7 +125,6 @@ export default class Dashboard extends React.Component {
 
   toggleInventoryTab() {
     this.setState({
-      content: 'inventory',
       title: 'Inventory',
       inventoryTab: true,
       surveyInfoTab: false,
@@ -137,7 +134,6 @@ export default class Dashboard extends React.Component {
 
   toggleSurveyInfoTab() {
     this.setState({
-      content: 'surveyInfo',
       title: 'MoveKick',
       inventoryTab: false,
       surveyInfoTab: true,
@@ -147,7 +143,6 @@ export default class Dashboard extends React.Component {
 
   toggleChatTab() {
     this.setState({
-      content: 'chat',
       title: 'Chat',
       inventoryTab: false,
       surveyInfoTab: false,
@@ -161,7 +156,7 @@ export default class Dashboard extends React.Component {
         <Header theme={myTheme} flexDirection="row-reverse">
           <Title theme={myTheme} style={styles.main}>{this.state.title}</Title>
           {
-            this.state.content === 'surveyInfo' ?
+            this.state.surveyInfoTab ?
               <Button transparent onPress={() => this.goToNext('info')}>
                 <Icon style={styles.icon} name="md-settings" />
               </Button>
@@ -211,7 +206,7 @@ const styles = StyleSheet.create({
     top: 20,
   },
   icon: {
-    color: '#FFFFFF',
+    color: '#FF5252',
   },
   appointment: {
     top: 90,
