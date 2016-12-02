@@ -7,35 +7,17 @@ import {
   TouchableHighlight,
   AlertIOS,
   Dimensions,
+  Image,
 } from 'react-native';
-import t from 'tcomb-form-native';
+import {
+  InputGroup,
+  Input,
+  Button,
+} from 'native-base';
 
-import Dashboard from './Dashboard';
 import Information from './Information';
 import helper from '../utils/helper';
 import Login from './Login';
-
-const Form = t.form.Form;
-const Person = t.struct({
-  name: t.String,
-  email: t.String,
-  password: t.String,
-  'Confirm password': t.String,
-});
-
-const options = {
-  fields: {
-    email: {
-      autoCapitalize: 'none',
-    },
-    password: {
-      secureTextEntry: true,
-    },
-    'Confirm password': {
-      secureTextEntry: true,
-    },
-  },
-};
 
 const onValueChange = async (item, selectedValue) => {
   try {
@@ -49,7 +31,13 @@ const onValueChange = async (item, selectedValue) => {
 export default class Signup extends React.Component {
   constructor(props) {
     super(props);
-    this.userInfo = null;
+    
+    this.state = {
+      name: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+    };
   }
 
   goToNext(type) {
@@ -65,13 +53,11 @@ export default class Signup extends React.Component {
   }
 
   userAuth(type) {
-    const value = this.refs.form.getValue();
-
-    if (value && value.password === value['Confirm password']) {
+    if (this.state.password === this.state.confirmPassword) {
       const user = {
-        name: value.name,
-        username: value.email,
-        password: value.password,
+        name: this.state.name,
+        username: this.state.email,
+        password: this.state.password,
       };
 
       helper.postUser(user, type)
@@ -96,33 +82,56 @@ export default class Signup extends React.Component {
   }
 
   render() {
+
     return (
-      <View style={styles.main}>
-        <View style={styles.row}>
-          <Text style={styles.title}>MoveKick</Text>
+      <View>
+        <View>
+          <Image style={styles.logo}
+            source={require('../assets/images/mkIcon.png')}
+          />
         </View>
         <View style={styles.container}>
-          <View style={styles.row}>
-            <Form
-              ref="form"
-              style={{ borderColor: 'red' }}
-              type={Person}
-              options={options}
-            />
+          <View style={styles.info}>
+            <InputGroup borderType="regular">
+              <Input
+                placeholder="Contact Name"
+                onChangeText={name => this.setState({ name })}
+              />
+            </InputGroup>
+            <InputGroup borderType="regular">
+              <Input
+                placeholder="Email"
+                onChangeText={email => this.setState({ email })}
+              />
+            </InputGroup>
+            <InputGroup borderType="regular">
+              <Input
+                secureTextEntry={true}
+                placeholder="Password"
+                onChangeText={password => this.setState({ password })}
+              />
+            </InputGroup>
+            <InputGroup borderType="regular">
+              <Input
+                secureTextEntry={true}
+                placeholder="Confirm password"
+                onChangeText={confirmPassword => this.setState({ confirmPassword })}
+              />
+            </InputGroup>
           </View>
-          <View style={styles.row}>
-            <TouchableHighlight
-              style={styles.button}
+          <View style={styles.button}>
+            <Button
+              block
+              primary
               onPress={() => this.userAuth('signup')}
-              underlayColor="limegreen"
             >
-              <Text style={styles.buttonText}>Signup</Text>
-            </TouchableHighlight>
+              Signup
+            </Button>
           </View>
         </View>
-        <View style={styles.login}>
+        <TouchableHighlight style={styles.login}>
           <Text onPress={() => this.goToNext('signin')}>Already have an account? Sign in here!</Text>
-        </View>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -132,50 +141,27 @@ export default class Signup extends React.Component {
 
 const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    // backgroundColor: 'black',
-  },
   container: {
     justifyContent: 'center',
-    // alignItems: 'center',
     alignSelf: 'center',
     width: width * 0.9,
     borderRadius: 5,
     flexDirection: 'column',
-    // width: 150,
-    // height: 300,
     padding: 20,
-    backgroundColor: 'rgba(255,255,255,.85)',
-  },
-  title: {
-    fontSize: 50,
-    fontFamily: 'Futura',
-    marginTop: 50,
+    top: 30,
     backgroundColor: 'transparent',
-    alignSelf: 'center',
-    marginBottom: 30,
-    opacity: 1,
-    textAlign: 'center',
-    textShadowColor: 'black',
   },
-  buttonText: {
-    fontSize: 18,
-    color: 'white',
+  logo: {
+    top: 30,
+    width: 250,
+    height: 250,
     alignSelf: 'center',
   },
   button: {
-    height: 36,
-    backgroundColor: '#1E90FF',
-    borderColor: '#1E90FF',
-    borderWidth: 1,
-    borderRadius: 5,
     top: 30,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
   },
   login: {
-    top: 80,
+    top: 120,
     alignSelf: 'center',
   },
 });
