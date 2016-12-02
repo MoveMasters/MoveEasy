@@ -34,6 +34,7 @@ class UserProfile extends React.Component {
       surveyTime: '',
       displayedConvo: []
 		}
+    setInterval(this.autoUpdate.bind(this), 1000);
 	}
 
 	componentWillMount() {
@@ -70,6 +71,14 @@ class UserProfile extends React.Component {
         displayedConvo: messages
       });
     });
+  }
+
+  autoUpdate() {
+    if(!this.state.userInfo) {
+      return;
+    }
+    const user_id = this.state.userInfo.user_id;
+    this.updateConversation(user_id);
   }
 
   onMessageSend(message) {

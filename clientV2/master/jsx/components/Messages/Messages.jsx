@@ -21,6 +21,7 @@ class Messages extends React.Component {
     };
 
     this.updateContacts();
+    setInterval(this.autoUpdate.bind(this), 1000);
   }
 
   updateContacts() {
@@ -42,6 +43,13 @@ class Messages extends React.Component {
     });
   }
 
+  autoUpdate() {
+    if(!this.state.userSelected) {
+      return;
+    }
+    const userId = this.state.userSelected._id;
+    this.updateConversation(userId);
+  }
 
   updateConversation(userId) {
     const userSelected = this.contactsById[userId];

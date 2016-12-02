@@ -51,7 +51,6 @@ class Conversation extends React.Component {
 
   renderMessage(message) {
     const sender = (!!message.moverName) ? message.moverName : message.customerName;
-    console.log('message', message, sender);
     const currentTime = new Date();
     const messageTime = new Date(message.createdAt);
     const diff = currentTime - messageTime;
@@ -80,7 +79,6 @@ class Conversation extends React.Component {
     if(event.key == 'Enter') {
       const { message } = this.state;
       const { onMessageSend } = this.props;
-      console.log('sending message', message)
       onMessageSend(message);
       this.setState({ message: '' })
     }
