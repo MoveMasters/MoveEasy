@@ -49,6 +49,7 @@ class UserProfile extends React.Component {
     this.updateConversation(user_id);
 		return util.getAllMoves().then( moves => {
 			let userInfo = moves.filter( move => move.user_id === user_id )[0];
+      this.setState({ userInfo })
 			return userInfo
 		})
 	}
@@ -56,7 +57,7 @@ class UserProfile extends React.Component {
 	setUserInfoAndInventory() {
 		this.getUserInfo().then( userInfo => {
 			const { name, phone, currentAddress, futureAddress, _id, surveyTime, username } = userInfo;
-			this.setState({ name, phone, currentAddress, futureAddress, _id, userInfo, surveyTime, email:username });
+			this.setState({ name, phone, currentAddress, futureAddress, _id, userInfo, surveyTime, email: username });
 			this.getInventory(_id).then( inventory => {
 				this.setState({ inventory })
 			})
@@ -71,12 +72,9 @@ class UserProfile extends React.Component {
     });
   }
 
-  onMessageSend(event) {
-    const text = $('#message-input').val();
-    if (!text) { return; }
-
+  onMessageSend(message) {
     const user_id = this.state.userInfo.user_id;
-    util.sendNewMessage(user_id, text).then( newMessage => {
+    util.sendNewMessage(user_id, message).then( newMessage => {
       this.updateConversation(user_id);
     });
   }
@@ -86,20 +84,10 @@ class UserProfile extends React.Component {
   }
 
   handleUpdateUserProfile() {
-    userInfo = this.state.userInfo;
-  	if(userInfo) {
-  		throw new Error('Error: expected userInfo');
-  	}
-
-  	//manually copy properties
-  	userInfo.name = this.state.name;
-  	userInfo.phone = this.state.phone;
-  	userInfo.currentAddress = this.state.currentAddress;
-  	userInfo.futureAddress = this.state.futureAddress;
-  	userInfo.surveyTime = this.state.surveyTime;
-
-  	util.updateUserMoveInfo(userInfo);
-
+    const { userInfo, name, phone, currentAddress, futureAddress, surveyTime } = this.state;
+    const newUserInfo = Object.assign({}, userInfo, { name, phone, currentAddress, futureAddress, surveyTime })
+    console.log('updating user info with:', newUserInfo)
+  	util.updateUserMoveInfo(newUserInfo);
   }
 
 
@@ -108,6 +96,11 @@ class UserProfile extends React.Component {
     return util.getInitialInventory( _id ).then( inventory => {
       return inventory;
     })
+  }
+
+  updateInventory() {
+    console.log('updating inventory')
+    this.getInventory().then(inventory => this.setState({ inventory }))
   }
 
   onClickVideoCall() {
@@ -176,6 +169,7 @@ class UserProfile extends React.Component {
 					modalItem={ Object.assign({}, modalItem) }
 					handleModal={ this.handleModal.bind(this) }
           clientName={ this.state.name}
+          updateInventory={ this.updateInventory.bind(this) }
           />
 			</ContentWrapper>
 		);

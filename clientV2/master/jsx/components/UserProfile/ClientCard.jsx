@@ -13,7 +13,7 @@ class ClientCard extends Component {
             </div>
             <h3 className="m0 text-bold">{ name }</h3>
             <div className="mv-lg">
-               <p>{ `${phone} | ${email}` }</p>
+               <p>{ `${phone}` }</p>
             </div>
             <div className="text-center" style={{color: 'white'}}>
               <a 
