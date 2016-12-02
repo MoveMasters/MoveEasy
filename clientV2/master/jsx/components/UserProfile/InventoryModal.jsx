@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Button, Col, Row } from 'react-bootstrap';
-import EditInventory from './EditInventory';
+import UpdateInventory from './UpdateInventory';
 
 const InventoryModal = (props) => (
   <Modal 
@@ -18,9 +18,10 @@ const InventoryModal = (props) => (
         </Col>
 
         <Col md={6}>
-          <EditInventory 
+          <UpdateInventory 
           modalItem={props.modalItem}
-          handleModal={props.handleModal}/>
+          handleModal={props.handleModal}
+          updateInventory={props.updateInventory}/>
         </Col>
       </Row>
     </Modal.Body>

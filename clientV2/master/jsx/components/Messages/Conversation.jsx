@@ -21,7 +21,12 @@ const msToTime = (totalMs) => {
 };
 
 class Conversation extends React.Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      message: ''
+    }
   }
 
   renderMessage(message) {
@@ -51,16 +56,25 @@ class Conversation extends React.Component {
     );
   }
 
+  handleKeyPress(event) {
+    if(event.key == 'Enter') {
+      const { message } = this.state;
+      const { onMessageSend } = this.props;
+      console.log('sending message', message)
+      onMessageSend(message);
+      this.setState({ message: '' })
+    }
+  }
+
   render() {
     var ddTitle = (<em className="fa fa-ellipsis-v fa-lg text-muted"></em>);
     const name = (!!this.props.userSelected) ? this.props.userSelected.name : '';
+    const { message } = this.state;
     return (
       <Col md={ this.props.colNum }>
       {/******** Conversation *******/}
           <div className="panel panel-default">
               <div className="panel-heading">
-                  <div className="pull-right label label-danger">5</div>
-                  <div className="pull-right label label-success">12</div>
                   <div className="panel-title">{name}</div>
               </div>
               { /* START list group */ }
@@ -73,12 +87,14 @@ class Conversation extends React.Component {
               { /* START panel footer */ }
               <div className="panel-footer clearfix">
                   <div className="input-group">
-                      <input id="message-input" type="text" placeholder="Send Message" className="form-control input-sm" />
-                      <span className="input-group-btn">
-                        <button type="submit" className="btn btn-default btn-sm"
-                          onClick={this.props.onMessageSend} ><i className="fa fa-search"></i>
-                        </button>
-                      </span>
+                      <input 
+                        id="message-input" 
+                        type="text" 
+                        placeholder="Say something then press enter..." 
+                        className="form-control input-sm"
+                        onChange={ e => this.setState({ message: e.target.value })}
+                        value={ message }
+                        onKeyPress={(e) => this.handleKeyPress(e)}/>
                   </div>
               </div>
               { /* END panel-footer */ }

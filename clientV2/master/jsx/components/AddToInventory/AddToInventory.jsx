@@ -13,7 +13,7 @@ class AddToInventory extends Component {
 			going: true,
 			pbo: false,
 			comment: '',
-			room: ''
+			room: 'Family Room'
 		};
 	}
 
@@ -45,6 +45,7 @@ class AddToInventory extends Component {
 		console.log('Posting Item to server:', item);
 
 		util.postItemToServer(item).then( (inventory) => {
+			console.log('updating inventory with:', inventory)
 			updateInventory(inventory);			
 		})
 

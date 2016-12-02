@@ -89,12 +89,9 @@ class Messages extends React.Component {
 
 
 
-  onMessageSend(event) {
-    const text = $('#message-input').val();
-    if (!text) { return; }
-
+  onMessageSend(message) {
     const userId = this.state.userSelected._id;
-    util.sendNewMessage(userId, text).then( newMessage => {
+    util.sendNewMessage(userId, message).then( newMessage => {
       this.updateConversation(userId);
     });
   }
