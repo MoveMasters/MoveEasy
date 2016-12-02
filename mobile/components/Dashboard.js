@@ -101,7 +101,7 @@ export default class Dashboard extends React.Component {
           <View justifyContent="center" alignItems="center">
             <Title style={styles.title}>Appointment Time</Title>
             <Text>{moment(this.moveData.surveyTime).calendar()}</Text>
-            <Button alignSelf="center" onPress={() => this.goToNext('survey')}>
+            <Button info alignSelf="center" onPress={() => this.goToNext('survey')}>
               Begin Survey
             </Button>
           </View>
@@ -157,8 +157,8 @@ export default class Dashboard extends React.Component {
   render() {
     return (
       <Container>
-        <Header flexDirection="row-reverse">
-          <Title style={styles.title}>{this.state.title}</Title>
+        <Header theme={myTheme} flexDirection="row-reverse">
+          <Title theme={myTheme} style={styles.title}>{this.state.title}</Title>
           {
             this.state.content === 'surveyInfo' ?
               <Button transparent onPress={() => this.goToNext('info')}>
@@ -175,15 +175,15 @@ export default class Dashboard extends React.Component {
 
         <Footer>
           <FooterTab theme={myTheme}>
-            <Button onPress={this.toggleInventoryTab}>
+            <Button active={this.state.inventoryTab} onPress={this.toggleInventoryTab}>
               Inventory
               <Icon name={this.state.inventoryTab ? 'ios-list-box' : 'ios-list-box-outline'} />
             </Button>
-            <Button onPress={this.toggleSurveyInfoTab}>
+            <Button  active={this.state.surveyInfoTab} onPress={this.toggleSurveyInfoTab}>
               Survey
               <Icon name={this.state.surveyInfoTab ? 'ios-camera' : 'ios-camera-outline'} />
             </Button>
-            <Button onPress={this.toggleChatTab}>
+            <Button active={this.state.chatTab} onPress={this.toggleChatTab}>
               Chat
               <Icon name={this.state.chatTab ? 'ios-chatboxes' : 'ios-chatboxes-outline'} />
             </Button>

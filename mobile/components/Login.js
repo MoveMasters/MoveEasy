@@ -103,7 +103,7 @@ export default class Login extends React.Component {
           <View style={styles.login}>
             <Button
               block
-              primary
+              danger
               onPress={() => this.userAuth('signin')}
             >
               Login

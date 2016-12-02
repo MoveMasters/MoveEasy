@@ -86,7 +86,7 @@ exports.retrieveMessages = function(context) {
         user: {
           _id: message.mover_id ? 2 : 1,
           name: message.mover_id ? message.company : 'Me Too',
-          avatar: 'https://facebook.github.io/react/img/logo_og.png',
+          avatar: require('../assets/images/mkIcon.png'),
         },
         // additional custom parameters
       };

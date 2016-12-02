@@ -122,7 +122,7 @@ export default class Signup extends React.Component {
           <View style={styles.button}>
             <Button
               block
-              primary
+              danger
               onPress={() => this.userAuth('signup')}
             >
               Signup
