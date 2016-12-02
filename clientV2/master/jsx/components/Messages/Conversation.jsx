@@ -11,12 +11,32 @@ const msToTime = (totalMs) => {
   s = (s - secs) / 60;
   var mins = s % 60;
   var hrs = (s - mins) / 60;
-  if (hrs > 0) {
-    return (hrs + ' hr');
+  var days = Math.round(hrs / 24);
+  hrs = hrs % 24;
+  if (days > 0) {
+    if (days > 1) {
+      return (days + ' days ago');
+    } else {
+      return ('1 day ago');
+    }
+  } else if (hrs > 0) {
+    if (hrs > 1) {
+      return (hrs + ' hours ago');
+    } else {
+      return ('1 hour ago');
+    }
   } else if (mins > 0) {
-    return (mins + ' min');
+    if (mins > 1) {
+      return (mins + ' minutes ago');
+    } else {
+      return ('1 minute ago');
+    }
   } else {
-    return (secs + ' sec');
+    if (secs > 1) {
+      return (secs + ' seconds ago');
+    } else {
+      return ('1 second ago');
+    }
   }
 };
 

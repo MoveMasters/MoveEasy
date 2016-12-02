@@ -6,7 +6,6 @@ const port = '9000';
 const localURL = `http://${ip}:${port}`;
 const herokuURL = 'https://movekick.herokuapp.com';
 const serverURL = (reactCookie.load('UseDev') === '1') ? localURL : herokuURL;
-// const serverURL = localURL;
 
 
 console.log('serverURL', serverURL);
