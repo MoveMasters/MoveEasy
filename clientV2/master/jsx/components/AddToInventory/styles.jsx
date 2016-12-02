@@ -44,5 +44,11 @@ export default {
 		height: '1px',
 		display: 'flex',
 		borderTop: '1px solid gainsboro'
+	},
+	formGroup: {
+		paddingTop: '1.5vh'
+	},
+	quantity: {
+		paddingTop: '3vh'
 	}
 }

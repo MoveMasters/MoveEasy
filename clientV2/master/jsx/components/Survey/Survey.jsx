@@ -200,13 +200,14 @@ class Survey extends Component {
 		return (
 			<ContentWrapper >
 			<Row>
-	    	<Col xs={6}>
+	    	<Col xs={5}>
 	   			<VideoFeed 
 	   			handleScreenshot={this.handleScreenshot.bind(this)}
 	   			moveId={this.props.params.moveId}/>	
 				</Col>
 
-				<Col xs={6}>
+				<Col xs={7}>
+
       		<MuiThemeProvider >
 
 	      		<HorizontalStepper 

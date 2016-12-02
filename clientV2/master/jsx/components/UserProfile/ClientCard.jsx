@@ -18,7 +18,7 @@ class ClientCard extends Component {
             <div className="text-center" style={{color: 'white'}}>
               <a 
                 className="btn btn-primary col-md-5" 
-                style={{marginLeft: '6%'}}
+                style={styles.startSurvey}
                 onClick={ onClickVideoCall }>Start Survey</a>
             </div>
          </div>
@@ -28,3 +28,11 @@ class ClientCard extends Component {
 }
 
 export default ClientCard;
+
+const styles = {
+  startSurvey: {
+    width: '150px',
+    left: '50%',
+    marginLeft: '-75px'
+  }
+}

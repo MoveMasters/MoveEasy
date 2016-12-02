@@ -1,16 +1,15 @@
 export default {
   root: {
+    maxHeight: '100%',
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    width: '94%',
-    marginRight: '2%',
-    marginLeft: '2%'
   },
   gridList: {
     display: 'flex',
     flexWrap: 'nowrap',
     overflowX: 'auto',
+    maxHeight: '100%'
   },
   titleStyle: {
     color: 'white',

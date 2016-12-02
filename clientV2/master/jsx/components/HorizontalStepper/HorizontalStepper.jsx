@@ -105,26 +105,30 @@ class HorizontalStepper extends React.Component {
     const { queue, dequeueItem } = this.props;
 
     return (
-      <div style={styles.container}>
-        {this.renderStepper(stepIndex)}
-        <div style={contentStyle}>
+      <div className="panel panel-default">
 
-          {finished ? this.renderNextItem(stepIndex) : 
+        <div style={styles.container}>
+          {this.renderStepper(stepIndex)}
+          <div style={contentStyle}>
 
-          (
-            <div>
-              <div className='col-md-6' style={styles.colSix}>
-                <Screenshot 
-                  queue={queue}
-                  dequeueItem={ dequeueItem } 
-                  style={styles.colSix} 
-                  handleNext={this.handleNext.bind(this)}/>
+            {finished ? this.renderNextItem(stepIndex) : 
+
+            (
+              <div>
+                <div className='col-md-6' style={styles.colSix}>
+                  <Screenshot 
+                    queue={queue}
+                    dequeueItem={ dequeueItem } 
+                    style={styles.colSix} 
+                    handleNext={this.handleNext.bind(this)}/>
+                </div>
+
+                {this.renderStepContent(stepIndex)}
               </div>
-
-              {this.renderStepContent(stepIndex)}
-            </div>
-          )}
+            )}
+          </div>
         </div>
+        
       </div>
     );
   }
