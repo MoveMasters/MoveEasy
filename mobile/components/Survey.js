@@ -339,7 +339,7 @@ export default class Survey extends React.Component {
       return (
         <View alignSelf="center">
           <Button
-            success
+            danger
             onPress={this.goToDashboard}
           >
             Go to Dashboard
@@ -388,7 +388,8 @@ const styles = StyleSheet.create({
   },
   selfView: {
     flex: 1,
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
     backgroundColor: 'black',
   },
   container: {

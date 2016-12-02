@@ -84,7 +84,7 @@ export default class Dashboard extends React.Component {
   _renderContent() {
     if (this.state.content === 'surveyInfo') {
       return (
-        <Content>
+        <Content justifyContent="flex-start">
           <View style={styles.info}>
             <Title style={styles.title}>{this.moveData.name}</Title>
             <Text>{this.moveData.phone}</Text>
@@ -97,12 +97,14 @@ export default class Dashboard extends React.Component {
             <Title style={styles.title}>Future Address</Title>
             <Text>{this.moveData.futureAddress}</Text>
           </View>
-          <View justifyContent="center" alignItems="center">
+          <View style={styles.appointment} justifyContent="center" alignItems="center">
             <Title style={styles.title}>Appointment Time</Title>
             <Text>{moment(this.moveData.surveyTime).calendar()}</Text>
-            <Button info alignSelf="center" onPress={() => this.goToNext('survey')}>
-              Begin Survey
-            </Button>
+            <View style={styles.appointButton}>
+              <Button danger onPress={() => this.goToNext('survey')}>
+                Begin Survey
+              </Button>
+            </View>
           </View>
         </Content>
       );
@@ -157,22 +159,22 @@ export default class Dashboard extends React.Component {
     return (
       <Container>
         <Header theme={myTheme} flexDirection="row-reverse">
-          <Title theme={myTheme} style={styles.title}>{this.state.title}</Title>
+          <Title theme={myTheme} style={styles.main}>{this.state.title}</Title>
           {
             this.state.content === 'surveyInfo' ?
               <Button transparent onPress={() => this.goToNext('info')}>
-              Edit
+                <Icon style={styles.icon} name="md-settings" />
               </Button>
               :
               <Button transparent>
-                <Icon name="ios-settings" />
+                <Icon style={styles.icon} name="md-cube" />
               </Button>
           }
         </Header>
 
         {this._renderContent()}
 
-        <Footer>
+        <Footer theme={myTheme}>
           <FooterTab theme={myTheme}>
             <Button active={this.state.inventoryTab} onPress={this.toggleInventoryTab}>
               Inventory
@@ -195,11 +197,26 @@ export default class Dashboard extends React.Component {
 
 
 const styles = StyleSheet.create({
+  main: {
+    fontSize: 20,
+  },
   title: {
     fontSize: 20,
+    textDecorationLine: 'underline',
   },
   info: {
     alignItems: 'flex-start',
-    paddingBottom: 20,
+    paddingBottom: 40,
+    paddingLeft: 5,
+    top: 20,
   },
+  icon: {
+    color: '#FFFFFF',
+  },
+  appointment: {
+    top: 90,
+  },
+  appointButton: {
+    top: 20,
+  }
 });

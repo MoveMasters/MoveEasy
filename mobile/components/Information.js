@@ -182,7 +182,7 @@ export default class Information extends React.Component {
             />
           </View>
           <Button
-            info
+            danger
             style={styles.submit}
             onPress={() => this.submitInfo()}
           >

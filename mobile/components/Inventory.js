@@ -70,13 +70,13 @@ export default class Inventory extends React.Component {
             ];
 
             return (
-              <Swipeout key={i} right={swipeoutBtns} backgroundColor="white">
+              <Swipeout key={i} right={swipeoutBtns} backgroundColor="#FFFFFF">
                 <View style={styles.inventoryItem} flexDirection="row">
-                  <Thumbnail square size={90} source={{ uri: item.url }} />
+                  <Thumbnail square size={100} source={{ uri: item.url }} />
                   <View  style={styles.info} flexDirection="column">
-                    <Title>{item.name}</Title>
-                    <Text>Quantity: {item.quantity}</Text>
-                    <Text>Going: {item.going ? 'yes' : 'no'}</Text>
+                    <Title style={styles.itemName}>{item.name}</Title>
+                    <Text style={styles.itemInfo}>Quantity: {item.quantity}</Text>
+                    <Text style={styles.itemInfo}>Going: {item.going ? 'yes' : 'no'}</Text>
                   </View>
                 </View>
               </Swipeout>
@@ -90,10 +90,10 @@ export default class Inventory extends React.Component {
 
 const styles = StyleSheet.create({
   inventoryItem: {
-    marginTop: 5,
-    paddingBottom: 5,
-    borderBottomWidth: 1,
-    borderColor: '#8c8c8c',
+    marginTop: 13,
+    paddingBottom: 13,
+    borderBottomWidth: 1.5,
+    borderColor: '#FF5252',
 
   },
   info: {
@@ -101,5 +101,12 @@ const styles = StyleSheet.create({
   },
   empty: {
     color: '#737373',
+  },
+  itemName: {
+    fontSize: 20,
+    textDecorationLine: 'underline',
+  },
+  itemInfo: {
+    fontSize: 13,
   },
 });

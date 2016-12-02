@@ -86,7 +86,7 @@ exports.retrieveMessages = function(context) {
         user: {
           _id: message.mover_id ? 2 : 1,
           name: message.mover_id ? message.company : 'Me Too',
-          avatar: require('../assets/images/mkIcon.png'),
+          avatar: 'https://media.licdn.com/media/AAEAAQAAAAAAAAWgAAAAJDIzODA1MmJkLTIxZWItNDk3ZC1hZDliLWQ2ZTUyNWNmMWVmYQ.jpg',
         },
         // additional custom parameters
       };
