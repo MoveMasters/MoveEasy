@@ -33,14 +33,14 @@ class UserProfile extends React.Component {
 			modalItem: null,
       surveyTime: '',
       displayedConvo: [],
-      messageMounted: false
+      messageMounted: false,
+      view: 'profile'
 		}
     this.intervalID = setInterval(this.autoUpdate.bind(this), 1000);
 	}
 
 
   componentWillUnmount() {
-    console.log('unmount');
     if(this.intervalID) {
       clearInterval(this.intervalID);
       delete this.intervalID;
@@ -53,7 +53,6 @@ class UserProfile extends React.Component {
 
   updateMessageState(state) {
     this.setState({messageMounted: state});
-    console.log('mounted', state);
   }
 
 	handleModal(showModal, modalItem) {
@@ -145,6 +144,16 @@ class UserProfile extends React.Component {
   	return Object.assign({}, this.state.modalItem);
   }
 
+  updateNav(event) {
+    const view = event.target.text;
+    console.log(view)
+    if(view === 'Messages') {
+      this.updateMessageState(true);
+    } else {
+      this.updateMessageState(false);
+    }
+  }
+
 	render() {
 		const { 
 			name, 
@@ -164,7 +173,8 @@ class UserProfile extends React.Component {
 				<Tab.Container className="container-md" id="settings-tab" defaultActiveKey="profilePane">
 					<Row>
 						<Col md={3}>
-							<Selector />
+							<Selector 
+                updateNav={this.updateNav.bind(this)}/>
 							<ClientCard 
 							name={name}
 							phone={phone}
@@ -190,7 +200,6 @@ class UserProfile extends React.Component {
                   userSelected={this.state.userInfo}
                   displayedConvo={this.state.displayedConvo}
                   onMessageSend={this.onMessageSend.bind(this)}
-                  updateMessageState={this.updateMessageState.bind(this)}
                 />
 					    </Tab.Content>
 					  </Col>

@@ -46,7 +46,6 @@ exports.getAllMoves = (req, res, next) => {
   .populate('user_id')
   .exec().then(moves => {
     moves = filterMoves(moves);
-    console.log('moves', moves);
     res.send({moves});
   });
 };
