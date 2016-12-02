@@ -6,17 +6,8 @@ import Conversation from './../Messages/Conversation';
 
 class MessagesPane extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
-
-  componentWillMount() {
-    this.props.updateMessageState(true);
-  }
-
-  componentWillUnmount() {
-    this.props.updateMessageState(false);
-  }
-
 
   render() {
     return (
