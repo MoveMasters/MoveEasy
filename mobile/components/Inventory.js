@@ -86,7 +86,7 @@ export default class Inventory extends React.Component {
       </ScrollView>
     );
   }
-};
+}
 
 const styles = StyleSheet.create({
   inventoryItem: {
