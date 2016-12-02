@@ -10,35 +10,15 @@ import {
   Image,
 } from 'react-native';
 import {
-  List,
-  ListItem,
   InputGroup,
   Input,
   Button,
 } from 'native-base';
-import t from 'tcomb-form-native';
 
 import Signup from './Signup';
 import Dashboard from './Dashboard';
-import Information from './Information';
 import helper from '../utils/helper';
 
-const Form = t.form.Form;
-const Person = t.struct({
-  email: t.String,
-  password: t.String,
-});
-
-const options = {
-  fields: {
-    email: {
-      autoCapitalize: 'none',
-    },
-    password: {
-      secureTextEntry: true,
-    },
-  },
-};
 
 const onValueChange = async (item, selectedValue) => {
   try {
