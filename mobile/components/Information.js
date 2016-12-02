@@ -67,6 +67,7 @@ export default class Information extends React.Component {
       });
     });
   }
+
   goToDashboard() {
     this.props.navigator.push({
       component: Dashboard,
@@ -88,8 +89,8 @@ export default class Information extends React.Component {
 
       helper.updateExistingMove(moveObj)
       .then((response) => {
-        const moveData = response.data;
-        const moveId = moveData._id;
+        console.log(response);
+        const moveData = response.data.filter(data => !!data.currentAddress)[0];
 
         storeItem('moveData', JSON.stringify(moveData));
         this.goToDashboard();
@@ -101,7 +102,7 @@ export default class Information extends React.Component {
     } else {
       helper.newMove(moveObj)
       .then((response) => {
-        const moveData = response.data;
+        const moveData = response.data.filter(data => !!data.currentAddress)[0];
         const moveId = moveData._id;
 
         storeItem('moveData', JSON.stringify(moveData));

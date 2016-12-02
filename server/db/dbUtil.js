@@ -243,8 +243,7 @@ exports.updateUserMoveInfo = (req, res, next) => {
       // changed the route so it sends the move newData
       // back to the mobile client so it can immediately store
       // and display it on the dashboard
-      const moveData = response[0];
-      res.send(moveData);
+      res.send(response);
     });
   });
 };
