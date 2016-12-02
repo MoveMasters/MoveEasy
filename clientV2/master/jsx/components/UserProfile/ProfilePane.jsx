@@ -9,8 +9,6 @@ class ProfilePane extends Component {
     const dateOptions = {  month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
     const surveyTimeStr = new Date(surveyTime).toLocaleDateString('en-US', dateOptions);
 
-    console.log('ptoprs', this.props)
-
 
     return (
       <Tab.Pane eventKey="profilePane">

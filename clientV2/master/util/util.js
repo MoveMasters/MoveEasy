@@ -273,6 +273,7 @@ const getConversation = (userId) => {
 const getContacts = () => {
   return axios.get(getContactsURL)
   .then( response => {
+    console.log('contacts', response.data.contacts);
     return response.data.contacts;
   })
   .catch( err => {

@@ -32,14 +32,29 @@ class UserProfile extends React.Component {
 			showModal: false,
 			modalItem: null,
       surveyTime: '',
-      displayedConvo: []
+      displayedConvo: [],
+      messageMounted: false
 		}
-    setInterval(this.autoUpdate.bind(this), 1000);
+    this.intervalID = setInterval(this.autoUpdate.bind(this), 1000);
 	}
+
+
+  componentWillUnmount() {
+    console.log('unmount');
+    if(this.intervalID) {
+      clearInterval(this.intervalID);
+      delete this.intervalID;
+    }
+  }
 
 	componentWillMount() {
 		this.setUserInfoAndInventory();
 	}
+
+  updateMessageState(state) {
+    this.setState({messageMounted: state});
+    console.log('mounted', state);
+  }
 
 	handleModal(showModal, modalItem) {
 		this.setState({ showModal, modalItem });
@@ -57,7 +72,12 @@ class UserProfile extends React.Component {
 
 	setUserInfoAndInventory() {
 		this.getUserInfo().then( userInfo => {
+      if(!userInfo) {
+        console.log('cound not find user', this.props.params.user_id);
+        return;
+      }
 			const { name, phone, currentAddress, futureAddress, _id, surveyTime, username } = userInfo;
+      console.log('id', _id);
 			this.setState({ name, phone, currentAddress, futureAddress, _id, userInfo, surveyTime, email: username });
 			this.getInventory(_id).then( inventory => {
 				this.setState({ inventory })
@@ -66,6 +86,7 @@ class UserProfile extends React.Component {
 	}
 
   updateConversation(user_id) {
+    console.log('update');
     util.getConversation(user_id).then( messages => {
       this.setState({
         displayedConvo: messages
@@ -77,8 +98,10 @@ class UserProfile extends React.Component {
     if(!this.state.userInfo) {
       return;
     }
-    const user_id = this.state.userInfo.user_id;
-    this.updateConversation(user_id);
+    if(this.state.messageMounted) {
+      const user_id = this.state.userInfo.user_id;
+      this.updateConversation(user_id);
+    }
   }
 
   onMessageSend(message) {
@@ -167,6 +190,7 @@ class UserProfile extends React.Component {
                   userSelected={this.state.userInfo}
                   displayedConvo={this.state.displayedConvo}
                   onMessageSend={this.onMessageSend.bind(this)}
+                  updateMessageState={this.updateMessageState.bind(this)}
                 />
 					    </Tab.Content>
 					  </Col>

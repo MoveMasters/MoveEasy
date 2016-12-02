@@ -29,12 +29,24 @@ exports.handleNewMove = (req, res, next) => {
   });
 };
 
+const filterMoves = (moves) => {
+  var output = [];
+  moves.forEach( move => {
+    if(move.user_id) {
+      move = dbUtil.fixMovePopulate(move);
+      output.push(move);
+    }
+  });
+  return output;
+}
+
 
 exports.getAllMoves = (req, res, next) => {
   Move.find()
   .populate('user_id')
   .exec().then(moves => {
-    moves = moves.map(dbUtil.fixMovePopulate);
+    moves = filterMoves(moves);
+    console.log('moves', moves);
     res.send({moves});
   });
 };

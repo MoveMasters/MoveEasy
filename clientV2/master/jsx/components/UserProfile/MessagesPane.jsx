@@ -9,6 +9,15 @@ class MessagesPane extends Component {
     super(props)
   }
 
+  componentWillMount() {
+    this.props.updateMessageState(true);
+  }
+
+  componentWillUnmount() {
+    this.props.updateMessageState(false);
+  }
+
+
   render() {
     return (
       <Tab.Pane eventKey="messagesPane">
