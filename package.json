@@ -3,9 +3,8 @@
   "description": "Server for MoveKick",
   "version": "0.0.1",
   "scripts": {
-    "start": "node server/server.js",
-    "test": "mocha server/test/*Spec.js",
-    "run": "nodemon server/server.js"
+    "start": "nodemon server/server.js",
+    "test": "mocha server/test/*Spec.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
