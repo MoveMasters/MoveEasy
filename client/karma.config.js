@@ -1,28 +1,39 @@
-module.exports = function (config) {
+var path = require('path');
+
+module.exports = function(config) {
   config.set({
-    browsers: ['Chrome'],
-    files: [ 'test/*Spec.js' ],
+    browsers: ['PhantomJS'],
+    basePath: '',
     frameworks: [
-      'jasmine',
-      'sinon'
+    'jasmine',
+    'sinon'
     ],
-    logLevel: 'debug',
-    singleRun: false,
+    singleRun: true,
+    files: [
+      'test/**/*.js'
+    ],
+
     preprocessors: {
-      'test/*Spec.js': [ 'webpack' ]
+      // add webpack as preprocessor
+      'test/*Spec.js': ['webpack', 'sourcemap']
     },
+
     webpack: { //kind of a copy of your webpack config
-      devtool: 'inline-source-map', //just do inline source maps instead of the default
+      devtool: 'inline-source-map', //just do inline source maps  default
       module: {
         loaders: [
           {
-            test: /\.js$/,
-            exclude: /\/node_modules\//,
+            test: /\.jsx?$/,
             loader: 'babel',
+            exclude: /\/node_modules\//,
             query: {
-              presets: ['airbnb']
+              presets: ['es2015', 'react']
             }
-          }
+          },
+          {
+            test: /\.json$/,
+            loader: 'json',
+          },
         ]
       },
       externals: {
@@ -30,8 +41,18 @@ module.exports = function (config) {
         'react/addons': true,
         'react/lib/ExecutionEnvironment': true,
         'react/lib/ReactContext': true
+      },
+      resolve: {
+          extensions: ['', '.js', '.jsx']
       }
-    }
-  });
-};
+    },
 
+    plugins: [
+      'karma-webpack',
+      'karma-jasmine',
+      'karma-sinon',
+      'karma-sourcemap-loader',
+      'karma-phantomjs-launcher'
+    ],
+  })
+};

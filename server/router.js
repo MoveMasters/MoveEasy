@@ -14,8 +14,8 @@ const isDev = process.env.DEV ? 1 : 0;
 
 module.exports = (app, express, server) => {
 
-  // app.use('/', ExpressPeerServer(server, {debug: true}));
-  app.use('/', express.static(path.join(__dirname, '/../clientV2/dist')))
+  app.use('/', express.static(path.join(__dirname, '/../client/dist')));
+  app.use('/home', express.static(path.join(__dirname, '/../landingPage')));
 
 
   app.use('/api/user', userRouter);
@@ -28,7 +28,7 @@ module.exports = (app, express, server) => {
   app.get('/*', function (req, res) {
     res
     .cookie('MoveKickDev', isDev)
-    .sendFile(path.join(__dirname, '/../clientV2/dist/index.html'));
+    .sendFile(path.join(__dirname, '/../client/dist/index.html'));
   });
 
 };

@@ -73,6 +73,7 @@ exports.handleNewMessageFromMover = (req, res, next) => {
     //add value
     newMessage.moverName = mover.name;
     res.send(newMessage);
+    console.log('newMessage', newMessage);
   }).catch( err => {
     console.log('handleNewMessageFromMover err', err);
     throw err;
