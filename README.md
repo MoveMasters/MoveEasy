@@ -20,6 +20,9 @@ Moving is a painful process. Moving companies depend on site visits to the trans
 - General purpose server to interface with the database
 
 
+![Alt text](https://media.giphy.com/media/SCsiqw01RavM4/giphy.gif "Desktop Browser Client")
+
+
 ## How it Works
 - Transferee downloads the MoveKick app from the iTunes app store
 - Transferee picks an available timeslot from the movers schedule for a survey
