@@ -18,7 +18,7 @@ $gray-lighter:           #edf1f2;
 
 $brand-primary:          #5d9cec;
 $brand-success:          #27c24c;
-$brand-info:             #23b7e5;
+$brand-info:             #3498db;
 $brand-warning:          #ff902b;
 $brand-danger:           #f05050;
 
@@ -65,7 +65,7 @@ $brand-yellow-dark:            darken($brand-yellow, $amountOfLight);
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-$body-bg:               #f5f7fa;
+$body-bg:               #f2f2f2;
 //** Global text color on `<body>`.
 $text-color:            #515253;
 
@@ -397,7 +397,7 @@ $navbar-padding-vertical:          (($navbar-height - $line-height-computed) / 2
 $navbar-collapse-max-height:       340px;
 
 $navbar-default-color:             #777;
-$navbar-default-bg:                #f8f8f8;
+$navbar-default-bg:                #3498db;
 $navbar-default-border:            darken($navbar-default-bg, 6.5%);
 
 // Navbar links

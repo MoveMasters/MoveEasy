@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import styles from './styles';
 import Videotag from 'react-html5video';
 import { Button } from 'react-bootstrap';
+import { browserHistory } from 'react-router';
 
 /************************************* SOCKET IO******************************************/ 
 
@@ -41,10 +42,14 @@ class VideoFeed extends Component {
     // socket = io('https://iiiiii.herokuapp.com', {transports: ['websocket']}); }
   }
 
-  endCall() {
+  endCall(goBack) {
     let videoTrack = localStream.getVideoTracks()[0];
     videoTrack.stop();
     console.log('stopping video track');
+    if (goBack) {
+    	browserHistory.goBack();
+    }
+    console.log('calling back')
   }
   
   componentDidMount() {
@@ -75,7 +80,7 @@ class VideoFeed extends Component {
 
   componentWillUnmount() {
       window.removeEventListener('resize', this._handleWindowResize);
-      this.endCall();
+      this.endCall(false);
   }
 
 	_handleWindowResize() {
@@ -259,7 +264,7 @@ class VideoFeed extends Component {
               style={styles.endCall} 
               bsStyle='danger' 
               bsSize='lg' 
-              onClick={this.endCall.bind(this)}>End Survey</Button>
+              onClick={() => this.endCall(true)}>End Survey</Button>
 
           </div>
 
