@@ -166,3 +166,90 @@ i {
 	font-weight: 300;
 	letter-spacing: 1px;
 }
+/********************** CUSTOM STYLES ************************/
+
+.carousel-control {
+    background-image: none !important;
+}
+
+.icon-prev, .icon-next {
+    color: black;
+}
+
+#arrow {
+    font-size: 4em;
+}
+
+
+
+.phone {
+    display: block;
+    margin: auto;
+}
+
+.gif {
+    display: block;
+    margin: auto;
+    position: absolute;
+    max-height: 70% !important;
+    left: 49.3%;
+    transform: translateX(-50%);
+    margin-top: 4.7%;
+}
+
+@media (min-width: 0px) {
+    .gif {
+        margin-top: 6% !important;
+    }
+}
+
+@media (min-width: 544px) {
+    .gif {
+        margin-top: 6% !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .gif {
+        margin-top: 6% !important;
+    }
+}
+
+@media (min-width: 993px) {
+    .gif {
+        margin-top: 4.7% !important;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
