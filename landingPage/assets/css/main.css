@@ -7,6 +7,10 @@
  * URL: http://blacktie.co
  */
 
+ .navbar-brand  {
+    font-size: 2em;
+ }
+
  #visionIcon {
     border-radius: 100px;
  }
