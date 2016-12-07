@@ -56,7 +56,7 @@ Moving is a painful process. Moving companies depend on site visits to the trans
 - For other operating systems, look online
 
 ### Client
-- cd clientV2
+- cd client
 - bower install && npm install
 
 ### Mobile
@@ -84,7 +84,7 @@ Moving is a painful process. Moving companies depend on site visits to the trans
 - npm start
 
 ### Client
-- cd clientV2
+- cd client
 - npm start
 - Open browser to URL
 
