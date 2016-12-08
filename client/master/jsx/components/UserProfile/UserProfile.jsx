@@ -137,7 +137,7 @@ class UserProfile extends React.Component {
   onClickVideoCall() {
     const { _id } = this.state;
     const path = `/survey/${_id}`
-    browserHistory.push(path);
+    this.props.history.push(path)
   }
 
   getModalItem() {

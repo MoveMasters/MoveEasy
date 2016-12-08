@@ -17,6 +17,8 @@ class Clients extends React.Component {
       this.onTableClick = this.onTableClick.bind(this);
     }
 
+    
+
     componentWillMount() {
       this.getAllMoves();
     }
@@ -29,9 +31,12 @@ class Clients extends React.Component {
     }
 
     onTableClick(user_id) {
+      console.log(this.props, 'this.props')
       // redirect to user profile
       const path = `/userProfile/${user_id}`;
-      browserHistory.push(path);
+      this.props.history.push(path)
+      // this.context.router.push(path);
+      // browserHistory.push(path);
     }
 
     filterMoves(query) {
