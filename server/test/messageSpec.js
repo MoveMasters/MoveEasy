@@ -85,11 +85,13 @@ describe('Message Server API tests', () => {
       const messages = res.body.messages;
       expect(messages.length).to.equal(2);
       //most recent at the head
-      expect(messages[0].text).to.equal(messageText2);
+      expect(messages[0].text).to.equal(messageText1);
       expect(messages[0].customerName).to.equal(customerName1);
-      expect(messages[0].moverName).to.equal(moverName1);
-      expect(messages[1].text).to.equal(messageText1);
+      //messages sent from users to a company are not mapped to a movers name
+      expect(messages[0].moverName).to.equal(undefined);
+      expect(messages[1].text).to.equal(messageText2);
       expect(messages[1].customerName).to.equal(customerName1);
+      expect(messages[1].moverName).to.equal(moverName1);
       done();
     });
   });
@@ -103,8 +105,8 @@ describe('Message Server API tests', () => {
       const messages = res.body.messages;
       expect(messages.length).to.equal(2);
       //most recent at the head
-      expect(messages[0].text).to.equal(messageText2);
-      expect(messages[1].text).to.equal(messageText1);
+      expect(messages[0].text).to.equal(messageText1);
+      expect(messages[1].text).to.equal(messageText2);
       done();
     });
   });
