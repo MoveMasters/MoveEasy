@@ -18,7 +18,7 @@ class Header extends React.Component {
     }
 
     logout() {
-        cookie.remove('x-access-token', { path: '/' });
+        cookie.remove('x-access-token', { path: '/app/' });
         console.log('logging out')
      }
 

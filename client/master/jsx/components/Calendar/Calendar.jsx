@@ -56,7 +56,8 @@ class Calendar extends React.Component {
     console.log('redirecting to:', user_id)
     // redirect to user profile
     const path = `/userProfile/${user_id}`;
-    browserHistory.push(path);
+    // browserHistory.push(path);
+    this.props.history.push(path)
   }
 
   render() {

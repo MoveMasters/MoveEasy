@@ -87,13 +87,6 @@ class Sidebar extends React.Component {
                                 <span data-localize="sidebar.heading.HEADER">Main Navigation</span>
                             </li>
 
-                            <li className={ this.routeActive('dashboard') ? 'active' : '' }>
-                                <Link to="/dashboard" title="Dashboard">
-                                <em className="icon-speedometer"></em>
-                                <span data-localize="sidebar.nav.DASHBOARD">Dashboard</span>
-                                </Link>
-                            </li>
-
                             <li className={ this.routeActive('clients') ? 'active' : '' }>
                                 <Link to="/clients" title="Clients">
                                 <em className="icon-people"></em>
@@ -115,12 +108,6 @@ class Sidebar extends React.Component {
                                 </Link>
                             </li>
 
-                            <li className={ this.routeActive('invoices') ? 'active' : '' }>
-                                <Link to="/invoices" title="Invoices">
-                                <em className="icon-credit-card"></em>
-                                <span data-localize="sidebar.nav.INVOICES">Invoices</span>
-                                </Link>
-                            </li>
 
 
 
@@ -134,6 +121,25 @@ class Sidebar extends React.Component {
     }
 
 }
+
+
+//Removed dashboard and invoices
+/*
+
+                            <li className={ this.routeActive('dashboard') ? 'active' : '' }>
+                                <Link to="/dashboard" title="Dashboard">
+                                <em className="icon-speedometer"></em>
+                                <span data-localize="sidebar.nav.DASHBOARD">Dashboard</span>
+                                </Link>
+                            </li>
+
+                            <li className={ this.routeActive('invoices') ? 'active' : '' }>
+                                <Link to="/invoices" title="Invoices">
+                                <em className="icon-credit-card"></em>
+                                <span data-localize="sidebar.nav.INVOICES">Invoices</span>
+                                </Link>
+                            </li>
+*/
 
 Sidebar.contextTypes = {
     router: React.PropTypes.object
