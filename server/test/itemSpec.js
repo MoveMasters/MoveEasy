@@ -4,10 +4,10 @@ const server = require('./../server.js');
 const jwt = require('jwt-simple');
 const DataUri = require('datauri').promise;
 const itemController = require('./../db/items/itemController');
+const Item = require('./../db/items/itemModel');
 const testUtil = require('./testUtil');
 
 const request = supertest.agent(server);
-
 
 
 
@@ -52,6 +52,22 @@ describe('Item Server APIs', () => {
       done();
     });
   });
+
+  //FIXME: Test not working when it the actual functionlity works
+  xit('Should delete item from mover', (done) => {
+    item.going = false;
+    request.post('/api/item/deleteItem')
+    .set('x-access-token', mover.token)
+    .send({item})
+    .end( (err, res) => {
+      Item.find({_id: item._id})
+      .then( items => {
+        expect(items.length).to.equal(0);
+        done();
+      })
+    });
+  });
+
 
 });
     

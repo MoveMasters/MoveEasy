@@ -64,3 +64,15 @@ exports.handleUpdateItem = (req, res, next) => {
     throw err;
   });
 }
+
+
+exports.handleDeleteItem = (req, res, next) => {
+  const item = req.body.item;
+  return Item.findOneAndRemove({_id: item._id}).then( deletedItem => {
+    return deletedItem;
+  }).catch( err => {
+    console.log('handleDeleteItem err', err);
+    throw err;
+  });
+
+}

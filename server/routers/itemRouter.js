@@ -7,6 +7,7 @@ const router = new express.Router();
 
 router.post('/newItem', authController.checkMoverAuth, itemController.handleNewItem);
 router.post('/updateItem', authController.checkGenAuth, itemController.handleUpdateItem);
+router.post('/deleteItem', authController.checkGenAuth, itemController.handleDeleteItem);
 router.get('/moveItems', authController.checkGenAuth, itemController.handleMoveItems);
 
 
