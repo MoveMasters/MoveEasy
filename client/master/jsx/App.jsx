@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Link, hashHistory, useRouterHistory, IndexRoute } from 'react-router';
-import { createHistory } from 'history';
+import { createHistory, useBasename } from 'history';
 import cookie from 'react-cookie';
 
 import initTranslation from './components/Common/localize';
@@ -25,7 +25,7 @@ import Signup from './components/Signup/Signup';
 import Survey from './components/Survey/Survey';
 import UserProfile from './components/UserProfile/UserProfile';
 
-import { browserHistory } from 'react-router';
+// import { browserHistory } from 'react-router';
 
 // Init translation system
 initTranslation();
@@ -44,7 +44,11 @@ const isAuthorized = () => {
 }
 
 
-const appHistory = useRouterHistory(createHistory)({ queryKey: false, basename: '/' });
+const appHistory = useRouterHistory(createHistory)({ queryKey: false, basename: '/app' });
+
+const browserHistory = useBasename(createHistory)({
+    basename: "/app"
+});
 
 class Authorize extends Component {
 	constructor(props) {

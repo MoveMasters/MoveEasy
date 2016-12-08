@@ -44,8 +44,12 @@ class VideoFeed extends Component {
 
   endCall(goBack) {
     let videoTrack = localStream.getVideoTracks()[0];
+    let audioTrack = localStream.getAudioTracks()[0];
     videoTrack.stop();
+    audioTrack.stop();
     console.log('stopping video track');
+    console.log('stopping audio track');
+
     if (goBack) {
     	browserHistory.goBack();
     }
