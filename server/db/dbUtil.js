@@ -128,7 +128,7 @@ exports.getMoveItems = (move_id) => {
 exports.getUserMoves = (user_id) => {
   return new Promimse( (resolve, reject) => {
     Move.find({user_id})
-    .sort({createdAt:-1})
+    .sort({surveyTime:-1})
     .populate('user_id')
     .exec().then(
       moves => {

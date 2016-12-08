@@ -12,11 +12,11 @@ import BasePage from './components/Layout/BasePage';
 import BaseHorizontal from './components/Layout/BaseHorizontal';
 
 // Main Routes
-import Dashboard from './components/Dashboard/Dashboard';
+//import Dashboard from './components/Dashboard/Dashboard';
 import Clients from './components/Clients/Clients';
 import Calendar from './components/Calendar/Calendar';
 import Messages from './components/Messages/Messages';
-import Invoices from './components/Invoices/Invoices';
+//import Invoices from './components/Invoices/Invoices';
 import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
 
@@ -99,14 +99,12 @@ class Authorize extends Component {
 					    <Route path='/' component={Base}>
 
 					        {/* Default route*/}
-					        <IndexRoute component={Dashboard} />
+					        <IndexRoute component={Clients} />
 
 					        {/* Main routes*/}
-					        <Route path='dashboard' component={Dashboard}/>
 					        <Route path='clients' component={Clients}/>
 					        <Route path='calendar' component={Calendar}/>
 					        <Route path='messages' component={Messages}/>
-					        <Route path='invoices' component={Invoices}/>
 
 
 					        {/* Survey user routes */}

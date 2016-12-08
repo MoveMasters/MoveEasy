@@ -66,7 +66,7 @@ class ClientTable extends React.Component {
 									</td>
 									<td>{ move.currentAddress }</td>
 									<td>{ move.futureAddress }</td>
-									<td>{ move.surveyComplete ? 'Survey Complete' : moment(move.surveyTime).format("ddd, hA") }</td>
+									<td>{ move.surveyComplete ? 'Survey Complete' : moment(move.surveyTime).format("MM/DD, ddd, hA") }</td>
 								</tr>    
 							))}
 							
