@@ -14,8 +14,8 @@ const isDev = process.env.DEV ? 1 : 0;
 
 module.exports = (app, express, server) => {
 
-  app.use('/', express.static(path.join(__dirname, '/../client/dist')));
-  app.use('/home', express.static(path.join(__dirname, '/../landingPage')));
+  app.use('/', express.static(path.join(__dirname, '/../landingPage')));
+  app.use('/app', express.static(path.join(__dirname, '/../client/dist')));
 
 
   app.use('/api/user', userRouter);
