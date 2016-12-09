@@ -10,12 +10,14 @@ Moving is a painful process. Moving companies depend on site visits to the trans
 
 ## Application in use
 
-### Browser View of a Remote Survey
+##### Browser View of a Remote Survey
 ![Alt text](http://i.imgur.com/dB5aW1I.gif "Browser View of a Remote Survey")
 
-### Browser View of Inventory
+##### Browser View of Inventory
 ![Alt text](http://i.imgur.com/9SXchKe.gif "Browser View of Inventory")
 
+##### Mobile View of Inventory
+![Alt text](https://media.giphy.com/media/S51XJAFn0QZlS/giphy.gif "Mobile View of Inventory")
 
 
 ## Team
@@ -50,6 +52,8 @@ Moving is a painful process. Moving companies depend on site visits to the trans
 
 - Node
 - Xcode
+- Clarifai Account
+- AWS Account (S3)
 
 ## Setup
 
